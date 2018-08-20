@@ -48,7 +48,7 @@ or request to close some issues as duplicates.
 How to bump version of the project
 ==================================
 
-The project adheres to [Semantic Versioning].
+The project adheres to `Semantic Versioning`_.
 
 .. _bug label:
     https://github.com/char-lie/stereo-parallel/labels/bug
