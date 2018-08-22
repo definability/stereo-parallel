@@ -45,6 +45,14 @@ If your pull request is complex and covers several tasks,
 you should either split it into several pull requests
 or request to close some issues as duplicates.
 
+Before merge
+------------
+
+* Write new tests if needed.
+* Make sure that all tests pass.
+* Change `README`_ if needed.
+* Check again grammar and lexicon of description of the pull request.
+
 How to bump version of the project
 ==================================
 
@@ -60,6 +68,8 @@ The project adheres to `Semantic Versioning`_.
     https://github.com/char-lie/stereo-parallel/issues/new
 .. _pull request:
     https://github.com/char-lie/stereo-parallel/pulls
+.. _README:
+    https://github.com/char-lie/stereo-parallel/blob/master/README.rst
 .. _Semantic Versioning:
     http://semver.org/spec/v2.0.0.html
 .. _squashed and merged:
