@@ -12,7 +12,7 @@ How to create a pull request
 
 #. Discuss the change you wish to make by creating `new issue`_.
 #. Create new branch with name that satisfies the following
-    * The name consists of two parts separated by dash.
+    * The name consists of two parts separated by slash.
     * The first part of the name should contain name of label
       assigned to the task.
       If multiple labels were assigned,
@@ -35,11 +35,13 @@ How to create a pull request
 Your changes will be squashed
 -----------------------------
 
-All pull requests are `squashed and merged`_ into the ``master`` branch.
+All accepted pull requests are `squashed and merged`_
+into the ``master`` branch.
 
-This means that all your commits finally will be squashed into one,
-its title will be the title of the pull request you've created
-and its description will be the description of the pull request.
+This means that all your commits finally will be squashed into one.
+Title of the resulting commit
+will be the title of the pull request you've created
+and its description will be copied from description of the pull request.
 
 If your pull request is complex and covers several tasks,
 you should either split it into several pull requests
