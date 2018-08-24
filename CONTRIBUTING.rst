@@ -1,6 +1,6 @@
-====================================
-Contributing code to Stereo Parallel
-====================================
+===============================
+Contributing to Stereo Parallel
+===============================
 
 Improvements to `Stereo Parallel`_ are welcome!
 First of all, read the `Contributor Covenant`_.
