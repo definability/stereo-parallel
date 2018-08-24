@@ -21,21 +21,21 @@ How to create a pull request
       branches that close bugs should be named
       **bugfix**.
     * The second part is a number of the issue.
-    * Examples: `feature/123`, `build/7`, `bugfix/666`.
+    * Examples: ``feature/123``, ``build/7``, ``bugfix/666``.
 #. Create new `pull request`_
     * Name of the pull request should consist of three parts.
-    * The first part is `Fix` for `bugfix` branches
-      and `Close` for another branches.
+    * The first part is ``Fix`` for ``bugfix`` branches
+      and ``Close`` for another branches.
     * The second part is a number of the issue lead by hash sign.
     * The third part is a title of the issue.
-    * For example, `Close #4: Create CONTRIBUTING file`.
+    * For example, ``Close #4: Create CONTRIBUTING file``.
 #. Description of the pull request should contain detailed summary
    of what you've done in it.
 
 Your changes will be squashed
 -----------------------------
 
-All pull requests are `squashed and merged`_ into the `master` branch.
+All pull requests are `squashed and merged`_ into the ``master`` branch.
 
 This means that all your commits finally will be squashed into one,
 its title will be the title of the pull request you've created
@@ -50,7 +50,7 @@ Before merge
 
 * Write new tests if needed.
 * Make sure that all tests pass.
-* Change `README`_ if needed.
+* Change README_ if needed.
 * Check again grammar and lexicon of description of the pull request.
 
 How to bump version of the project
