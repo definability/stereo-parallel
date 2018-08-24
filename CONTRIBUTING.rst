@@ -3,7 +3,7 @@ Contributing to Stereo Parallel
 ===============================
 
 Improvements to `Stereo Parallel`_ are welcome!
-First of all, read the `Contributor Covenant`_.
+First of all, read the `Code of Conduct`_.
 
 .. contents::
 
@@ -60,7 +60,7 @@ The project adheres to `Semantic Versioning`_.
 
 .. _bug label:
     https://github.com/char-lie/stereo-parallel/labels/bug
-.. _Contributor Covenant:
+.. _Code of Conduct:
     https://github.com/char-lie/stereo-parallel/blob/master/CODE_OF_CONDUCT.md
 .. _Keep a Changelog:
     https://keepachangelog.com
