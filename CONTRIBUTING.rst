@@ -7,8 +7,11 @@ First of all, read the `Code of Conduct`_.
 
 .. contents::
 
-How to create a pull request
-============================
+Pull request processing
+=======================
+
+Create pull request
+-------------------
 
 #. Discuss the change you wish to make by creating `new issue`_.
 #. Create new branch with name that satisfies the following
@@ -37,6 +40,7 @@ Your changes will be squashed
 
 All accepted pull requests are `squashed and merged`_
 into the ``master`` branch.
+Keep this in mind when writing description of your pull request.
 
 This means that all your commits finally will be squashed into one.
 Title of the resulting commit
