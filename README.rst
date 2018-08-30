@@ -15,8 +15,12 @@ The code is licensed under `MIT License`_.
 You can freely copy and use it in your project
 (even for commercial projects with closed source code).
 When you modify some files,
-you should leave `Copyright (c) 2018 char-lie` at the top of files
-like it's explained in answer to
+
+- leave `Copyright (c) 2018 char-lie` at the top of modified file(s),
+- write your own copyright under it,
+- write license text you want to use (or leave `MIT Licence`_ if you use it).
+
+It's explained in answer to
 `How to manage a copyright notice in an open source project?`_.
 
 .. _CONTRIBUTING:
