@@ -94,6 +94,7 @@ Read it to know how to name the next version of the project.
 .. _Semantic Versioning:
     http://semver.org/spec/v2.0.0.html
 .. _squashed and merged:
-    https://help.github.com/articles/about-pull-request-merges/ #squash-and-merge-your-pull-request-commits
+    https://help.github.com/articles/about-pull-request-merges/
+    #squash-and-merge-your-pull-request-commits
 .. _Stereo Parallel:
     https://github.com/char-lie/stereo-parallel/
