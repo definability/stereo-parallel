@@ -56,6 +56,7 @@ Before merge
 
 * Write new tests if needed.
 * Make sure that all tests pass.
+* Change CHANGELOG_ if needed.
 * Change README_ if needed.
 * Check again grammar and lexicon of description of the pull request.
 
@@ -63,9 +64,23 @@ How to bump version of the project
 ==================================
 
 The project adheres to `Semantic Versioning`_.
+Read it to know how to name the next version of the project.
+
+- Switch to ``master`` branch.
+- Change version in CHANGELOG_ file,
+  commit the change with ``Stereo Parallel ${VERSION}`` tag,
+  where ``${VERSION}`` is a new version of the project,
+  but don't push it for now.
+- Create tag with name ``v ${VERSION}``,
+  (``git tag -a "v${VERSION}"`` in ``bash``)
+  with title ``Stereo Parallel ${VERSION}``,
+  and add corresponding section of CHANGELOG_ to tag description.
+- Push your changes using (``git push --follow-tags`` in ``bash``).
 
 .. _bug label:
     https://github.com/char-lie/stereo-parallel/labels/bug
+.. _CHANGELOG:
+    https://github.com/char-lie/stereo-parallel/blob/master/CHANGELOG.rst
 .. _Code of Conduct:
     https://github.com/char-lie/stereo-parallel/blob/master/CODE_OF_CONDUCT.md
 .. _Keep a Changelog:
@@ -79,6 +94,7 @@ The project adheres to `Semantic Versioning`_.
 .. _Semantic Versioning:
     http://semver.org/spec/v2.0.0.html
 .. _squashed and merged:
-    https://help.github.com/articles/about-pull-request-merges/ #squash-and-merge-your-pull-request-commits
+    https://help.github.com/articles/about-pull-request-merges/
+    #squash-and-merge-your-pull-request-commits
 .. _Stereo Parallel:
     https://github.com/char-lie/stereo-parallel/

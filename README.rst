@@ -2,6 +2,8 @@
 Stereo Parallel
 ===============
 
+.. contents::
+
 Contributing
 ============
 
