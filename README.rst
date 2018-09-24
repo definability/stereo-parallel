@@ -36,7 +36,8 @@ To build the project in Linux,
 - go there and call ``cmake`` specifying root as the parameter,
 - build the project using ``cmake -build`` or your build system (``make``?).
 
-.. code:: bash
+.. code-block:: bash
+
     git clone https://github.com/char-lie/stereo-parallel.git
     mkdir stereo-parallel/build
     cd build
