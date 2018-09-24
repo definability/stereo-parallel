@@ -25,6 +25,26 @@ When you modify some files,
 It's explained in answer to
 `How to manage a copyright notice in an open source project?`_.
 
+Build the project
+=================
+
+The project uses CMake_ of version 3 and higher.
+To build the project in Linux,
+
+- clone it,
+- create a directory to build the project in,
+- go there and call ``cmake`` specifying root as the parameter,
+- build the project using ``cmake -build`` or your build system (``make``?).
+
+.. code:: bash
+    git clone https://github.com/char-lie/stereo-parallel.git
+    mkdir stereo-parallel/build
+    cd build
+    cmake ..
+    cmake -build .
+
+.. _Cmake:
+    https://cmake.org
 .. _CONTRIBUTING:
     https://github.com/char-lie/stereo-parallel/blob/master/CONTRIBUTING.md
 .. _Code of Conduct:
