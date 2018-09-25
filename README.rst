@@ -44,7 +44,7 @@ To build the project in Linux,
     cmake ..
     cmake -build .
 
-.. _Cmake:
+.. _CMake:
     https://cmake.org
 .. _CONTRIBUTING:
     https://github.com/char-lie/stereo-parallel/blob/master/CONTRIBUTING.md
