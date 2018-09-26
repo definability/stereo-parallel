@@ -119,6 +119,7 @@ matrix:
       addons:
         apt:
           sources:
+            - llvm-toolchain-trusty-6.0
             - llvm-toolchain-r-test
           packages:
             - clang-6.0
