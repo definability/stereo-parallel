@@ -2,6 +2,9 @@
 Stereo Parallel
 ===============
 
+.. image:: https://travis-ci.org/char-lie/stereo-parallel.svg?branch=master
+    :target: https://travis-ci.org/char-lie/stereo-parallel
+
 .. contents::
 
 Contributing
