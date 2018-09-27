@@ -120,9 +120,9 @@ matrix:
         apt:
           sources:
             - llvm-toolchain-trusty-6.0
-            - sourceline: 'ppa:ubuntu-toolchain-r/test'
           packages:
-            - llvm-6.0
+            - libedit-dev
+            - llvm-6.0-dev
             - clang-6.0
       env:
         - MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
