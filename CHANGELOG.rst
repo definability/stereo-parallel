@@ -16,6 +16,7 @@ Added
 -----
 
 - Project build with CMake_
+- Project testing with ctest_
 
 .. Remove these two lines and one indentation level of the next two lines
     when you will release the first version.
@@ -24,6 +25,8 @@ Added
 
 .. _CMake:
     https://cmake.org
+.. _ctest:
+    https://cmake.org/cmake/help/v3.0/manual/ctest.1.html
 .. _Keep a Changelog:
     http://keepachangelog.com/en/1.0.0
 .. _Semantic Versioning:
