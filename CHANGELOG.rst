@@ -8,6 +8,7 @@ The format is based on `Keep a Changelog`_
 and this project adheres to `Semantic Versioning`_.
 
 .. contents::
+    :backlinks: none
 
 Unreleased_
 ===========
