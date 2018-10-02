@@ -130,8 +130,13 @@ matrix:
 before_install:
     - eval "${MATRIX_EVAL}"
 
+before_script:
+    - sudo apt-get update
+    - sudo apt-get install -y libboost-test-dev
+
 script:
   - mkdir build
   - cd build
   - cmake ..
   - cmake --build .
+  - ctest

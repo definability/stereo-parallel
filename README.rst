@@ -47,8 +47,24 @@ To build the project in Linux,
     cmake ..
     cmake --build .
 
+After build, it's recommended to run tests
+in order to make sure that all works fine.
+This can be done by executing ctest_ in build directory.
+Here is a bash script for download, build and test
+
+.. code-block:: bash
+
+    git clone https://github.com/char-lie/stereo-parallel.git
+    mkdir stereo-parallel/build
+    cd build
+    cmake ..
+    cmake --build .
+    ctest
+
 .. _CMake:
     https://cmake.org
+.. _ctest:
+    https://cmake.org/cmake/help/v3.0/manual/ctest.1.html
 .. _CONTRIBUTING:
     https://github.com/char-lie/stereo-parallel/blob/master/CONTRIBUTING.md
 .. _Code of Conduct:
