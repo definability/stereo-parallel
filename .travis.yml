@@ -135,20 +135,20 @@ before_script:
     - sudo apt-get install -y libboost-test-dev
 
 script:
-  - mkdir build
-  - cd build
-  - |
-    if [[ $CC == clang* ]]
-    then
-      echo "Use scan-build"
-      scan-build --use-cc=/usr/bin/$CC --use-c++=/usr/bin/$CXX \
-          -enable-checker core -enable-checker unix -enable-checker cplusplus \
-          -enable-checker security -v cmake .. && \
-      scan-build --use-cc=/usr/bin/$CC --use-c++=/usr/bin/$CXX \
-          -enable-checker core -enable-checker unix -enable-checker cplusplus \
-          -enable-checker security -v cmake --build .
-    else
-      cmake .. && \
-      cmake --build .
-    fi
-  - ctest
+    - mkdir build
+    - cd build
+    - |
+      if [[ $CC == clang* ]]
+      then
+        echo "Use scan-build"
+        scan-build --use-cc=/usr/bin/$CC --use-c++=/usr/bin/$CXX \
+            -enable-checker core -enable-checker unix -enable-checker cplusplus \
+            -enable-checker security -v cmake .. && \
+        scan-build --use-cc=/usr/bin/$CC --use-c++=/usr/bin/$CXX \
+            -enable-checker core -enable-checker unix -enable-checker cplusplus \
+            -enable-checker security -v cmake --build .
+      else
+        cmake .. && \
+        cmake --build .
+      fi
+    - ctest
