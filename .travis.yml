@@ -138,8 +138,9 @@ script:
   - mkdir build
   - cd build
   - |
-    if [ $CC == clang* ]
+    if [[ $CC == clang* ]]
     then
+      echo "Use scan-build"
       scan-build --use-cc=/usr/bin/$CC --use-c++=/usr/bin/$CXX \
           -enable-checker core -enable-checker unix -enable-checker cplusplus \
           -enable-checker security -v cmake .. && \
