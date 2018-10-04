@@ -137,6 +137,16 @@ before_script:
 script:
   - mkdir build
   - cd build
-  - cmake ..
-  - cmake --build .
+  - if [ $CC == clang* ]
+    then
+      scan-build --use-cc=/usr/bin/$CC --use-c++=/usr/bin/$CXX \
+          -enable-checker core -enable-checker unix -enable-checker cplusplus \
+          -enable-checker security -v cmake ..
+      scan-build --use-cc=/usr/bin/$CC --use-c++=/usr/bin/$CXX \
+          -enable-checker core -enable-checker unix -enable-checker cplusplus \
+          -enable-checker security -v cmake --build .
+    else
+      cmake ..
+      cmake --build .
+    fi
   - ctest
