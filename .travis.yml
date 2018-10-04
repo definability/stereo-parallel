@@ -140,11 +140,11 @@ script:
   - |
     if [ $CC == clang* ]
     then
-      scan-build --use-cc=/usr/bin/$CC --use-c++=/usr/bin/$CXX
-          -enable-checker core -enable-checker unix -enable-checker cplusplus
+      scan-build --use-cc=/usr/bin/$CC --use-c++=/usr/bin/$CXX \
+          -enable-checker core -enable-checker unix -enable-checker cplusplus \
           -enable-checker security -v cmake .. && \
-      scan-build --use-cc=/usr/bin/$CC --use-c++=/usr/bin/$CXX
-          -enable-checker core -enable-checker unix -enable-checker cplusplus
+      scan-build --use-cc=/usr/bin/$CC --use-c++=/usr/bin/$CXX \
+          -enable-checker core -enable-checker unix -enable-checker cplusplus \
           -enable-checker security -v cmake --build .
     else
       cmake .. && \
