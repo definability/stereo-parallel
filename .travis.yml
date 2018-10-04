@@ -140,13 +140,29 @@ script:
     - |
       if [[ $CC == clang* ]]
       then
-        echo "Use scan-build"
-        scan-build --use-cc=/usr/bin/$CC --use-c++=/usr/bin/$CXX \
-            -enable-checker core -enable-checker unix -enable-checker cplusplus \
-            -enable-checker security -v cmake .. && \
-        scan-build --use-cc=/usr/bin/$CC --use-c++=/usr/bin/$CXX \
-            -enable-checker core -enable-checker unix -enable-checker cplusplus \
-            -enable-checker security -v cmake --build .
+        CMAKE_CXX_CLANG_TIDY="clang-tidy;"
+        CMAKE_CXX_CLANG_TIDY+="-warnings-as-errors=*;"
+        CMAKE_CXX_CLANG_TIDY+="-header-filter=$(realpath ..);"
+        scan-build \
+            --use-cc=$CC \
+            --use-c++=$CXX \
+            -enable-checker core \
+            -enable-checker unix \
+            -enable-checker cplusplus \
+            -enable-checker security \
+            -v \
+            cmake \
+            -DCMAKE_CXX_CLANG_TIDY=$CMAKE_CXX_CLANG_TIDY \
+            .. && \
+        scan-build \
+            --use-cc=/usr/bin/$CC \
+            --use-c++=/usr/bin/$CXX \
+            -enable-checker core \
+            -enable-checker unix \
+            -enable-checker cplusplus \
+            -enable-checker security \
+            -v \
+            cmake --build .
       else
         cmake .. && \
         cmake --build .
