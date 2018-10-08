@@ -1,0 +1,11 @@
+{
+    "Checks": "\
+        *,\
+        -fuchsia*,\
+    ",
+    "WarningsAsErrors": "\
+        *,\
+        -clang-diagnostic-unused-command-line-argument,\
+        -cert-err58-cpp,\
+    ",
+}
