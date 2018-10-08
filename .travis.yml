@@ -149,13 +149,14 @@ script:
     - |
       if [[ $CC == clang* ]]
       then
+        BUILD_DIR="${TRAVIS_BUILD_DIR}"
         clang-static-analyzer cmake \
-            -DCMAKE_CXX_CLANG_TIDY="clang-tidy;-header-filter=$(realpath ..);" \
+            -DCMAKE_CXX_CLANG_TIDY="clang-tidy;-header-filter=${BUILD_DIR};" \
             -DCMAKE_BUILD_TYPE=Debug \
             .. && \
         clang-static-analyzer cmake --build . && \
-        rm -rf *
       fi
+    - rm -rf *
     - cmake -DCMAKE_CXX_FLAGS="-pedantic -Wall -Wextra -Werror" ..
     - cmake --build .
     - ctest
