@@ -133,6 +133,10 @@ before_install:
 before_script:
     - sudo apt-get update
     - sudo apt-get install -y libboost-test-dev
+
+script:
+    - mkdir build
+    - cd build
     - alias clang-static-analyzer="scan-build
         --use-cc=`which $CC`
         --use-c++=`which $CXX`
@@ -142,10 +146,6 @@ before_script:
         -enable-checker cplusplus
         -enable-checker security
         -v -v -v"
-
-script:
-    - mkdir build
-    - cd build
     - |
       if [[ $CC == clang* ]]
       then
