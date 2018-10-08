@@ -149,31 +149,13 @@ script:
     - |
       if [[ $CC == clang* ]]
       then
-        CMAKE_CXX_CLANG_TIDY="clang-tidy;"
-        CMAKE_CXX_CLANG_TIDY+="-warnings-as-errors=*;"
-        CMAKE_CXX_CLANG_TIDY+="-header-filter=$(realpath ..);"
-        scan-build \
-            --use-cc=$CC \
-            --use-c++=$CXX \
-            -enable-checker core \
-            -enable-checker unix \
-            -enable-checker cplusplus \
-            -enable-checker security \
-            -v \
-            cmake \
-            -DCMAKE_CXX_CLANG_TIDY=$CMAKE_CXX_CLANG_TIDY \
+        clang-static-analyzer cmake \
+            -DCMAKE_CXX_CLANG_TIDY="clang-tidy;-header-filter=$(realpath ..);" \
+            -DCMAKE_BUILD_TYPE=Debug \
             .. && \
-        scan-build \
-            --use-cc=/usr/bin/$CC \
-            --use-c++=/usr/bin/$CXX \
-            -enable-checker core \
-            -enable-checker unix \
-            -enable-checker cplusplus \
-            -enable-checker security \
-            -v \
-            cmake --build .
-      else
-        cmake .. && \
-        cmake --build .
+        clang-static-analyzer cmake --build . && \
+        rm -rf *
       fi
+    - cmake -DCMAKE_CXX_FLAGS="-pedantic -Wall -Wextra -Werror" ..
+    - cmake --build .
     - ctest
