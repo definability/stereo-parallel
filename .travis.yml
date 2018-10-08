@@ -137,18 +137,18 @@ before_script:
 script:
     - mkdir build
     - cd build
-    - alias clang_static_analyzer="scan-build
-        --use-cc=`which $CC`
-        --use-c++=`which $CXX`
-        --force-analyze-debug-code
-        -enable-checker core
-        -enable-checker unix
-        -enable-checker cplusplus
-        -enable-checker security
-        -v -v -v"
     - |
       if [[ $CC == clang* ]]
       then
+        alias clang_static_analyzer="scan-build \
+            --use-cc=`which $CC` \
+            --use-c++=`which $CXX` \
+            --force-analyze-debug-code \
+            -enable-checker core \
+            -enable-checker unix \
+            -enable-checker cplusplus \
+            -enable-checker security \
+            -v -v -v" && \
         BUILD_DIR="${TRAVIS_BUILD_DIR}"
         clang_static_analyzer cmake \
             -DCMAKE_CXX_CLANG_TIDY="clang-tidy;-header-filter=${BUILD_DIR};" \
