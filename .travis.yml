@@ -149,7 +149,7 @@ script:
             -enable-checker cplusplus \
             -enable-checker security \
             -v -v -v" && \
-        BUILD_DIR="${TRAVIS_BUILD_DIR}"
+        BUILD_DIR="${TRAVIS_BUILD_DIR}" && \
         clang_static_analyzer cmake \
             -DCMAKE_CXX_CLANG_TIDY="clang-tidy;-header-filter=${BUILD_DIR};" \
             -DCMAKE_BUILD_TYPE=Debug \
