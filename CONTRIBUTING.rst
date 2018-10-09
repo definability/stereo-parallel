@@ -7,6 +7,53 @@ First of all, read the `Code of Conduct`_.
 
 .. contents::
 
+Running tests
+=============
+
+When you write something new,
+you should check that your code doesn't break anything
+and complies with coding standards used in the project.
+
+In order to check the style,
+run `Clang Static Analyzer`_ and `Clang-Tidy`_.
+It's feasible to create an alias for the static analyzer
+
+.. code-block:: bash
+    mkdir build
+    cd build
+    alias clang-static-analyzer="scan-build \
+          --use-cc=`which cc` \
+          --use-c++=`which cpp` \
+          --force-analyze-debug-code \
+          -enable-checker core \
+          -enable-checker unix \
+          -enable-checker cplusplus \
+          -enable-checker security \
+          -v -v -v"
+    clang-static-analyzer cmake \
+         -DCMAKE_CXX_CLANG_TIDY="clang-tidy;-header-filter=$(realpath ..);" \
+         -DCMAKE_BUILD_TYPE=Debug \
+         ..
+    clang-static-analyzer cmake --build .
+
+Warnings are allowed (but try to avoid them if possible),
+errors will fail the CI.
+
+Note that you should use ``scan-build`` for both
+CMake project generation and compilation.
+Next, you should clear content of the build folder,
+because now it doesn't contain runnable test,
+rebuild the project and run tests
+
+.. code-block:: bash
+    rm -rf *
+    cmake \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_CXX_FLAGS="-pedantic -Wall -Wextra -Werror" \
+          ..
+    cmake --build .
+    ctest
+
 Pull request processing
 =======================
 
@@ -97,4 +144,8 @@ Read it to know how to name the next version of the project.
     https://help.github.com/articles/about-pull-request-merges/
     #squash-and-merge-your-pull-request-commits
 .. _Stereo Parallel:
-    https://github.com/char-lie/stereo-parallel/
+    https://github.com/char-lie/stereo-parallel
+.. _Clang Static Analyzer:
+    https://clang-analyzer.llvm.org
+.. _Clang-Tidy:
+    http://clang.llvm.org/extra/clang-tidy
