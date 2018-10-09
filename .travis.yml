@@ -139,9 +139,11 @@ before_script:
         --use-c++=`which $CXX`
         --force-analyze-debug-code
         -enable-checker core
-        -enable-checker unix
         -enable-checker cplusplus
+        -enable-checker deadcode
+        -enable-checker nullability
         -enable-checker security
+        -enable-checker unix
         -v -v -v"
 
 script:
