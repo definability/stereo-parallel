@@ -48,7 +48,6 @@ rebuild the project and run tests
 
 .. code-block:: bash
 
-    rm -rf *
     cmake \
           -DCMAKE_BUILD_TYPE=Debug \
           -DCMAKE_CXX_FLAGS="-pedantic -Wall -Wextra -Werror" \
