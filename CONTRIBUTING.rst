@@ -19,6 +19,7 @@ run `Clang Static Analyzer`_ and `Clang-Tidy`_.
 It's feasible to create an alias for the static analyzer
 
 .. code-block:: bash
+
     mkdir build
     cd build
     alias clang-static-analyzer="scan-build \
@@ -46,6 +47,7 @@ because now it doesn't contain runnable test,
 rebuild the project and run tests
 
 .. code-block:: bash
+
     rm -rf *
     cmake \
           -DCMAKE_BUILD_TYPE=Debug \
