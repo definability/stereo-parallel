@@ -66,7 +66,7 @@ Here is a bash script for download, build and test
 .. _ctest:
     https://cmake.org/cmake/help/v3.0/manual/ctest.1.html
 .. _CONTRIBUTING:
-    https://github.com/char-lie/stereo-parallel/blob/master/CONTRIBUTING.md
+    https://github.com/char-lie/stereo-parallel/blob/master/CONTRIBUTING.rst
 .. _Code of Conduct:
     https://github.com/char-lie/stereo-parallel/blob/master/CODE_OF_CONDUCT.md
 .. _How to manage a copyright notice in an open source project?:
