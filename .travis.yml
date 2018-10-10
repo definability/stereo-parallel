@@ -133,10 +133,33 @@ before_install:
 before_script:
     - sudo apt-get update
     - sudo apt-get install -y libboost-test-dev
+    - shopt -s expand_aliases
+    - alias clang-static-analyzer="scan-build
+        --use-cc=`which $CC`
+        --use-c++=`which $CXX`
+        --force-analyze-debug-code
+        -enable-checker core
+        -enable-checker cplusplus
+        -enable-checker deadcode
+        -enable-checker nullability
+        -enable-checker security
+        -enable-checker unix
+        -v -v -v"
 
 script:
-  - mkdir build
-  - cd build
-  - cmake ..
-  - cmake --build .
-  - ctest
+    - mkdir build
+    - cd build
+    - |
+      if [[ $CC == clang* ]]
+      then
+        BUILD_DIR="${TRAVIS_BUILD_DIR}" && \
+        clang-static-analyzer cmake \
+            -DCMAKE_CXX_CLANG_TIDY="clang-tidy;-header-filter=${BUILD_DIR};" \
+            -DCMAKE_BUILD_TYPE=Debug \
+            .. && \
+        clang-static-analyzer cmake --build .
+      fi
+    - rm -rf *
+    - cmake -DCMAKE_CXX_FLAGS="-pedantic -Wall -Wextra -Werror" ..
+    - cmake --build .
+    - ctest
