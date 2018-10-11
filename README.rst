@@ -4,6 +4,8 @@ Stereo Parallel
 
 .. image:: https://travis-ci.org/char-lie/stereo-parallel.svg?branch=master
     :target: https://travis-ci.org/char-lie/stereo-parallel
+.. image:: https://codedocs.xyz/char-lie/stereo-parallel.svg
+    :target: https://codedocs.xyz/char-lie/stereo-parallel
 
 .. contents::
 
