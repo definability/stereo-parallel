@@ -102,6 +102,7 @@ or request to close some issues as duplicates.
 Before merge
 ------------
 
+* Update documentation if needed.
 * Write new tests if needed.
 * Make sure that all tests pass.
 * Change CHANGELOG_ if needed.
