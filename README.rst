@@ -63,6 +63,26 @@ Here is a bash script for download, build and test
     cmake --build .
     ctest
 
+Documentation
+=============
+
+You can build the documentation locally
+and read it offline from ``build/docs`` directory.
+First, you should install Doxygen_ and Graphviz_.
+Under Ubuntu you can do it by
+
+.. code-block:: bash
+
+    sudo apt install doxygen graphviz
+
+Then, you can build the documentation using CMake_.
+Just enable ``BUILD_DOC`` flag
+
+.. code-block:: bash
+
+    cmake .. -DBUILD_DOC=ON
+    cmake --build .
+
 .. _CMake:
     https://cmake.org
 .. _ctest:
@@ -71,6 +91,10 @@ Here is a bash script for download, build and test
     https://github.com/char-lie/stereo-parallel/blob/master/CONTRIBUTING.rst
 .. _Code of Conduct:
     https://github.com/char-lie/stereo-parallel/blob/master/CODE_OF_CONDUCT.md
+.. _Doxygen:
+    http://www.doxygen.org
+.. _Graphviz:
+    https://www.graphviz.org
 .. _How to manage a copyright notice in an open source project?:
     https://softwareengineering.stackexchange.com/a/158011
 .. _MIT License:
