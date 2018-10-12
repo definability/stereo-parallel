@@ -25,3 +25,4 @@ project(STEREO_PARALLEL)
 enable_testing()
 
 add_subdirectory(tests)
+add_subdirectory(docs)
