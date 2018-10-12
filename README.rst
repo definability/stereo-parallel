@@ -4,8 +4,15 @@ Stereo Parallel
 
 .. image:: https://travis-ci.org/char-lie/stereo-parallel.svg?branch=master
     :target: https://travis-ci.org/char-lie/stereo-parallel
+
 .. image:: https://codedocs.xyz/char-lie/stereo-parallel.svg
     :target: https://codedocs.xyz/char-lie/stereo-parallel
+
+.. image::
+    https://api.codacy.com/project/badge/Grade/f1ce613656e445cebd3829e05533a8a5
+    :target: https://www.codacy.com/app/char-lie/stereo-parallel?
+             utm_source=github.com&amp;utm_medium=referral&amp;
+             utm_content=char-lie/stereo-parallel&amp;utm_campaign=Badge_Grade
 
 .. contents::
 
