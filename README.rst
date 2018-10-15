@@ -5,6 +5,9 @@ Stereo Parallel
 .. image:: https://travis-ci.org/char-lie/stereo-parallel.svg?branch=master
     :target: https://travis-ci.org/char-lie/stereo-parallel
 
+.. image:: https://codedocs.xyz/char-lie/stereo-parallel.svg
+    :target: https://codedocs.xyz/char-lie/stereo-parallel
+
 .. image::
     https://api.codacy.com/project/badge/Grade/f1ce613656e445cebd3829e05533a8a5
     :target: https://www.codacy.com/app/char-lie/stereo-parallel?
@@ -70,7 +73,9 @@ Here is a bash script for download, build and test
 Documentation
 =============
 
-You can build the documentation locally
+The project has `online documentation`_.
+
+You can also build it locally
 and read it offline from ``build/docs`` directory.
 First, you should install Doxygen_ and Graphviz_.
 Under Ubuntu you can do it by
@@ -103,3 +108,5 @@ Just enable ``BUILD_DOC`` flag
     https://softwareengineering.stackexchange.com/a/158011
 .. _MIT License:
     https://github.com/char-lie/stereo-parallel/blob/master/LICENSE
+.. _online documentation:
+    https://codedocs.xyz/char-lie/stereo-parallel
