@@ -24,7 +24,10 @@
 #define BOOST_TEST_MODULE Stereo Parallel tests
 #include <boost/test/unit_test.hpp>
 
+BOOST_AUTO_TEST_SUITE(API)
 
 BOOST_AUTO_TEST_CASE(compile)
 {
 }
+
+BOOST_AUTO_TEST_SUITE_END()
