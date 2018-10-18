@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE(create_image)
     struct Image image{0, 0, nullptr};
     BOOST_CHECK_EQUAL(image.width, 0);
     BOOST_CHECK_EQUAL(image.height, 0);
-    BOOST_CHECK_EQUAL(image.data, nullptr);
+    BOOST_CHECK(!image.data);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
