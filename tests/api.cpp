@@ -21,6 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#define BOOST_TEST_MODULE Stereo Parallel tests
 #include <boost/test/unit_test.hpp>
 
 

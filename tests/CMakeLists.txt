@@ -32,7 +32,6 @@ target_compile_definitions(
     test_executable
     PRIVATE
     "BOOST_TEST_DYN_LINK=1"
-    "BOOST_TEST_MODULE=Stereo Parallel tests"
 )
 
 add_test(NAME stereo-parallel COMMAND test_executable)
