@@ -27,13 +27,12 @@
 #include <memory>
 
 using ULONG = unsigned long;
-using FLOAT = double;
-using FLOAT_PTR = std::shared_ptr<FLOAT>;
+using ULONG_PTR = std::shared_ptr<ULONG>;
 
 struct Image {
     ULONG width;
     ULONG height;
-    FLOAT_PTR data;
+    ULONG_PTR data;
 };
 
 #endif
