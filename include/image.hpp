@@ -21,12 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/**
+ * @file
+ */
 #ifndef IMAGE_HPP
 #define IMAGE_HPP
 
 #include <memory>
 
+/**
+ * \brief Unsigned long type alias
+ * to use the same name on CPU and GPU.
+ */
 using ULONG = unsigned long;
+/**
+ * \brief Unsigned long pointer type alias
+ * to use the same name on CPU and GPU.
+ */
 using ULONG_PTR = std::shared_ptr<ULONG>;
 
 /**
