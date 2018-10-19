@@ -1,6 +1,10 @@
 option(BUILD_DOC "Build documentation" OFF)
 
 if (BUILD_DOC)
+    if (POLICY CMP0057)
+      cmake_policy(SET CMP0057 NEW)
+    endif()
+
     find_package(Doxygen REQUIRED dot)
 
     set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
