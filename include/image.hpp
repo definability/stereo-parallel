@@ -29,9 +29,24 @@
 using ULONG = unsigned long;
 using ULONG_PTR = std::shared_ptr<ULONG>;
 
+/**
+ * \brief Structure to represent image on both CPU and GPU.
+ */
 struct Image {
+    /**
+     * \brief Width of the image in pixels.
+     */
     ULONG width;
+    /**
+     * \brief Height of the image in pixels.
+     */
     ULONG height;
+    /**
+     * \brief Data contained in the image.
+     *
+     * Image is represented as a grid with intensities of pixels.
+     * Intensity is a non-negative integer.
+     */
     ULONG_PTR data;
 };
 
