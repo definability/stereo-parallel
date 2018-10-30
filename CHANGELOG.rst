@@ -18,6 +18,7 @@ Added
 
 - Project build with CMake_
 - Project testing with ctest_
+- `Image` structure to store information about images
 
 .. Remove these two lines and one indentation level of the next two lines
     when you will release the first version.
