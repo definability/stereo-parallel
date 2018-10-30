@@ -21,13 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#define BOOST_TEST_MODULE Stereo Parallel tests
-#include <boost/test/unit_test.hpp>
+/**
+ * @file
+ */
+#ifndef IMAGE_HPP
+#define IMAGE_HPP
 
-BOOST_AUTO_TEST_SUITE(API)
+#include <memory>
 
-BOOST_AUTO_TEST_CASE(compile)
-{
-}
+/**
+ * \brief Unsigned long type alias
+ * to use the same name on CPU and GPU.
+ */
+using ULONG = unsigned long;
+/**
+ * \brief Unsigned long pointer type alias
+ * to use the same name on CPU and GPU.
+ */
+using ULONG_PTR = std::shared_ptr<ULONG>;
 
-BOOST_AUTO_TEST_SUITE_END()
+/**
+ * \brief Structure to represent image on both CPU and GPU.
+ */
+struct Image {
+    /**
+     * \brief Width of the image in pixels.
+     */
+    ULONG width;
+    /**
+     * \brief Height of the image in pixels.
+     */
+    ULONG height;
+    /**
+     * \brief Data contained in the image.
+     *
+     * Image is represented as a grid with intensities of pixels.
+     * Intensity is a non-negative integer.
+     */
+    ULONG_PTR data;
+};
+
+#endif

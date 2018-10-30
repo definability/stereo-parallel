@@ -21,13 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#define BOOST_TEST_MODULE Stereo Parallel tests
 #include <boost/test/unit_test.hpp>
+#include <image.hpp>
 
-BOOST_AUTO_TEST_SUITE(API)
+BOOST_AUTO_TEST_SUITE(ImageTest)
 
-BOOST_AUTO_TEST_CASE(compile)
+BOOST_AUTO_TEST_CASE(create_image)
 {
+    struct Image image{0, 0, nullptr};
+    BOOST_CHECK_EQUAL(image.width, 0);
+    BOOST_CHECK_EQUAL(image.height, 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
