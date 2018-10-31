@@ -1,2 +1,2 @@
 DOXYFILE = docs/Doxyfile.in
-INPUT = input
+INPUT = include
