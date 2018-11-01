@@ -19,8 +19,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-add_library(image image.hpp)
-set_target_properties(image PROPERTIES LINKER_LANGUAGE CXX)
+add_library(image image.cpp)
 target_include_directories(
     image PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
