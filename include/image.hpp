@@ -27,7 +27,9 @@
 #ifndef IMAGE_HPP
 #define IMAGE_HPP
 
-#include <memory>
+#include <vector>
+
+using std::vector;
 
 /**
  * \brief Unsigned long type alias
@@ -35,15 +37,16 @@
  */
 using ULONG = unsigned long;
 /**
- * \brief Unsigned long pointer type alias
+ * \brief Unsigned long array type alias
  * to use the same name on CPU and GPU.
  */
-using ULONG_PTR = std::shared_ptr<ULONG>;
+using ULONG_ARRAY = vector<ULONG>;
 
 /**
  * \brief Structure to represent image on both CPU and GPU.
  */
-struct Image {
+struct Image
+{
     /**
      * \brief Width of the image in pixels.
      */
@@ -53,12 +56,33 @@ struct Image {
      */
     ULONG height;
     /**
+     * \brief Maximal intensity contained in Image::data array.
+     */
+    ULONG max_value;
+    /**
      * \brief Data contained in the image.
      *
      * Image is represented as a grid with intensities of pixels.
      * Intensity is a non-negative integer.
+     *
+     * In order to increase performance
+     * 1D array is used with row-major order:
+     * first, we put elements of the first row one-by-one,
+     * then the second one, and so on
+     *
+     * \f[
+     *  \begin{bmatrix}
+     *      a_{0 0} & a_{0 1} \\
+     *      a_{1 0} & a_{1 1} \\
+     *  \end{bmatrix}
+     *  \mapsto
+     *  \begin{bmatrix}
+     *      a_{0 0} & a_{0 1} &
+     *      a_{1 0} & a_{1 1}
+     *  \end{bmatrix}
+     * \f]
      */
-    ULONG_PTR data;
+    ULONG_ARRAY data;
 };
 
 #endif
