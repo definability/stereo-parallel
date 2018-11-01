@@ -85,4 +85,19 @@ struct Image
     ULONG_ARRAY data;
 };
 
+/**
+ * Structure that contains position of a pixel.
+ */
+struct Pixel
+{
+    /**
+     * \brief Row (vertical offset) of the pixel.
+     */
+    ULONG row;
+    /**
+     * \brief Column (horizontal offset) of the pixel.
+     */
+    ULONG column;
+};
+
 #endif
