@@ -25,7 +25,7 @@
 
 bool image_valid(const struct Image& image)
 {
-    if (!image.max_value || !image.width || !image.height)
+    if (image.max_value == 0 || image.width == 0 || image.height == 0)
     {
         return false;
     }
