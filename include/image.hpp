@@ -29,8 +29,6 @@
 
 #include <vector>
 
-using std::vector;
-
 /**
  * \brief Unsigned long type alias
  * to use the same name on CPU and GPU.
@@ -40,7 +38,7 @@ using ULONG = unsigned long;
  * \brief Unsigned long array type alias
  * to use the same name on CPU and GPU.
  */
-using ULONG_ARRAY = vector<ULONG>;
+using ULONG_ARRAY = std::vector<ULONG>;
 
 /**
  * \brief Structure to represent image on both CPU and GPU.
