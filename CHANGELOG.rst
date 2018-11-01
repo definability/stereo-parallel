@@ -16,9 +16,14 @@ Unreleased_
 Added
 -----
 
-- Project build with CMake_
-- Project testing with ctest_
-- `Image` structure to store information about images
+- Project build with CMake_.
+- Project testing with ctest_.
+- `Image` structure to store information about images.
+- `Pixel` structure to represent position of a pixel.
+- `image_valid` function to check validity of `Image`.
+- `get_pixel_index` to calculate index of given pixel in 1D intensities array.
+- `get_pixel_value` to fetch intensity of given pixel
+  from 1D intensities array.
 
 .. Remove these two lines and one indentation level of the next two lines
     when you will release the first version.
