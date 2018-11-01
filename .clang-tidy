@@ -8,5 +8,6 @@
         -clang-diagnostic-unused-command-line-argument,\
         -cert-err58-cpp,\
         -google-runtime-int,\
+        -cppcoreguidelines-pro-type-vararg,\
     ",
 }
