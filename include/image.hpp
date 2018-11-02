@@ -27,7 +27,7 @@
 #ifndef IMAGE_HPP
 #define IMAGE_HPP
 
-#include <memory>
+#include <vector>
 
 /**
  * \brief Unsigned long type alias
@@ -35,15 +35,16 @@
  */
 using ULONG = unsigned long;
 /**
- * \brief Unsigned long pointer type alias
+ * \brief Unsigned long array type alias
  * to use the same name on CPU and GPU.
  */
-using ULONG_PTR = std::shared_ptr<ULONG>;
+using ULONG_ARRAY = std::vector<ULONG>;
 
 /**
  * \brief Structure to represent image on both CPU and GPU.
  */
-struct Image {
+struct Image
+{
     /**
      * \brief Width of the image in pixels.
      */
@@ -53,12 +54,75 @@ struct Image {
      */
     ULONG height;
     /**
+     * \brief Maximal intensity contained in Image::data array.
+     */
+    ULONG max_value;
+    /**
      * \brief Data contained in the image.
      *
      * Image is represented as a grid with intensities of pixels.
      * Intensity is a non-negative integer.
+     *
+     * In order to increase performance
+     * 1D array is used with row-major order:
+     * first, we put elements of the first row one-by-one,
+     * then the second one, and so on
+     *
+     * \f[
+     *  \begin{bmatrix}
+     *      a_{0 0} & a_{0 1} \\
+     *      a_{1 0} & a_{1 1} \\
+     *  \end{bmatrix}
+     *  \mapsto
+     *  \begin{bmatrix}
+     *      a_{0 0} & a_{0 1} &
+     *      a_{1 0} & a_{1 1}
+     *  \end{bmatrix}
+     * \f]
      */
-    ULONG_PTR data;
+    ULONG_ARRAY data;
 };
+
+/**
+ * Structure that contains position of a pixel.
+ */
+struct Pixel
+{
+    /**
+     * \brief Row (vertical offset) of the pixel.
+     */
+    ULONG row;
+    /**
+     * \brief Column (horizontal offset) of the pixel.
+     */
+    ULONG column;
+};
+
+/**
+ * \brief Check validity of an image.
+ *
+ * Image should contain at least one pixel,
+ * maximal intensity should be greater than zero,
+ * and neither intensity should exceed specified maximal value.
+ */
+bool image_valid(const struct Image& image);
+/**
+ * \brief Get position of the pixel in data array of the image.
+ *
+ * Despite instensities of pixels are stored in 1D array Image::data,
+ * it's convenient to access them using their coordinates.
+ * That's why the function for coordinates' conversion is needed.
+ *
+ * Result of accessing non-existent value
+ * depends on ::ULONG_ARRAY.
+ */
+ULONG get_pixel_index(const struct Image& image, struct Pixel pixel);
+/**
+ * \brief Get intensity of the pixel in the image.
+ *
+ * Simply call ::get_pixel_index and take a value with returned index
+ * from Image::data.
+ */
+ULONG get_pixel_value(const struct Image& image, struct Pixel pixel);
 
 #endif
