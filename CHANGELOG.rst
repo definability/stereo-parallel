@@ -18,23 +18,24 @@ Added
 
 - Project build with CMake_.
 - Project testing with ctest_.
-- `Image` structure to store information about images.
+- ``Image`` structure to store information about images.
   Contains
 
-  - `width` of an image,
-  - `height` of an image,
-  - `max_value` limit for intensity,
-  - `data` array of intensities of pixels in row-major order.
+  - ``width`` of an image,
+  - ``height`` of an image,
+  - ``max_value`` limit for intensity,
+  - ``data`` array of intensities of pixels in row-major order.
 
-- `Pixel` structure to represent position of a pixel.
+- ``Pixel`` structure to represent position of a pixel.
   Contains
 
-  - `row` (vertical offset) of a pixel,
-  - `column` (horizontal offset) of a pixel.
+  - ``row`` (vertical offset) of a pixel,
+  - ``column`` (horizontal offset) of a pixel.
 
-- `image_valid` function to check validity of `Image`.
-- `get_pixel_index` to calculate index of given pixel in 1D intensities array.
-- `get_pixel_value` to fetch intensity of given pixel
+- ``image_valid`` function to check validity of ``Image``.
+- ``get_pixel_index`` to calculate index of given pixel
+  in 1D intensities array.
+- ``get_pixel_value`` to fetch intensity of given pixel
   from 1D intensities array.
 
 .. Remove these two lines and one indentation level of the next two lines
