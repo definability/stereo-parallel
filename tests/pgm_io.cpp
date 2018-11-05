@@ -144,7 +144,7 @@ BOOST_AUTO_TEST_CASE(read_write_image)
 3 4 5
 )image"};
 
-    std::istringstream image_input{image_string.c_str()};
+    std::istringstream image_input{image_string};
     image_input >> pgm_io;
     BOOST_CHECK(pgm_io.get_image());
     BOOST_CHECK_EQUAL(pgm_io.get_image()->width, 3);
@@ -171,7 +171,7 @@ BOOST_AUTO_TEST_CASE(read_write_imagelong)
 0
 )image"};
 
-    std::istringstream image_input{image_string.c_str()};
+    std::istringstream image_input{image_string};
     image_input >> pgm_io;
     BOOST_CHECK(pgm_io.get_image());
     BOOST_CHECK_EQUAL(pgm_io.get_image()->width, 12);
