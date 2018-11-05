@@ -24,8 +24,6 @@
 #include <boost/test/unit_test.hpp>
 #include <image.hpp>
 
-using std::vector;
-
 BOOST_AUTO_TEST_SUITE(ImageTest)
 
 BOOST_AUTO_TEST_CASE(create_image)
@@ -34,7 +32,7 @@ BOOST_AUTO_TEST_CASE(create_image)
     BOOST_CHECK_EQUAL(image.width, 2);
     BOOST_CHECK_EQUAL(image.height, 1);
     BOOST_CHECK_EQUAL(image.max_value, 1);
-    BOOST_CHECK(image.data == vector<ULONG>({0, 1}));
+    BOOST_CHECK(image.data == std::vector<ULONG>({0, 1}));
 }
 
 BOOST_AUTO_TEST_CASE(check_image_valid)
