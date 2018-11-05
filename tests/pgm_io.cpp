@@ -23,13 +23,13 @@
  */
 #include <boost/test/unit_test.hpp>
 
-#include <string>
-#include <sstream>
 #include <iostream>
 #include <memory>
+#include <sstream>
+#include <string>
 
-#include <pgm_io.hpp>
 #include <image.hpp>
+#include <pgm_io.hpp>
 
 BOOST_AUTO_TEST_SUITE(PGM_IO_test)
 
