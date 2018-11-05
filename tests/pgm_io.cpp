@@ -24,7 +24,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <string>
-#include <strstream>
+#include <sstream>
 #include <iostream>
 #include <memory>
 
@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_SUITE(PGM_IO_test)
 BOOST_AUTO_TEST_CASE(read_image)
 {
     PGM_IO pgm_io;
-    std::istrstream image_content{R"image(
+    std::istringstream image_content{R"image(
     # Grayscale image
     P2
     # 3 columns and 2 rows
@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(read_image)
 BOOST_AUTO_TEST_CASE(read_wrong_format_name)
 {
     PGM_IO pgm_io;
-    std::istrstream image_content{R"image(
+    std::istringstream image_content{R"image(
     P
     3 2
     10
@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE(read_wrong_format_name)
 BOOST_AUTO_TEST_CASE(read_wrong_max_value)
 {
     PGM_IO pgm_io;
-    std::istrstream image_content{R"image(
+    std::istringstream image_content{R"image(
     P2
     3 2
     65537
@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE(read_wrong_max_value)
 BOOST_AUTO_TEST_CASE(read_wrong_data)
 {
     PGM_IO pgm_io;
-    std::istrstream image_content{R"image(
+    std::istringstream image_content{R"image(
     P2
     3 2
     -1
@@ -112,8 +112,8 @@ BOOST_AUTO_TEST_CASE(write_image)
         Image{3, 2, 5, {0, 1, 2, 3, 4, 5}});
     PGM_IO pgm_io{image};
 
-    std::ostrstream image_content;
-    image_content << pgm_io << std::ends;
+    std::ostringstream image_content;
+    image_content << pgm_io;
 
     BOOST_CHECK_EQUAL(image_content.str(),
 R"image(P2
@@ -128,8 +128,8 @@ BOOST_AUTO_TEST_CASE(write_no_image)
 {
     PGM_IO pgm_io;
 
-    std::ostrstream image_content;
-    image_content << pgm_io << std::ends;
+    std::ostringstream image_content;
+    image_content << pgm_io;
 
     BOOST_CHECK_EQUAL(image_content.str(), "");
 }
@@ -144,15 +144,15 @@ BOOST_AUTO_TEST_CASE(read_write_image)
 3 4 5
 )image"};
 
-    std::istrstream image_input{image_string.c_str()};
+    std::istringstream image_input{image_string.c_str()};
     image_input >> pgm_io;
     BOOST_CHECK(pgm_io.get_image());
     BOOST_CHECK_EQUAL(pgm_io.get_image()->width, 3);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->height, 2);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->max_value, 5);
 
-    std::ostrstream image_output;
-    image_output << pgm_io << std::ends;
+    std::ostringstream image_output;
+    image_output << pgm_io;
 
     BOOST_CHECK_EQUAL(image_output.str(), image_string);
 }
@@ -171,15 +171,15 @@ BOOST_AUTO_TEST_CASE(read_write_imagelong)
 0
 )image"};
 
-    std::istrstream image_input{image_string.c_str()};
+    std::istringstream image_input{image_string.c_str()};
     image_input >> pgm_io;
     BOOST_CHECK(pgm_io.get_image());
     BOOST_CHECK_EQUAL(pgm_io.get_image()->width, 12);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->height, 3);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->max_value, 65536);
 
-    std::ostrstream image_output;
-    image_output << pgm_io << std::ends;
+    std::ostringstream image_output;
+    image_output << pgm_io;
 
     BOOST_CHECK_EQUAL(image_output.str(), image_string);
 }
