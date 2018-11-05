@@ -20,7 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 add_library(image image.cpp)
+add_library(pgm_io pgm_io.cpp)
 target_include_directories(
     image PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+target_include_directories(
+    pgm_io PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
