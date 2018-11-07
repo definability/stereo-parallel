@@ -155,7 +155,7 @@ std::istream& operator>>(std::istream& in, PGM_IO& ppm_io)
 
     if (!in.eof())
     {
-        if (PGM_IO::read_pgm_instruction(in) != "")
+        if (!PGM_IO::read_pgm_instruction(in).empty())
         {
             in.setstate(std::ios_base::failbit);
             return in;
