@@ -123,7 +123,7 @@ std::istream& operator>>(std::istream& in, PGM_IO& ppm_io)
         image->height = std::stoul(PGM_IO::read_pgm_instruction(in));
         image->max_value = std::stoul(PGM_IO::read_pgm_instruction(in));
     }
-    catch (std::invalid_argument)
+    catch (std::invalid_argument&)
     {
         in.setstate(std::ios_base::failbit);
         return in;
@@ -145,7 +145,7 @@ std::istream& operator>>(std::istream& in, PGM_IO& ppm_io)
                 image->data[get_pixel_index(*image, {row, column})] =
                     std::stoul(PGM_IO::read_pgm_instruction(in));
             }
-            catch (std::invalid_argument)
+            catch (std::invalid_argument&)
             {
                 in.setstate(std::ios_base::failbit);
                 return in;
