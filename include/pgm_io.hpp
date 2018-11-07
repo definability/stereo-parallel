@@ -155,8 +155,10 @@ public:
      * in the case of wrong file format (including blank file).
      */
     friend std::istream& operator>>(std::istream& in, PGM_IO& ppm_io);
+    /**
+     * \brief Overload of `<<` operator to write an image to output stream.
+     */
+    friend std::ostream& operator<<(std::ostream& out, const PGM_IO& ppm_io);
 };
-
-std::ostream& operator<<(std::ostream& out, const PGM_IO& ppm_io);
 
 #endif
