@@ -107,7 +107,7 @@ std::ostream& operator<<(std::ostream& out, const PGM_IO& ppm_io)
 
 std::istream& operator>>(std::istream& in, PGM_IO& ppm_io)
 {
-    std::string format_code = PGM_IO::read_ppm_instruction(in);
+    std::string format_code = PGM_IO::read_pgm_instruction(in);
     if (format_code != PGM_IO::FORMAT_CODE)
     {
         in.setstate(std::ios_base::failbit);
@@ -117,9 +117,18 @@ std::istream& operator>>(std::istream& in, PGM_IO& ppm_io)
     std::shared_ptr<struct Image> image =
         std::make_shared<struct Image>(Image{0, 0, 0, {}});
 
-    image->width = std::stoul(PGM_IO::read_ppm_instruction(in));
-    image->height = std::stoul(PGM_IO::read_ppm_instruction(in));
-    image->max_value = std::stoul(PGM_IO::read_ppm_instruction(in));
+    try
+    {
+        image->width = std::stoul(PGM_IO::read_pgm_instruction(in));
+        image->height = std::stoul(PGM_IO::read_pgm_instruction(in));
+        image->max_value = std::stoul(PGM_IO::read_pgm_instruction(in));
+    }
+    catch (std::invalid_argument)
+    {
+        in.setstate(std::ios_base::failbit);
+        return in;
+    }
+
     if (image->max_value > PGM_IO::MAX_VALUE_LIMIT)
     {
         in.setstate(std::ios_base::failbit);
@@ -131,8 +140,25 @@ std::istream& operator>>(std::istream& in, PGM_IO& ppm_io)
     {
         for (unsigned column = 0; column < image->width; ++column)
         {
-            image->data[get_pixel_index(*image, {row, column})] =
-                std::stoul(PGM_IO::read_ppm_instruction(in));
+            try
+            {
+                image->data[get_pixel_index(*image, {row, column})] =
+                    std::stoul(PGM_IO::read_pgm_instruction(in));
+            }
+            catch (std::invalid_argument)
+            {
+                in.setstate(std::ios_base::failbit);
+                return in;
+            }
+        }
+    }
+
+    if (!in.eof())
+    {
+        if (PGM_IO::read_pgm_instruction(in) != "")
+        {
+            in.setstate(std::ios_base::failbit);
+            return in;
         }
     }
 
