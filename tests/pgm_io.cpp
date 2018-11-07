@@ -45,6 +45,8 @@ BOOST_AUTO_TEST_CASE(read_image)
 
     0 1 2
     3 4 5
+    # The end
+    # Long end
     )image"};
     image_content >> pgm_io;
     BOOST_REQUIRE(pgm_io.get_image());
@@ -59,6 +61,26 @@ BOOST_AUTO_TEST_CASE(read_image)
     BOOST_CHECK_EQUAL(get_pixel_value(image, {1, 0}), 3);
     BOOST_CHECK_EQUAL(get_pixel_value(image, {1, 1}), 4);
     BOOST_CHECK_EQUAL(get_pixel_value(image, {1, 2}), 5);
+}
+
+BOOST_AUTO_TEST_CASE(read_blank_file)
+{
+    PGM_IO pgm_io;
+    std::istringstream image_content{""};
+    image_content >> pgm_io;
+    BOOST_CHECK(!pgm_io.get_image());
+    BOOST_CHECK(!image_content);
+}
+
+BOOST_AUTO_TEST_CASE(read_comment_file)
+{
+    PGM_IO pgm_io;
+    std::istringstream image_content{R"image(
+    # Comment
+    )image"};
+    image_content >> pgm_io;
+    BOOST_CHECK(!pgm_io.get_image());
+    BOOST_CHECK(!image_content);
 }
 
 BOOST_AUTO_TEST_CASE(read_wrong_format_name)
@@ -76,7 +98,7 @@ BOOST_AUTO_TEST_CASE(read_wrong_format_name)
     BOOST_CHECK(!image_content);
 }
 
-BOOST_AUTO_TEST_CASE(read_wrong_max_value)
+BOOST_AUTO_TEST_CASE(read_big_max_value)
 {
     PGM_IO pgm_io;
     std::istringstream image_content{R"image(
@@ -91,7 +113,37 @@ BOOST_AUTO_TEST_CASE(read_wrong_max_value)
     BOOST_CHECK(!image_content);
 }
 
-BOOST_AUTO_TEST_CASE(read_wrong_data)
+BOOST_AUTO_TEST_CASE(read_incomplete_data)
+{
+    PGM_IO pgm_io;
+    std::istringstream image_content{R"image(
+    P2
+    3 2
+    65537
+    0 1 2
+    3 4
+    )image"};
+    image_content >> pgm_io;
+    BOOST_CHECK(!pgm_io.get_image());
+    BOOST_CHECK(!image_content);
+}
+
+BOOST_AUTO_TEST_CASE(read_redundant_data)
+{
+    PGM_IO pgm_io;
+    std::istringstream image_content{R"image(
+    P2
+    3 2
+    65537
+    0 1 2
+    3 4 5 6
+    )image"};
+    image_content >> pgm_io;
+    BOOST_CHECK(!pgm_io.get_image());
+    BOOST_CHECK(!image_content);
+}
+
+BOOST_AUTO_TEST_CASE(read_wrong_max_value)
 {
     PGM_IO pgm_io;
     std::istringstream image_content{R"image(
@@ -99,7 +151,22 @@ BOOST_AUTO_TEST_CASE(read_wrong_data)
     3 2
     -1
     0 1 2
-    3 4
+    3 4 5
+    )image"};
+    image_content >> pgm_io;
+    BOOST_CHECK(!pgm_io.get_image());
+    BOOST_CHECK(!image_content);
+}
+
+BOOST_AUTO_TEST_CASE(read_intensity_letter)
+{
+    PGM_IO pgm_io;
+    std::istringstream image_content{R"image(
+    P2
+    3 2
+    5
+    p 1 2
+    3 4 5
     )image"};
     image_content >> pgm_io;
     BOOST_CHECK(!pgm_io.get_image());
