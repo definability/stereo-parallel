@@ -47,7 +47,6 @@ std::string PGM_IO::read_pgm_instruction(std::istream& in)
 {
     if (in.eof())
     {
-        in.setstate(std::ios_base::failbit);
         return "";
     }
     std::string current_input;
@@ -57,7 +56,6 @@ std::string PGM_IO::read_pgm_instruction(std::istream& in)
         in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         if (in.eof())
         {
-            in.setstate(std::ios_base::failbit);
             return "";
         }
         in >> current_input;
