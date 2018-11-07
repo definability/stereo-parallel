@@ -60,6 +60,10 @@ std::string PGM_IO::read_pgm_instruction(std::istream& in)
         }
         in >> current_input;
     }
+    if (current_input == "#")
+    {
+        return "";
+    }
     return current_input;
 }
 
