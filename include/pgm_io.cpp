@@ -43,7 +43,7 @@ std::shared_ptr<struct Image> PGM_IO::get_image() const
     return this->image;
 }
 
-std::string PGM_IO::PGM_IO::read_ppm_instruction(std::istream& in)
+std::string PGM_IO::read_pgm_instruction(std::istream& in)
 {
     if (in.eof())
     {

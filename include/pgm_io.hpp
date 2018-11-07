@@ -60,7 +60,13 @@ private:
      * \brief Pointer to an ::Image the ::PGM_IO had read or needs to write.
      */
     std::shared_ptr<struct Image> image;
-    static std::string read_ppm_instruction(std::istream& in);
+    /**
+     * \brief Read the next chunk ignoring comments.
+     *
+     * \return String with instruction,
+     * or blank string if input stream is finished.
+     */
+    static std::string read_pgm_instruction(std::istream& in);
 public:
     /**
      * \brief Maximum value of maximum gray value.
