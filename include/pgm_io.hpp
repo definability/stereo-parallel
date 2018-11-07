@@ -29,28 +29,125 @@
 
 #include <image.hpp>
 
+/**
+ * \brief Input and output operations for PGM image format.
+ *
+ * The class allows to read and write ::Image
+ * from stream that contains image in
+ * <a href="http://netpbm.sourceforge.net/doc/pgm.html">"plain" PGM</a>
+ * and write it to stream in this format.
+ *
+ * The structure is very simple.
+ * All chunks of information are separated by whitespace
+ * (space, tab or new line).
+ * Let's call one chunk an \b instruction.
+ * All instructions except comments and the first instruction
+ * are regular ASCII numbers.
+ * Comments start with `#` character
+ * and go to the end of the line where the symbol occurs.
+ * PGM file contains the following instructions in the following order:
+ *
+ * - Two magic characters: `P2`;
+ * - Two numbers:
+ *   width (number of columns) and height (number of rows);
+ * - Maximum gray value;
+ * - List of intensities in row-major order.
+ */
 class PGM_IO
 {
 private:
+    /**
+     * \brief Pointer to an ::Image the ::PGM_IO had read or needs to write.
+     */
     std::shared_ptr<struct Image> image;
     static std::string read_ppm_instruction(std::istream& in);
 public:
+    /**
+     * \brief Maximum value of maximum gray value.
+     */
     static const unsigned MAX_VALUE_LIMIT = 1u << 16u;
+    /**
+     * \brief Maximal number of decimal digits in intensity integer.
+     *
+     * Exact formula is
+     *
+     * \f[
+     *  MAX\_COLOR\_DIGITS =
+     *  \left\lceil \log_{10}{MAX\_VALUE\_LIMIT} \right\rceil
+     * \f]
+     *
+     * Though, `log10` function seems not to have `constexpr` overload,
+     * so it's needed to hardcode the constant.
+     */
     static const unsigned MAX_COLOR_DIGITS = 5;
+    /**
+     * \brief Maximal number of symbols per line.
+     *
+     * In description of the plain PGM format
+     * it's said that no line should be longer than `70` characters.
+     */
     static const unsigned MAX_COLUMNS = 70;
+    /**
+     * \brief Maximal number of instructions per line.
+     *
+     * It's easier to limit number of instruction per line
+     * using the longest possible size,
+     * than calculate length of each instruction in runtime.
+     */
     static const unsigned MAX_NUMBERS_PER_ROW =
         MAX_COLUMNS / (1 + MAX_COLOR_DIGITS);
+    /**
+     * \brief Magic string that identifies the plain PGM format.
+     */
     static constexpr const char* FORMAT_CODE = "P2";
+    /**
+     * \brief Default constructor.
+     */
     PGM_IO() = default;
+    /**
+     * \brief Default copy constructor just makes a shallow copy.
+     */
     PGM_IO(const PGM_IO&) = default;
+    /**
+     * \brief Default move constructor.
+     */
     PGM_IO(PGM_IO&&) = default;
+    /**
+     * \brief Default copy assignment operator.
+     */
     PGM_IO& operator=(const PGM_IO&) = default;
+    /**
+     * \brief Default move assignment operator.
+     */
     PGM_IO& operator=(PGM_IO&&) = default;
+    /**
+     * \brief Constructor with specific image.
+     *
+     * If we want to write a file,
+     * we may want to create a ::PGM_IO instance
+     * with ::Image specified immediately.
+     */
     explicit PGM_IO(std::shared_ptr<struct Image> image);
+    /**
+     * \brief Default destructor.
+     */
     ~PGM_IO() = default;
+    /**
+     * \brief Image setter.
+     */
     void set_image(const std::shared_ptr<struct Image>& image);
+    /**
+     * \brief Image getter.
+     */
     std::shared_ptr<struct Image> get_image() const;
-
+    /**
+     * \brief Overload of `>>` operator to read an image from input stream.
+     *
+     * Sets
+     * <a href="https://en.cppreference.com/w/cpp/io/ios_base/iostate">
+     * failbit</a>
+     * in the case of wrong file format (including blank file).
+     */
     friend std::istream& operator>>(std::istream& in, PGM_IO& ppm_io);
 };
 
