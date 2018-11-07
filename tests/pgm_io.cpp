@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(read_image)
     3 4 5
     )image"};
     image_content >> pgm_io;
-    BOOST_CHECK(pgm_io.get_image());
+    BOOST_REQUIRE(pgm_io.get_image());
     BOOST_CHECK_EQUAL(pgm_io.get_image()->width, 3);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->height, 2);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->max_value, 10);
@@ -146,7 +146,7 @@ BOOST_AUTO_TEST_CASE(read_write_image)
 
     std::istringstream image_input{image_string};
     image_input >> pgm_io;
-    BOOST_CHECK(pgm_io.get_image());
+    BOOST_REQUIRE(pgm_io.get_image());
     BOOST_CHECK_EQUAL(pgm_io.get_image()->width, 3);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->height, 2);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->max_value, 5);
@@ -173,7 +173,7 @@ BOOST_AUTO_TEST_CASE(read_write_imagelong)
 
     std::istringstream image_input{image_string};
     image_input >> pgm_io;
-    BOOST_CHECK(pgm_io.get_image());
+    BOOST_REQUIRE(pgm_io.get_image());
     BOOST_CHECK_EQUAL(pgm_io.get_image()->width, 12);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->height, 3);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->max_value, 65536);
