@@ -21,11 +21,12 @@
 # SOFTWARE.
 find_package(Boost 1.54 REQUIRED COMPONENTS unit_test_framework)
 
-add_executable(test_executable api.cpp image.cpp)
+add_executable(test_executable api.cpp image.cpp pgm_io.cpp)
 target_include_directories(test_executable PRIVATE ${BOOST_INCLUDE_DIRS})
 target_link_libraries(
     test_executable
     image
+    pgm_io
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 target_compile_definitions(

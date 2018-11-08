@@ -24,8 +24,6 @@
 #include <boost/test/unit_test.hpp>
 #include <image.hpp>
 
-using std::vector;
-
 BOOST_AUTO_TEST_SUITE(ImageTest)
 
 BOOST_AUTO_TEST_CASE(create_image)
@@ -34,7 +32,7 @@ BOOST_AUTO_TEST_CASE(create_image)
     BOOST_CHECK_EQUAL(image.width, 2);
     BOOST_CHECK_EQUAL(image.height, 1);
     BOOST_CHECK_EQUAL(image.max_value, 1);
-    BOOST_CHECK(image.data == vector<ULONG>({0, 1}));
+    BOOST_CHECK(image.data == std::vector<ULONG>({0, 1}));
 }
 
 BOOST_AUTO_TEST_CASE(check_image_valid)
@@ -63,22 +61,30 @@ BOOST_AUTO_TEST_CASE(image_invalid_size)
 
 BOOST_AUTO_TEST_CASE(check_get_pixel_index)
 {
-    struct Image image{2, 2, 3, {3, 2, 1, 0}};
+    struct Image image{3, 2, 5, {5, 4, 3, 2, 1, 0}};
     BOOST_CHECK(image_valid(image));
-    BOOST_CHECK(get_pixel_index(image, {0, 0}) == 0);
-    BOOST_CHECK(get_pixel_index(image, {0, 1}) == 1);
-    BOOST_CHECK(get_pixel_index(image, {1, 0}) == 2);
-    BOOST_CHECK(get_pixel_index(image, {1, 1}) == 3);
+    BOOST_CHECK_EQUAL(image.width, 3);
+    BOOST_CHECK_EQUAL(image.height, 2);
+    BOOST_CHECK_EQUAL(get_pixel_index(image, {0, 0}), 0);
+    BOOST_CHECK_EQUAL(get_pixel_index(image, {0, 1}), 1);
+    BOOST_CHECK_EQUAL(get_pixel_index(image, {0, 2}), 2);
+    BOOST_CHECK_EQUAL(get_pixel_index(image, {1, 0}), 3);
+    BOOST_CHECK_EQUAL(get_pixel_index(image, {1, 1}), 4);
+    BOOST_CHECK_EQUAL(get_pixel_index(image, {1, 2}), 5);
 }
 
 BOOST_AUTO_TEST_CASE(check_get_pixel_value)
 {
-    struct Image image{2, 2, 3, {3, 2, 1, 0}};
+    struct Image image{3, 2, 5, {5, 4, 3, 2, 1, 0}};
     BOOST_CHECK(image_valid(image));
-    BOOST_CHECK(get_pixel_value(image, {0, 0}) == 3);
-    BOOST_CHECK(get_pixel_value(image, {0, 1}) == 2);
-    BOOST_CHECK(get_pixel_value(image, {1, 0}) == 1);
-    BOOST_CHECK(get_pixel_value(image, {1, 1}) == 0);
+    BOOST_CHECK_EQUAL(image.width, 3);
+    BOOST_CHECK_EQUAL(image.height, 2);
+    BOOST_CHECK_EQUAL(get_pixel_value(image, {0, 0}), 5);
+    BOOST_CHECK_EQUAL(get_pixel_value(image, {0, 1}), 4);
+    BOOST_CHECK_EQUAL(get_pixel_value(image, {0, 2}), 3);
+    BOOST_CHECK_EQUAL(get_pixel_value(image, {1, 0}), 2);
+    BOOST_CHECK_EQUAL(get_pixel_value(image, {1, 1}), 1);
+    BOOST_CHECK_EQUAL(get_pixel_value(image, {1, 2}), 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
