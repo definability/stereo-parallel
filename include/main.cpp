@@ -32,7 +32,8 @@ int main(int argc, char* argv[]) try
 
     if (vm.count("left-image") == 1 && vm.count("right-image") == 1)
     {
-        try {
+        try
+        {
             struct Image left_image{
                 read_image(vm["left-image"].as<std::string>())
             };
@@ -47,6 +48,10 @@ int main(int argc, char* argv[]) try
         catch (const std::logic_error& e)
         {
             std::cerr << "Logic error: " << e.what() << std::endl;
+        }
+        catch (...)
+        {
+            throw;
         }
     }
     else if (vm.count("left-image") > 0 || vm.count("right-image") > 0)
