@@ -9,7 +9,7 @@
 #include <image.hpp>
 #include <pgm_io.hpp>
 
-struct Image read_image(std::string image_path);
+struct Image read_image(const std::string& image_path);
 
 int main(int argc, char* argv[]) try
 {
@@ -69,7 +69,7 @@ catch(...) {
     return 1;
 }
 
-struct Image read_image(std::string image_path)
+struct Image read_image(const std::string& image_path)
 {
     std::ifstream image_file(image_path);
     if (!image_file)
