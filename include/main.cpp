@@ -41,11 +41,11 @@ int main(int argc, char* argv[]) try
                 read_image(vm["right-image"].as<std::string>())
             };
         }
-        catch (const std::invalid_argument& e)
+        catch (std::invalid_argument& e)
         {
             std::cerr << "Invalid argument: " << e.what() << std::endl;
         }
-        catch (const std::logic_error& e)
+        catch (std::logic_error& e)
         {
             std::cerr << "Logic error: " << e.what() << std::endl;
         }
@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) try
     }
     return 0;
 }
-catch(const std::exception& e) {
+catch(std::exception& e) {
     std::cerr << "Unexpected exception: " << e.what() << std::endl;
     return 1;
 }
