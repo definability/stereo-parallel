@@ -77,26 +77,21 @@ struct Image read_image(const std::string& image_path)
     std::ifstream image_file(image_path);
     if (!image_file)
     {
-        throw std::invalid_argument(
-            "Unable to open file `" + image_path + "`."
-        );
+        throw std::invalid_argument("Unable to open file.");
     }
 
     PGM_IO pgm_io;
     image_file >> pgm_io;
     if (!image_file)
     {
-        throw std::invalid_argument(
-            std::string("File `" + image_path +
-            "` is not a correct plain PGM image.").c_str()
-        );
+        throw std::invalid_argument("File is not a correct plain PGM image.");
     }
     if (!pgm_io.get_image())
     {
         throw std::logic_error(
-            std::string("Image `" + image_path + "` is valid, "
+            "Image is valid, "
             "but it wasn't read for some reason. "
-            "Please, report the issue to developers.").c_str()
+            "Please, report the issue to developers."
         );
     }
     return *pgm_io.get_image();
