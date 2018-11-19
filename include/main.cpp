@@ -28,9 +28,9 @@ int main(int argc, char* argv[]) try
         boost::program_options::parse_command_line(argc, argv, desc),
         vm
     );
-    boost::program_options::notify(vm);    
+    boost::program_options::notify(vm);   
 
-    if (vm.count("left-image") && vm.count("right-image"))
+    if (vm.count("left-image") == 1 && vm.count("right-image") == 1)
     {
         struct Image left_image;
         struct Image right_image;
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) try
             std::cerr << "Logic error: " << e.what() << std::endl;
         }
     }
-    else if (vm.count("left-image") || vm.count("right-image"))
+    else if (vm.count("left-image") > 0 || vm.count("right-image") > 0)
     {
         std::cerr
             << "You should specify both left and right image."
