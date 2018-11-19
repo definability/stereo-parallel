@@ -32,11 +32,13 @@ int main(int argc, char* argv[]) try
 
     if (vm.count("left-image") == 1 && vm.count("right-image") == 1)
     {
-        struct Image left_image;
-        struct Image right_image;
         try {
-            left_image = read_image(vm["left-image"].as<std::string>());
-            right_image = read_image(vm["right-image"].as<std::string>());
+            struct Image left_image{
+                read_image(vm["left-image"].as<std::string>())
+            };
+            struct Image right_image{
+                read_image(vm["right-image"].as<std::string>())
+            };
         }
         catch (std::invalid_argument& e)
         {
