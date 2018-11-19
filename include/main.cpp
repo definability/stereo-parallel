@@ -6,8 +6,8 @@
 #include <stdexcept>
 #include <string>
 
-#include <pgm_io.hpp>
 #include <image.hpp>
+#include <pgm_io.hpp>
 
 struct Image read_image(std::string image_path);
 
