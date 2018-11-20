@@ -43,11 +43,11 @@ int main(int argc, char* argv[]) try
         }
         catch (const std::invalid_argument& e)
         {
-            std::cerr << "Invalid argument: " << e.what() << std::endl;
+            std::cerr << "Invalid argument: unable to read an image." << std::endl;
         }
         catch (const std::logic_error& e)
         {
-            std::cerr << "Logic error: " << e.what() << std::endl;
+            std::cerr << "Logic error: an image was parsed, but wasn't stored." << std::endl;
         }
     }
     else if (vm.count("left-image") > 0 || vm.count("right-image") > 0)
@@ -77,22 +77,18 @@ struct Image read_image(const std::string& image_path)
     std::ifstream image_file(image_path);
     if (!image_file)
     {
-        throw std::invalid_argument("Unable to open file.");
+        throw std::invalid_argument("");
     }
 
     PGM_IO pgm_io;
     image_file >> pgm_io;
     if (!image_file)
     {
-        throw std::invalid_argument("File is not a correct plain PGM image.");
+        throw std::invalid_argument("");
     }
     if (!pgm_io.get_image())
     {
-        throw std::logic_error(
-            "Image is valid, "
-            "but it wasn't read for some reason. "
-            "Please, report the issue to developers."
-        );
+        throw std::logic_error("");
     }
     return *pgm_io.get_image();
 }
