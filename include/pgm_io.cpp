@@ -77,19 +77,17 @@ std::ostream& operator<<(std::ostream& out, const PGM_IO& ppm_io)
     out << PGM_IO::FORMAT_CODE << std::endl;
     out << image->width << " " << image->height << std::endl;
     out << image->max_value << std::endl;
-    unsigned row_space_consumed = 1;
     for (unsigned row = 0; row < image->height; ++row)
     {
         for (unsigned column = 0; column < image->width; ++column)
         {
             out << image->data[get_pixel_index(*image, {row, column})];
-            if (row_space_consumed < PGM_IO::MAX_NUMBERS_PER_ROW)
+            if (column == 0 || (column + 1) % PGM_IO::MAX_NUMBERS_PER_ROW != 0)
             {
                 if (column + 1 < image->width)
                 {
                     out << " ";
                 }
-                ++row_space_consumed;
             }
             else
             {
@@ -97,7 +95,6 @@ std::ostream& operator<<(std::ostream& out, const PGM_IO& ppm_io)
                 {
                     out << std::endl;
                 }
-                row_space_consumed = 0;
             }
         }
         out << std::endl;
