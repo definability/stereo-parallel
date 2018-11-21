@@ -23,6 +23,7 @@
  */
 #include "pgm_io.hpp"
 
+#include <cctype>
 #include <ios>
 #include <iostream>
 #include <limits>
@@ -65,6 +66,26 @@ std::string PGM_IO::read_pgm_instruction(std::istream& in)
         return "";
     }
     return current_input;
+}
+
+bool PGM_IO::check_file_end(std::istream& in)
+{
+    for (char current_input; in && !in.eof(); in.get(current_input))
+    {
+        if (current_input == '#')
+        {
+            in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+        else if (current_input != '\0' && !std::isspace(current_input))
+        {
+            in.setstate(std::ios_base::failbit);
+        };
+    }
+    if (in.eof())
+    {
+        in.clear(std::ios::goodbit | std::ios::eofbit);
+    }
+    return in.good();
 }
 
 std::ostream& operator<<(std::ostream& out, const PGM_IO& ppm_io)
@@ -150,14 +171,7 @@ std::istream& operator>>(std::istream& in, PGM_IO& ppm_io)
         }
     }
 
-    if (!in.eof())
-    {
-        if (!PGM_IO::read_pgm_instruction(in).empty())
-        {
-            in.setstate(std::ios_base::failbit);
-            return in;
-        }
-    }
+    PGM_IO::check_file_end(in);
 
     ppm_io.set_image(image);
 
