@@ -70,6 +70,14 @@ Here is a bash script for download, build and test
     cmake --build .
     ctest
 
+Using the application
+=====================
+
+After build,
+your ``build/include`` directory should contain
+``stereo_parallel`` executable file.
+Launch it without parameters to see the ``help``.
+
 Documentation
 =============
 

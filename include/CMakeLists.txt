@@ -29,3 +29,21 @@ target_include_directories(
     pgm_io PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
+target_link_libraries(
+    pgm_io
+    image
+)
+
+find_package(Boost 1.54 REQUIRED COMPONENTS program_options)
+add_executable(stereo_parallel main.cpp)
+target_include_directories(
+    stereo_parallel
+    PRIVATE
+    ${BOOST_INCLUDE_DIRS}
+)
+target_link_libraries(
+    stereo_parallel
+    image
+    pgm_io
+    ${Boost_PROGRAM_OPTIONS_LIBRARY}
+)
