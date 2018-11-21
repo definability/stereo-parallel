@@ -70,13 +70,13 @@ std::string PGM_IO::read_pgm_instruction(std::istream& in)
 
 bool PGM_IO::check_file_end(std::istream& in)
 {
-    for (char current_input; in && !in.eof(); in.get(current_input))
+    for (char current_input; in.good() && !in.eof(); in >> current_input)
     {
         if (current_input == '#')
         {
             in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
-        else if (current_input != '\0' && !std::isspace(current_input))
+        else if (current_input != '\0' && std::isspace(current_input) != 0)
         {
             in.setstate(std::ios_base::failbit);
         };
