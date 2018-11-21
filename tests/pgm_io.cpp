@@ -49,6 +49,7 @@ BOOST_AUTO_TEST_CASE(read_image)
     # Long end
     )image"};
     image_content >> pgm_io;
+    BOOST_CHECK(image_content);
     BOOST_REQUIRE(pgm_io.get_image());
     BOOST_CHECK_EQUAL(pgm_io.get_image()->width, 3);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->height, 2);
@@ -189,6 +190,7 @@ R"image(P2
 0 1 2
 3 4 5
 )image");
+    BOOST_CHECK(image_content);
 }
 
 BOOST_AUTO_TEST_CASE(write_no_image)
@@ -199,6 +201,7 @@ BOOST_AUTO_TEST_CASE(write_no_image)
     image_content << pgm_io;
 
     BOOST_CHECK_EQUAL(image_content.str(), "");
+    BOOST_CHECK(image_content);
 }
 
 BOOST_AUTO_TEST_CASE(read_write_image)
@@ -213,6 +216,7 @@ BOOST_AUTO_TEST_CASE(read_write_image)
 
     std::istringstream image_input{image_string};
     image_input >> pgm_io;
+    BOOST_CHECK(image_input);
     BOOST_REQUIRE(pgm_io.get_image());
     BOOST_CHECK_EQUAL(pgm_io.get_image()->width, 3);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->height, 2);
@@ -222,6 +226,7 @@ BOOST_AUTO_TEST_CASE(read_write_image)
     image_output << pgm_io;
 
     BOOST_CHECK_EQUAL(image_output.str(), image_string);
+    BOOST_CHECK(image_output);
 }
 
 BOOST_AUTO_TEST_CASE(read_write_imagelong)
@@ -240,6 +245,8 @@ BOOST_AUTO_TEST_CASE(read_write_imagelong)
 
     std::istringstream image_input{image_string};
     image_input >> pgm_io;
+
+    BOOST_CHECK(image_input);
     BOOST_REQUIRE(pgm_io.get_image());
     BOOST_CHECK_EQUAL(pgm_io.get_image()->width, 13);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->height, 3);
@@ -249,6 +256,7 @@ BOOST_AUTO_TEST_CASE(read_write_imagelong)
     image_output << pgm_io;
 
     BOOST_CHECK_EQUAL(image_output.str(), image_string);
+    BOOST_CHECK(image_output);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
