@@ -228,20 +228,20 @@ BOOST_AUTO_TEST_CASE(read_write_imagelong)
 {
     PGM_IO pgm_io;
     std::string image_string{R"image(P2
-12 3
+13 3
 65536
 65536 65536 65536 65536 65536 65536 65536 65536 65536 65536 65536
-65536
+65536 65536
 1 2 3 4 5 6 7 8 9 10 11
-12
+12 13
 0 1 100 1000 10000 5 50 500 5000 50000 65535
-0
+0 2
 )image"};
 
     std::istringstream image_input{image_string};
     image_input >> pgm_io;
     BOOST_REQUIRE(pgm_io.get_image());
-    BOOST_CHECK_EQUAL(pgm_io.get_image()->width, 12);
+    BOOST_CHECK_EQUAL(pgm_io.get_image()->width, 13);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->height, 3);
     BOOST_CHECK_EQUAL(pgm_io.get_image()->max_value, 65536);
 
