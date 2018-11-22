@@ -52,7 +52,7 @@ std::string PGM_IO::read_pgm_instruction(std::istream& in)
     }
     std::string current_input;
     in >> current_input;
-    while (!in.eof() && current_input == "#")
+    while (!in.eof() && current_input[0] == '#')
     {
         in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         if (in.eof())
@@ -61,7 +61,7 @@ std::string PGM_IO::read_pgm_instruction(std::istream& in)
         }
         in >> current_input;
     }
-    if (current_input == "#")
+    if (current_input[0] == '#')
     {
         return "";
     }
