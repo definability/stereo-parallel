@@ -67,6 +67,14 @@ private:
      * or blank string if input stream is finished.
      */
     static std::string read_pgm_instruction(std::istream& in);
+    /**
+     * \brief Check whether PGM file ends correctly.
+     *
+     * End of the file should contain only whitespace and comments.
+     * The function checks exactly this fact,
+     * returns `true` if it holds and returns `false` otherwise.
+     */
+    static bool check_file_end(std::istream& in);
 public:
     /**
      * \brief Maximum value of maximum gray value.
