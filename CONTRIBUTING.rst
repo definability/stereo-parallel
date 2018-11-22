@@ -77,6 +77,13 @@ rebuild the project and run tests
     cmake --build .
     ctest
 
+If you want to see verbose and colorful output, use
+
+.. code-block:: bash
+
+    BOOST_TEST_COLOR_OUTPUT=1 BOOST_TEST_LOG_LEVEL=all ctest -VV
+
+
 Pull request processing
 =======================
 
