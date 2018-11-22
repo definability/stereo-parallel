@@ -37,11 +37,11 @@ BOOST_AUTO_TEST_CASE(read_image)
 {
     PGM_IO pgm_io;
     std::istringstream image_content{R"image(
-    # Grayscale image
+    ##### Grayscale image #####
     P2
     # 3 columns and 2 rows
     3 2
-    10 # Another pretty comment before a blank line
+    10 #Sticky comment
 
     0 1 2
     3 4 5
