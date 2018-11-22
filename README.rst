@@ -22,21 +22,6 @@ Contributing
 Before adding any changes, read
 `Code of Conduct`_ and CONTRIBUTING_ guide.
 
-Using the code
-==============
-
-The project is licensed under `MIT License`_.
-You can freely copy and use the code in your project
-(even if it's commercial and its source code is closed).
-When you modify some files,
-
-- leave ``Copyright (c) 2018 char-lie`` at the top of modified file(s),
-- write your own copyright under it,
-- write license text you want to use (or leave `MIT License`_ if you use it).
-
-It's explained in answer to
-`How to manage a copyright notice in an open source project?`_.
-
 Build the project
 =================
 
@@ -99,6 +84,21 @@ Just enable ``BUILD_DOC`` flag
 
     cmake .. -DBUILD_DOC=ON
     cmake --build .
+
+Using the code
+==============
+
+The project is licensed under `MIT License`_.
+You can freely copy and use the code in your project
+(even if it's commercial and its source code is closed).
+When you modify some files,
+
+- leave ``Copyright (c) 2018 char-lie`` at the top of modified file(s),
+- write your own copyright under it,
+- write license text you want to use (or leave `MIT License`_ if you use it).
+
+It's explained in answer to
+`How to manage a copyright notice in an open source project?`_.
 
 .. _CMake:
     https://cmake.org

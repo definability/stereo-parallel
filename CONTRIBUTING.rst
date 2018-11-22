@@ -37,6 +37,28 @@ It's feasible to create an alias for the static analyzer
          ..
     clang-static-analyzer cmake --build .
 
+You can also use ``clang`` explicitly
+by changing ``which cc`` and ``which cpp`` to appropriate names
+
+.. code-block:: bash
+
+    mkdir build
+    cd build
+    alias clang-static-analyzer="scan-build \
+          --use-cc=clang \
+          --use-c++=clang++ \
+          --force-analyze-debug-code \
+          -enable-checker core \
+          -enable-checker unix \
+          -enable-checker cplusplus \
+          -enable-checker security \
+          -v -v -v"
+    clang-static-analyzer cmake \
+         -DCMAKE_CXX_CLANG_TIDY="clang-tidy;-header-filter=$(realpath ..);" \
+         -DCMAKE_BUILD_TYPE=Debug \
+         ..
+    clang-static-analyzer cmake --build .
+
 Warnings are allowed (but try to avoid them if possible),
 errors will fail the CI.
 
