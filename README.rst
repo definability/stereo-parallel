@@ -40,7 +40,7 @@ It's explained in answer to
 Build the project
 =================
 
-The project uses CMake_ of version 3 and higher.
+The project uses CMake_ of version 3.1 and higher.
 To build the project in Linux,
 
 - clone it,
@@ -103,7 +103,7 @@ Just enable ``BUILD_DOC`` flag
 .. _CMake:
     https://cmake.org
 .. _ctest:
-    https://cmake.org/cmake/help/v3.0/manual/ctest.1.html
+    https://cmake.org/cmake/help/v3.1/manual/ctest.1.html
 .. _CONTRIBUTING:
     https://github.com/char-lie/stereo-parallel/blob/master/CONTRIBUTING.rst
 .. _Code of Conduct:
