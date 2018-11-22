@@ -46,16 +46,16 @@ std::shared_ptr<struct Image> PGM_IO::get_image() const
 
 std::string PGM_IO::read_pgm_instruction(std::istream& in)
 {
-    if (in.eof())
+    if (in.fail())
     {
         return "";
     }
     std::string current_input;
     in >> current_input;
-    while (!in.eof() && current_input[0] == '#')
+    while (in.good() && current_input[0] == '#')
     {
         in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        if (in.eof())
+        if (in.fail())
         {
             return "";
         }
