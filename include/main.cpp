@@ -41,13 +41,13 @@ int main(int argc, char* argv[]) try
                 read_image(vm["right-image"].as<std::string>())
             };
         }
-        catch (const std::invalid_argument& e)
+        catch (std::invalid_argument& e)
         {
-            std::cerr << "Invalid argument: unable to read an image." << std::endl;
+            std::cerr << "Invalid argument: " << e.what() << std::endl;
         }
-        catch (const std::logic_error& e)
+        catch (std::logic_error& e)
         {
-            std::cerr << "Logic error: an image was parsed, but wasn't stored." << std::endl;
+            std::cerr << "Logic error: " << e.what() << std::endl;
         }
     }
     else if (vm.count("left-image") > 0 || vm.count("right-image") > 0)
@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) try
     }
     return 0;
 }
-catch(const std::exception& e) {
+catch(std::exception& e) {
     std::cerr << "Unexpected exception: " << e.what() << std::endl;
     return 1;
 }
@@ -77,18 +77,27 @@ struct Image read_image(const std::string& image_path)
     std::ifstream image_file(image_path);
     if (!image_file)
     {
-        throw std::invalid_argument("");
+        throw std::invalid_argument(
+            "Unable to open file `" + image_path + "`."
+        );
     }
 
     PGM_IO pgm_io;
     image_file >> pgm_io;
     if (!image_file)
     {
-        throw std::invalid_argument("");
+        throw std::invalid_argument(
+            "File `" + image_path +
+            "` is not a correct plain PGM image."
+        );
     }
     if (!pgm_io.get_image())
     {
-        throw std::logic_error("");
+        throw std::logic_error(
+            "Image `" + image_path + "` is valid, "
+            "but it wasn't read for some reason. "
+            "Please, report the issue to developers."
+        );
     }
     return *pgm_io.get_image();
 }
