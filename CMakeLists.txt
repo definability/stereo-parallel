@@ -25,7 +25,8 @@ project(STEREO_PARALLEL)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory(include)
+set(STEREO_PARALLEL_MAIN_INCLUDE_DIR ${STEREO_PARALLEL_SOURCE_DIR}/include)
+add_subdirectory(lib)
 
 enable_testing()
 

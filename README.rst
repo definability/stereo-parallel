@@ -59,7 +59,7 @@ Using the application
 =====================
 
 After build,
-your ``build/include`` directory should contain
+your ``build/lib`` directory should contain
 ``stereo_parallel`` executable file.
 Launch it without parameters to see the ``help``.
 
