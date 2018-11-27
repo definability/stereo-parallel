@@ -202,7 +202,7 @@ ULONG potential_index_fast(
     index += node.pixel.row;
 
     return index;
-};
+}
 
 ULONG potential_index(
     const struct DisparityGraph& graph,
