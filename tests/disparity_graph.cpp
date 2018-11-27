@@ -75,6 +75,47 @@ BOOST_AUTO_TEST_CASE(check_neighborhood)
     BOOST_CHECK(!neighborhood_exists(disparity_graph, {0, 1}, {1, 2}));
 }
 
+BOOST_AUTO_TEST_CASE(check_edges_existence)
+{
+    PGM_IO pgm_io;
+    std::istringstream left_image_content{R"left_image(
+    P2
+    3 2
+    2
+    0 1 2
+    2 0 1
+    )left_image"};
+    std::istringstream right_image_content{R"right_image(
+    P2
+    3 2
+    2
+    1 0 2
+    2 0 1
+    )right_image"};
+
+    left_image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image left_image{*pgm_io.get_image()};
+
+    right_image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image right_image{*pgm_io.get_image()};
+
+    struct DisparityGraph disparity_graph{left_image, right_image, 1};
+
+    BOOST_CHECK(edge_exists(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 0}}));
+    BOOST_CHECK(edge_exists(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 1}}));
+
+    BOOST_CHECK(edge_exists(disparity_graph, {{{0, 1}, 0}, {{0, 0}, 0}}));
+    BOOST_CHECK(edge_exists(disparity_graph, {{{0, 1}, 1}, {{0, 0}, 0}}));
+
+    BOOST_CHECK(!edge_exists(disparity_graph, {{{0, 1}, 2}, {{0, 1}, 1}}));
+    BOOST_CHECK(!edge_exists(disparity_graph, {{{0, 0}, 1}, {{0, 1}, 2}}));
+
+    BOOST_CHECK(!edge_exists(disparity_graph, {{{0, 0}, 2}, {{0, 1}, 0}}));
+    BOOST_CHECK(!edge_exists(disparity_graph, {{{0, 1}, 0}, {{0, 1}, 2}}));
+}
+
 BOOST_AUTO_TEST_CASE(
     check_initial_edges_penalties,
     *boost::unit_test::tolerance(0.5)
@@ -164,6 +205,83 @@ BOOST_AUTO_TEST_CASE(
     BOOST_TEST(node_penalty(disparity_graph, {{1, 1}, 1}) == 1.0);
 
     BOOST_TEST(node_penalty(disparity_graph, {{1, 2}, 0}) == 0.0);
+}
+
+BOOST_AUTO_TEST_CASE(check_edges_penalties, *boost::unit_test::tolerance(0.5))
+{
+    PGM_IO pgm_io;
+    std::istringstream left_image_content{R"left_image(
+    P2
+    3 2
+    2
+    0 1 2
+    2 0 1
+    )left_image"};
+    std::istringstream right_image_content{R"right_image(
+    P2
+    3 2
+    2
+    1 0 2
+    2 0 1
+    )right_image"};
+
+    left_image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image left_image{*pgm_io.get_image()};
+
+    right_image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image right_image{*pgm_io.get_image()};
+
+    struct DisparityGraph disparity_graph{left_image, right_image, 2};
+
+    disparity_graph.potentials[
+        potential_index(disparity_graph, {{0, 0}, 0}, {0, 1})
+    ] = -2.0;
+
+    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 0}}) == -2.0);
+    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 1}}) == -1.0);
+
+    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 1}, 0}, {{0, 0}, 0}}) == -2.0);
+    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 1}, 0}, {{0, 0}, 1}}) == 1.0);
+}
+
+BOOST_AUTO_TEST_CASE(check_nodes_penalties, *boost::unit_test::tolerance(0.5))
+{
+    PGM_IO pgm_io;
+    std::istringstream left_image_content{R"left_image(
+    P2
+    3 2
+    2
+    0 1 2
+    2 0 1
+    )left_image"};
+    std::istringstream right_image_content{R"right_image(
+    P2
+    3 2
+    2
+    1 0 2
+    2 0 1
+    )right_image"};
+
+    left_image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image left_image{*pgm_io.get_image()};
+
+    right_image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image right_image{*pgm_io.get_image()};
+
+    struct DisparityGraph disparity_graph{left_image, right_image, 2};
+
+    disparity_graph.potentials[
+        potential_index(disparity_graph, {{0, 0}, 0}, {0, 1})
+    ] = -2.0;
+
+    BOOST_TEST(node_penalty(disparity_graph, {{0, 0}, 0}) == 3.0);
+    BOOST_TEST(node_penalty(disparity_graph, {{0, 0}, 1}) == 0.0);
+
+    BOOST_TEST(node_penalty(disparity_graph, {{0, 1}, 0}) == 1.0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
