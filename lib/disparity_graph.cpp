@@ -171,13 +171,13 @@ bool edge_exists(
     }
     if (edge.node.pixel.row == edge.neighbor.pixel.row)
     {
-        if (edge.node.pixel.column + 1 == edge.node.pixel.column
-            && edge.node.disparity + 1 > edge.neighbor.disparity)
+        if (edge.node.pixel.column + 1 == edge.neighbor.pixel.column
+            && edge.node.disparity > edge.neighbor.disparity + 1)
         {
             return false;
         }
-        else if (edge.node.pixel.column == edge.node.pixel.column + 1
-            && edge.node.disparity < edge.neighbor.disparity + 1)
+        else if (edge.node.pixel.column == edge.neighbor.pixel.column + 1
+            && edge.node.disparity + 1 < edge.neighbor.disparity)
         {
             return false;
         }
