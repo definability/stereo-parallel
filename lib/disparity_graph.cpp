@@ -31,7 +31,10 @@ DisparityGraph::DisparityGraph(
     struct Image left,
     struct Image right,
     ULONG maximal_disparity
-): left{left}, right{right}, maximal_disparity{maximal_disparity}
+)
+    : left{std::move(left)}
+    , right{std::move(right)}
+    , maximal_disparity{maximal_disparity}
 {
     if (!image_valid(this->left))
     {
@@ -102,15 +105,15 @@ ULONG neighbor_index(
     {
         return 0;
     }
-    else if (pixel.column == neighbor.column + 1)
+    if (pixel.column == neighbor.column + 1)
     {
         return 1;
     }
-    else if (pixel.row + 1 == neighbor.row)
+    if (pixel.row + 1 == neighbor.row)
     {
         return 2;
     }
-    else if (pixel.row == neighbor.row + 1)
+    if (pixel.row == neighbor.row + 1)
     {
         return 3;
     }
@@ -118,7 +121,7 @@ ULONG neighbor_index(
 }
 
 bool neighborhood_exists(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Pixel pixel,
     struct Pixel neighbor
 )
@@ -131,7 +134,7 @@ bool neighborhood_exists(
 }
 
 bool neighborhood_exists_fast(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Pixel pixel,
     ULONG neighbor_index
 )
@@ -147,7 +150,7 @@ bool neighborhood_exists_fast(
 }
 
 bool edge_exists(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Edge edge
 )
 {
@@ -183,7 +186,7 @@ bool edge_exists(
 }
 
 ULONG potential_index_fast(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Node node,
     ULONG neighbor_index
 )
@@ -202,7 +205,7 @@ ULONG potential_index_fast(
 };
 
 ULONG potential_index(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Node node,
     struct Pixel neighbor
 )
@@ -215,7 +218,7 @@ ULONG potential_index(
 }
 
 ULONG potential_index_slow(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Edge edge
 )
 {
@@ -227,7 +230,7 @@ ULONG potential_index_slow(
 }
 
 FLOAT potential_value(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Node node,
     struct Pixel neighbor
 )
@@ -236,7 +239,7 @@ FLOAT potential_value(
 }
 
 FLOAT potential_value_slow(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Edge edge
 )
 {
@@ -244,7 +247,7 @@ FLOAT potential_value_slow(
 }
 
 FLOAT potential_value_fast(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Node node,
     ULONG neighbor_index
 )
@@ -252,7 +255,7 @@ FLOAT potential_value_fast(
     return graph.potentials[potential_index_fast(graph, node, neighbor_index)];
 }
 
-FLOAT edge_penalty(struct DisparityGraph graph, struct Edge edge)
+FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge)
 {
     return
         SQR(TO_FLOAT(edge.node.disparity) - TO_FLOAT(edge.neighbor.disparity))
@@ -260,7 +263,7 @@ FLOAT edge_penalty(struct DisparityGraph graph, struct Edge edge)
         + potential_value(graph, edge.neighbor, edge.node.pixel);
 }
 
-FLOAT node_penalty(struct DisparityGraph graph, struct Node node)
+FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node)
 {
     Pixel left_pixel = node.pixel;
     left_pixel.column += node.disparity;

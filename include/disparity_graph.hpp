@@ -60,52 +60,52 @@ struct Edge
 };
 
 ULONG neighbor_index(
-    struct Pixel node,
+    struct Pixel pixel,
     struct Pixel neighbor
 );
 bool neighborhood_exists(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Pixel pixel,
     struct Pixel neighbor
 );
 bool neighborhood_exists_fast(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Pixel pixel,
     ULONG neighbor_index
 );
 bool edge_exists(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Edge edge
 );
 ULONG potential_index_fast(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Node node,
     ULONG neighbor_index
 );
 ULONG potential_index(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Node node,
     struct Pixel neighbor
 );
 ULONG potential_index_slow(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Edge edge
 );
 FLOAT potential_value(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Node node,
     struct Pixel neighbor
 );
 FLOAT potential_value_slow(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Edge edge
 );
 FLOAT potential_value_fast(
-    struct DisparityGraph graph,
+    const struct DisparityGraph& graph,
     struct Node node,
     ULONG neighbor_index
 );
-FLOAT edge_penalty(struct DisparityGraph graph, struct Edge edge);
-FLOAT node_penalty(struct DisparityGraph graph, struct Node node);
+FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge);
+FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node);
 
 #endif
