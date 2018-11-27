@@ -153,10 +153,7 @@ BOOST_AUTO_TEST_CASE(check_continuity_constraint)
     BOOST_CHECK(!edge_exists(disparity_graph, {{{1, 1}, 0}, {{1, 0}, 2}}));
 }
 
-BOOST_AUTO_TEST_CASE(
-    check_initial_edges_penalties,
-    *boost::unit_test::tolerance(0.5)
-)
+BOOST_AUTO_TEST_CASE(check_initial_edges_penalties)
 {
     PGM_IO pgm_io;
     std::istringstream left_image_content{R"left_image(
@@ -196,10 +193,7 @@ BOOST_AUTO_TEST_CASE(
     BOOST_CHECK(fabs(edge_penalty(disparity_graph, {{{0, 1}, 2}, {{1, 1}, 2}}) - 0.0) < 0.5);
 }
 
-BOOST_AUTO_TEST_CASE(
-    check_initial_nodes_penalties,
-    *boost::unit_test::tolerance(0.5)
-)
+BOOST_AUTO_TEST_CASE(check_initial_nodes_penalties)
 {
     PGM_IO pgm_io;
     std::istringstream left_image_content{R"left_image(
@@ -246,7 +240,7 @@ BOOST_AUTO_TEST_CASE(
     BOOST_CHECK(fabs(node_penalty(disparity_graph, {{1, 2}, 0}) - 0.0) < 0.5);
 }
 
-BOOST_AUTO_TEST_CASE(check_edges_penalties, *boost::unit_test::tolerance(0.5))
+BOOST_AUTO_TEST_CASE(check_edges_penalties)
 {
     PGM_IO pgm_io;
     std::istringstream left_image_content{R"left_image(
@@ -285,7 +279,7 @@ BOOST_AUTO_TEST_CASE(check_edges_penalties, *boost::unit_test::tolerance(0.5))
     BOOST_CHECK(fabs(edge_penalty(disparity_graph, {{{0, 1}, 0}, {{0, 0}, 1}}) - 1.0) < 0.5);
 }
 
-BOOST_AUTO_TEST_CASE(check_nodes_penalties, *boost::unit_test::tolerance(0.5))
+BOOST_AUTO_TEST_CASE(check_nodes_penalties)
 {
     PGM_IO pgm_io;
     std::istringstream left_image_content{R"left_image(
