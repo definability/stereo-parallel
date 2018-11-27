@@ -94,6 +94,10 @@ ULONG neighbor_index(
     struct Pixel neighbor
 )
 {
+    if (pixel.column != neighbor.column && pixel.row != neighbor.row)
+    {
+        return NEIGHBORS_COUNT;
+    }
     if (pixel.column + 1 == neighbor.column)
     {
         return 0;
@@ -110,7 +114,7 @@ ULONG neighbor_index(
     {
         return 3;
     }
-    return -1;
+    return NEIGHBORS_COUNT;
 }
 
 bool neighborhood_exists(
