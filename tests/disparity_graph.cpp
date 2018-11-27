@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 #include <boost/test/unit_test.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <disparity_graph.hpp>
 #include <pgm_io.hpp>
@@ -147,14 +148,16 @@ BOOST_AUTO_TEST_CASE(
 
     struct DisparityGraph disparity_graph{left_image, right_image, 2};
 
-    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 0}}) == 0.0);
-    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 0}, 0}, {{1, 0}, 1}}) == 1.0);
+    // No floats? :O
+    // https://www.boost.org/doc/libs/master/libs/test/doc/html/boost_test/testing_tools/extended_comparison/floating_point.html
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(edge_penalty(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 0}}), 0.0));
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(edge_penalty(disparity_graph, {{{0, 0}, 0}, {{1, 0}, 1}}), 1.0));
 
-    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 1}, 1}, {{0, 2}, 0}}) == 1.0);
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(edge_penalty(disparity_graph, {{{0, 1}, 1}, {{0, 2}, 0}}), 1.0));
 
-    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 1}, 0}, {{0, 0}, 2}}) == 4.0);
-    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 1}, 2}, {{1, 0}, 0}}) == 4.0);
-    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 1}, 2}, {{1, 1}, 2}}) == 0.0);
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(edge_penalty(disparity_graph, {{{0, 1}, 0}, {{0, 0}, 2}}), 4.0));
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(edge_penalty(disparity_graph, {{{0, 1}, 2}, {{1, 0}, 0}}), 4.0));
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(edge_penalty(disparity_graph, {{{0, 1}, 2}, {{1, 1}, 2}}), 0.0));
 }
 
 BOOST_AUTO_TEST_CASE(
@@ -188,23 +191,23 @@ BOOST_AUTO_TEST_CASE(
 
     struct DisparityGraph disparity_graph{left_image, right_image, 2};
 
-    BOOST_TEST(node_penalty(disparity_graph, {{0, 0}, 0}) == 1.0);
-    BOOST_TEST(node_penalty(disparity_graph, {{0, 0}, 1}) == 0.0);
-    BOOST_TEST(node_penalty(disparity_graph, {{0, 0}, 2}) == 1.0);
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{0, 0}, 0}), 1.0));
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{0, 0}, 1}), 0.0));
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{0, 0}, 2}), 1.0));
 
-    BOOST_TEST(node_penalty(disparity_graph, {{0, 1}, 0}) == 1.0);
-    BOOST_TEST(node_penalty(disparity_graph, {{0, 1}, 1}) == 4.0);
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{0, 1}, 0}), 1.0));
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{0, 1}, 1}), 4.0));
 
-    BOOST_TEST(node_penalty(disparity_graph, {{0, 2}, 0}) == 0.0);
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{0, 2}, 0}), 0.0));
 
-    BOOST_TEST(node_penalty(disparity_graph, {{1, 0}, 0}) == 0.0);
-    BOOST_TEST(node_penalty(disparity_graph, {{1, 0}, 1}) == 4.0);
-    BOOST_TEST(node_penalty(disparity_graph, {{1, 0}, 2}) == 1.0);
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{1, 0}, 0}), 0.0));
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{1, 0}, 1}), 4.0));
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{1, 0}, 2}), 1.0));
 
-    BOOST_TEST(node_penalty(disparity_graph, {{1, 1}, 0}) == 0.0);
-    BOOST_TEST(node_penalty(disparity_graph, {{1, 1}, 1}) == 1.0);
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{1, 1}, 0}), 0.0));
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{1, 1}, 1}), 1.0));
 
-    BOOST_TEST(node_penalty(disparity_graph, {{1, 2}, 0}) == 0.0);
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{1, 2}, 0}), 0.0));
 }
 
 BOOST_AUTO_TEST_CASE(check_edges_penalties, *boost::unit_test::tolerance(0.5))
@@ -239,11 +242,11 @@ BOOST_AUTO_TEST_CASE(check_edges_penalties, *boost::unit_test::tolerance(0.5))
         potential_index(disparity_graph, {{0, 0}, 0}, {0, 1})
     ] = -2.0;
 
-    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 0}}) == -2.0);
-    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 1}}) == -1.0);
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(edge_penalty(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 0}}), -2.0));
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(edge_penalty(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 1}}), -1.0));
 
-    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 1}, 0}, {{0, 0}, 0}}) == -2.0);
-    BOOST_TEST(edge_penalty(disparity_graph, {{{0, 1}, 0}, {{0, 0}, 1}}) == 1.0);
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(edge_penalty(disparity_graph, {{{0, 1}, 0}, {{0, 0}, 0}}), -2.0));
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(edge_penalty(disparity_graph, {{{0, 1}, 0}, {{0, 0}, 1}}), 1.0));
 }
 
 BOOST_AUTO_TEST_CASE(check_nodes_penalties, *boost::unit_test::tolerance(0.5))
@@ -278,10 +281,10 @@ BOOST_AUTO_TEST_CASE(check_nodes_penalties, *boost::unit_test::tolerance(0.5))
         potential_index(disparity_graph, {{0, 0}, 0}, {0, 1})
     ] = -2.0;
 
-    BOOST_TEST(node_penalty(disparity_graph, {{0, 0}, 0}) == 3.0);
-    BOOST_TEST(node_penalty(disparity_graph, {{0, 0}, 1}) == 0.0);
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{0, 0}, 0}), 3.0));
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{0, 0}, 1}), 0.0));
 
-    BOOST_TEST(node_penalty(disparity_graph, {{0, 1}, 0}) == 1.0);
+    BOOST_CHECK(boost::math::fpc::close_at_tolerance<FLOAT>(0.5)(node_penalty(disparity_graph, {{0, 1}, 0}), 1.0));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
