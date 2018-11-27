@@ -176,7 +176,7 @@ bool edge_exists(
         {
             return false;
         }
-        else if (edge.node.pixel.column == edge.neighbor.pixel.column + 1
+        if (edge.node.pixel.column == edge.neighbor.pixel.column + 1
             && edge.node.disparity + 1 < edge.neighbor.disparity)
         {
             return false;
