@@ -105,12 +105,6 @@ FLOAT potential_value_fast(
     struct Node node,
     ULONG neighbor_index
 );
-FLOAT edge_penalty_fast(
-    struct DisparityGraph graph,
-    struct Node node,
-    ULONG neighbor_index,
-    FLOAT neighbor_disparity
-);
 FLOAT edge_penalty(struct DisparityGraph graph, struct Edge edge);
 FLOAT node_penalty(struct DisparityGraph graph, struct Node node);
 
