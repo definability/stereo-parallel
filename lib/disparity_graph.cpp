@@ -79,15 +79,15 @@ DisparityGraph::DisparityGraph(
         );
     }
 
-    this->potentials.resize(
+    this->reparametrization.resize(
         this->left.width
         * this->left.height
         * NEIGHBORS_COUNT
         * this->maximal_disparity
     );
     fill(
-        this->potentials.begin(),
-        this->potentials.end(),
+        this->reparametrization.begin(),
+        this->reparametrization.end(),
         static_cast<FLOAT>(0)
     );
 }
@@ -235,7 +235,7 @@ FLOAT potential_value(
     struct Pixel neighbor
 )
 {
-    return graph.potentials[potential_index(graph, node, neighbor)];
+    return graph.reparametrization[potential_index(graph, node, neighbor)];
 }
 
 FLOAT potential_value_slow(
@@ -243,7 +243,7 @@ FLOAT potential_value_slow(
     struct Edge edge
 )
 {
-    return graph.potentials[potential_index_slow(graph, edge)];
+    return graph.reparametrization[potential_index_slow(graph, edge)];
 }
 
 FLOAT potential_value_fast(
@@ -252,7 +252,9 @@ FLOAT potential_value_fast(
     ULONG neighbor_index
 )
 {
-    return graph.potentials[potential_index_fast(graph, node, neighbor_index)];
+    return graph.reparametrization[
+        potential_index_fast(graph, node, neighbor_index)
+    ];
 }
 
 FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge)
