@@ -39,7 +39,7 @@ struct DisparityGraph
     struct Image left;
     struct Image right;
     ULONG maximal_disparity;
-    FLOAT_ARRAY potentials;
+    FLOAT_ARRAY reparametrization;
     DisparityGraph(
         struct Image left,
         struct Image right,
