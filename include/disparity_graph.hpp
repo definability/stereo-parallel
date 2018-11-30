@@ -363,6 +363,20 @@ bool neighborhood_exists_fast(
 );
 
 /**
+ * \brief Check existence of provided Node.
+ *
+ * Node exists if position of its pixel doesn't overflow its image
+ * and corresponding pixel (calculated by the disparity)
+ * doesn't overflow another image.
+ */
+bool node_exists(
+    ULONG maximal_disparity,
+    const struct Image& image,
+    const struct Image& another_image,
+    struct Node node
+);
+
+/**
  * \brief Check existence of provided Edge in given DisparityGraph.
  *
  * Similar to ::neighborhood_exists,
@@ -405,8 +419,9 @@ FLOAT potential_value_fast(
  * \brief Calculate penalty of Edge without neighborhood check.
  *
  * You should use ::edge_exists function
- * to check that the edge actually exists.
- * If it doesn't, the penalty is assumed to be \f$\infty\f$.
+ * to check that the Edge actually exists.
+ * If it doesn't, the penalty is assumed to be \f$\infty\f$
+ * (but this function doesn't check existence).
  *
  * Otherwise, the penalty is a norm of a difference
  * between disparities of Node instances that the Edge connects.
@@ -414,6 +429,14 @@ FLOAT potential_value_fast(
 FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge);
 /**
  * \brief Calculate penalty of Node.
+ *
+ * You should use ::node_exists function
+ * to check that the Node actually exists.
+ * If it doesn't, the penalty is assumed to be \f$\infty\f$
+ * (but this function doesn't check existence).
+ *
+ * Otherwise, the penalty is a norm of a difference
+ * between disparities of Node instances that the Edge connects.
  */
 FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node);
 
