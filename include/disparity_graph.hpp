@@ -107,15 +107,16 @@ const ULONG NEIGHBORS_COUNT = 4;
  * The problem is to find such \f$k\f$
  * that minimizes the following function
  * given a norm \f$\left\| \cdot \right\|\f$
+ * and positive \f$p \in \mathbb{R}\f$
  *
  * \f[
  *  E\left( k \right) =
  *  \sum\limits_{i \in I} \left\|
  *      R\left( i^x, i^y \right)
  *      - L\left( i^x + k_i, i^y \right)
- *  \right\|
+ *  \right\|^p
  *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
- *      \left\| k_i - k_j \right\|
+ *      \left\| k_i - k_j \right\|^p
  * \f]
  */
 struct DisparityGraph
@@ -146,17 +147,17 @@ struct DisparityGraph
      *      \sum\limits_{i \in I} \left\|
      *          R\left( i^x, i^y \right)
      *          - L\left( i^x + k_i, i^y \right)
-     *      \right\|
+     *      \right\|^p
      *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
-     *          \left\| k_i - k_j \right\|
+     *          \left\| k_i - k_j \right\|^p
      *  \right\}}
      *  \ge \sum\limits_{i \in I} \min\limits_{d \in D}{
      *  \left\|
      *      R\left( i^x, i^y \right)
      *      - L\left( i^x + d, i^y \right)
-     *  \right\|}
+     *  \right\|^p}
      *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
-     *      \min\limits_{d, d' \in D}{\left\| d - d' \right\|}
+     *      \min\limits_{d, d' \in D}{\left\| d - d' \right\|^p}
      * \f]
      *
      * The last sum is zero, so
@@ -167,15 +168,15 @@ struct DisparityGraph
      *      \sum\limits_{i \in I} \left\|
      *          R\left( i^x, i^y \right)
      *          - L\left( i^x + k_i, i^y \right)
-     *      \right\|
+     *      \right\|^p
      *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
-     *          \left\| k_i - k_j \right\|
+     *          \left\| k_i - k_j \right\|^p
      *  \right\}}
      *  \ge \sum\limits_{i \in I} \min\limits_{d \in D}{
      *  \left\|
      *      R\left( i^x, i^y \right)
      *      - L\left( i^x + d, i^y \right)
-     *  \right\|}
+     *  \right\|^p}
      *  = \widetilde{E}
      * \f]
      *
@@ -196,12 +197,12 @@ struct DisparityGraph
      *      = \sum\limits_{i \in I} \left[
      *          \left\|
      *              R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
-     *          \right\|
+     *          \right\|^p
      *          + \sum\limits_{j \in \mathcal{N}_i}
      *              \varphi_{i j}\left( k_i \right)
      *      \right]
      *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i} \left[
-     *          \left\| k_i - k_j \right\|
+     *          \left\| k_i - k_j \right\|^p
      *          - \varphi_{i j}\left( k_i \right)
      *          - \varphi_{j i}\left( k_j \right)
      *      \right]
@@ -216,13 +217,13 @@ struct DisparityGraph
      *      = \sum\limits_{i \in I} \min_{d \in D}{\left[
      *          \left\|
      *              R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
-     *          \right\|
+     *          \right\|^p
      *          + \sum\limits_{j \in \mathcal{N}_i}
      *              \varphi_{i j}\left( k_i \right)
      *      \right]}
      *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
      *          \min_{d, d' \in D}{\left[
-     *              \left\| k_i - k_j \right\|
+     *              \left\| k_i - k_j \right\|^p
      *              - \varphi_{i j}\left( k_i \right)
      *              - \varphi_{j i}\left( k_j \right)
      *          \right]}
@@ -248,13 +249,13 @@ struct DisparityGraph
      *  \sum\limits_{i \in I} \min_{d \in D}{\left[
      *      \left\|
      *          R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
-     *      \right\|
+     *      \right\|^p
      *      + \sum\limits_{j \in \mathcal{N}_i}
      *          \varphi_{i j}\left( k_i \right)
      *  \right]}
      *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
      *      \min_{d, d' \in D}{\left[
-     *          \left\| k_i - k_j \right\|
+     *          \left\| k_i - k_j \right\|^p
      *          - \varphi_{i j}\left( k_i \right)
      *          - \varphi_{j i}\left( k_j \right)
      *      \right]}
