@@ -149,39 +149,55 @@ bool neighborhood_exists_fast(
     );
 }
 
+bool node_exists(
+    ULONG maximal_disparity,
+    const struct Image& image,
+    const struct Image& another_image,
+    struct Node node
+)
+{
+    return !(
+        node.disparity > maximal_disparity
+        || node.pixel.row >= image.height
+        || node.pixel.column >= image.width
+        || node.pixel.column + node.disparity >= another_image.width
+    );
+}
+
 bool edge_exists(
     const struct DisparityGraph& graph,
     struct Edge edge
 )
 {
+    if (!node_exists(graph.maximal_disparity, graph.left, graph.right, edge.node))
+    {
+        return false;
+    }
+    if (!node_exists(graph.maximal_disparity, graph.left, graph.right, edge.neighbor))
+    {
+        return false;
+    }
     if (!neighborhood_exists(graph, edge.node.pixel, edge.neighbor.pixel))
     {
         return false;
     }
-    if (edge.node.disparity > graph.maximal_disparity
-        || edge.neighbor.disparity > graph.maximal_disparity)
+
+    if (edge.node.pixel.row != edge.neighbor.pixel.row)
+    {
+        return true;
+    }
+
+    if (edge.node.pixel.column + 1 == edge.neighbor.pixel.column
+        && edge.node.disparity > edge.neighbor.disparity + 1)
     {
         return false;
     }
-    if (edge.node.disparity + edge.node.pixel.column >= graph.left.width
-        || edge.neighbor.disparity + edge.neighbor.pixel.column
-            >= graph.right.width)
+    if (edge.node.pixel.column == edge.neighbor.pixel.column + 1
+        && edge.node.disparity + 1 < edge.neighbor.disparity)
     {
         return false;
     }
-    if (edge.node.pixel.row == edge.neighbor.pixel.row)
-    {
-        if (edge.node.pixel.column + 1 == edge.neighbor.pixel.column
-            && edge.node.disparity > edge.neighbor.disparity + 1)
-        {
-            return false;
-        }
-        if (edge.node.pixel.column == edge.neighbor.pixel.column + 1
-            && edge.node.disparity + 1 < edge.neighbor.disparity)
-        {
-            return false;
-        }
-    }
+
     return true;
 }
 
