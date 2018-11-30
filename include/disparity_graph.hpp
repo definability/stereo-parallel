@@ -285,32 +285,90 @@ struct DisparityGraph
     );
 };
 
+/**
+ * \brief Node of DisparityGraph is a pair
+ * consisting of Pixel and disparity assigned to it.
+ */
 struct Node
 {
     struct Pixel pixel;
     ULONG disparity;
 };
 
+/**
+ * \brief Edge is a pair of two Node instances.
+ */
 struct Edge
 {
     struct Node node;
     struct Node neighbor;
 };
 
+/**
+ * \brief Get index of a neighbor for fast access in different data arrays.
+ *
+ * Pixel is a more complex structure than a number.
+ * Tree is a slow structure for our purposes.
+ *
+ * We can store information associated with pixel and its neighbors
+ * in an array,
+ * but this needs a calculation of corresponding indices for data access.
+ * This function provides these indices.
+ *
+ * @return
+ *  Integer from `[0; ::NEIGHBORS_COUNT - 1]` range
+ *  if there should be at least one Edge between two provided pixels.
+ *  ::NEIGHBORS_COUNT if the `neighbor` is not a neighbor of the pixel.
+ */
 ULONG neighbor_index(
     struct Pixel pixel,
     struct Pixel neighbor
 );
+
+/**
+ * \brief Check existence of provided Pixel instances in given DisparityGraph.
+ *
+ * As it's explained in ::NEIGHBORS_COUNT,
+ * there are four possible neighbors.
+ *
+ * Logic says that
+ * top pixels don't have top neighbors,
+ * bottom pixels don't have bottom neighbors,
+ * right pixels don't have right neighbors
+ * and left pixels don't have left pixels.
+ *
+ * Also, pixels that are not the nearest straight neighbors,
+ * are not a neighbors in the DisparityGraph.
+ */
 bool neighborhood_exists(
     const struct DisparityGraph& graph,
     struct Pixel pixel,
     struct Pixel neighbor
 );
+
+/**
+ * \brief Check existence of provided Pixel instances in given DisparityGraph.
+ *
+ * See ::neighborhood_exists for more information.
+ *
+ * This function differs from ::neighborhood_exists
+ * just by the second parameter:
+ * it takes a neighbor index
+ * calculated by ::neighbor_index function.
+ */
 bool neighborhood_exists_fast(
     const struct DisparityGraph& graph,
     struct Pixel pixel,
     ULONG neighbor_index
 );
+
+/**
+ * \brief Check existence of provided Edge in given DisparityGraph.
+ *
+ * Similar to ::neighborhood_exists,
+ * but also checks constraints imposed on disparities
+ * of the neighboring pixels.
+ */
 bool edge_exists(
     const struct DisparityGraph& graph,
     struct Edge edge
@@ -343,7 +401,20 @@ FLOAT potential_value_fast(
     struct Node node,
     ULONG neighbor_index
 );
+/**
+ * \brief Calculate penalty of Edge without neighborhood check.
+ *
+ * You should use ::edge_exists function
+ * to check that the edge actually exists.
+ * If it doesn't, the penalty is assumed to be \f$\infty\f$.
+ *
+ * Otherwise, the penalty is a norm of a difference
+ * between disparities of Node instances that the Edge connects.
+ */
 FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge);
+/**
+ * \brief Calculate penalty of Node.
+ */
 FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node);
 
 #endif
