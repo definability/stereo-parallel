@@ -82,8 +82,9 @@ const ULONG NEIGHBORS_COUNT = 4;
  * Disparity is a difference
  * between number of a column of a pixel of the left image
  * and number of a column of corresponding pixel of the right image.
- * Given maximal disparity \f$d\f$ and denoting
- * \f$D = \left\{ 1, \dots, d \right\}\f$,
+ * Given maximal disparity (DisparityGraph::maximal_disparity)
+ * \f$\max{D}\f$ and denoting
+ * \f$D = \left\{ 1, \dots, \max{D} \right\}\f$,
  * correspondence function is called labeling and its signature is
  *
  * \f[
@@ -170,7 +171,7 @@ const ULONG NEIGHBORS_COUNT = 4;
  * which lead to the same \f$E\left( k \right)\f$
  * for specific labeling \f$k\f$.
  * The following function we call a reparametrization
- * (::DisparityGraph::reparametrization)
+ * (DisparityGraph::reparametrization)
  *
  * \f[
  *  \varphi: I^2 \times K \rightarrow \mathbb{R}
