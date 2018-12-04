@@ -284,6 +284,10 @@ struct DisparityGraph
      * for the optimization problem.
      */
     FLOAT_ARRAY reparametrization;
+    /**
+     * \brief Create DisparityGraph entity
+     * and initialize its DisparityGraph::reparametrization.
+     */
     DisparityGraph(
         struct Image left,
         struct Image right,
