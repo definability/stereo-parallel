@@ -296,16 +296,32 @@ struct DisparityGraph
  */
 struct Node
 {
+    /**
+     * \brief Pixel to which the Node instance belongs.
+     */
     struct Pixel pixel;
+    /**
+     * \brief Disparity assigned to the Node::pixel in the Node instance.
+     *
+     * Disparity specifies the difference between columns
+     * of current pixel on the right image
+     * and corresponding one on the left image.
+     */
     ULONG disparity;
 };
 
 /**
- * \brief Edge is a pair of two Node instances.
+ * \brief Edge is an ordered pair of two Node instances.
  */
 struct Edge
 {
+    /**
+     * \brief Start Node of the directed Edge.
+     */
     struct Node node;
+    /**
+     * \brief Start Node of the directed Edge.
+     */
     struct Node neighbor;
 };
 
@@ -331,7 +347,9 @@ ULONG neighbor_index(
 );
 
 /**
- * \brief Check existence of provided Pixel instances in given DisparityGraph.
+ * \brief Check wheter provided Pixel instances
+ * in given DisparityGraph are neighbors
+ * and exist at all.
  *
  * As it's explained in ::NEIGHBORS_COUNT,
  * there are four possible neighbors.
