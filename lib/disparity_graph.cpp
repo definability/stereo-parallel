@@ -189,7 +189,7 @@ bool edge_exists(
     return true;
 }
 
-FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge)
+FLOAT edge_penalty(struct Edge edge)
 {
     return
         SQR(TO_FLOAT(edge.node.disparity) - TO_FLOAT(edge.neighbor.disparity));
