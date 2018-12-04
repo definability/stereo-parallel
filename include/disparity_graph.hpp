@@ -282,6 +282,47 @@ struct DisparityGraph
     /**
      * \brief Reparametrization is a helpful vector
      * for the optimization problem.
+     *
+     * It assigns a floating point value
+     * to each pair of Node and neighboring Pixel instances
+     *
+     * \f[
+     *  \varphi: I^2 \times K \rightarrow \mathbb{R}
+     * \f]
+     *
+     * It's infeasible to use a tree for such purpose.
+     * Also, it may be slow to use an k-D array.
+     *
+     * The DisparityGraph::reparametrization is a 1D array,
+     * with specific indexing rules:
+     * it uses a generalization of row/column-major order.
+     *
+     * Used "dimensions" are following (upper ones are more nested):
+     *
+     * - Pixel::row of Node::pixel,
+     * - Node::disparity,
+     * - Index of current neighbor of Node instance,
+     * - Pixel::column of Node::pixel
+     *
+     * Index of an element of the DisparityGraph::reparametrization
+     * for specific Node and neighbor index
+     * can be calculated by formula
+     *
+     * \f[
+     *  k\left( \left\langle x, y \right\rangle, i, d \right) =
+     *      y + h \cdot \left(
+     *          d + \max{D} \cdot \left(
+     *              i + \max_j{\mathcal{N}_j} \cdot \left(
+     *                      x \cdot w
+     *                  \right)
+     *              \right)
+     *          \right),
+     * \f]
+     *
+     * where \f$\left\langle x, y \right\rangle\f$
+     * are coordinates of Node::pixel,
+     * \f$i\f$ is an index of used neighbor
+     * and \f$d\f$ is a Node::disparity.
      */
     FLOAT_ARRAY reparametrization;
     /**
