@@ -179,8 +179,6 @@ BOOST_AUTO_TEST_CASE(check_initial_edges_penalties)
 
     struct DisparityGraph disparity_graph{left_image, right_image, 2};
 
-    // No floats? :O
-    // https://www.boost.org/doc/libs/master/libs/test/doc/html/boost_test/testing_tools/extended_comparison/floating_point.html
     BOOST_CHECK_CLOSE(
         edge_penalty({{{0, 0}, 0}, {{0, 1}, 0}}),
         0.0,
