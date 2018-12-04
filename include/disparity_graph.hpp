@@ -58,6 +58,8 @@ const ULONG NEIGHBORS_COUNT = 4;
  * (Markov random field) for MAP (maximal a posteriory) problem
  * of stereo vision.
  *
+ * \section problem-statement Statement of the problem
+ *
  * Let's call width of images \f$w\f$ and height \f$h\f$,
  * introduce sets \f$X = \left\{ 1, \dots, w \right\}\f$
  * and \f$Y = \left\{ 1, \dots, h \right\}\f$,
@@ -118,6 +120,148 @@ const ULONG NEIGHBORS_COUNT = 4;
  *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
  *      \left\| k_i - k_j \right\|^p
  * \f]
+ *
+ * \section dual-problem Dual problem
+ *
+ * It's easy to check that the following inequality holds
+ * for any norm and any labeling
+ *
+ * \f[
+ *  \min\limits_{k: I \rightarrow D}{E\left( k \right)}
+ *  = \min\limits_{k: I \rightarrow D}{\left\{
+ *      \sum\limits_{i \in I} \left\|
+ *          R\left( i^x, i^y \right)
+ *          - L\left( i^x + k_i, i^y \right)
+ *      \right\|^p
+ *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
+ *          \left\| k_i - k_j \right\|^p
+ *  \right\}}
+ *  \ge \sum\limits_{i \in I} \min\limits_{d \in D}{
+ *  \left\|
+ *      R\left( i^x, i^y \right)
+ *      - L\left( i^x + d, i^y \right)
+ *  \right\|^p}
+ *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
+ *      \min\limits_{d, d' \in D}{\left\| d - d' \right\|^p}
+ * \f]
+ *
+ * The last sum is zero, so
+ *
+ * \f[
+ *  \min\limits_{k: I \rightarrow D}{E\left( k \right)}
+ *  = \min\limits_{k: I \rightarrow D}{\left\{
+ *      \sum\limits_{i \in I} \left\|
+ *          R\left( i^x, i^y \right)
+ *          - L\left( i^x + k_i, i^y \right)
+ *      \right\|^p
+ *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
+ *          \left\| k_i - k_j \right\|^p
+ *  \right\}}
+ *  \ge \sum\limits_{i \in I} \min\limits_{d \in D}{
+ *  \left\|
+ *      R\left( i^x, i^y \right)
+ *      - L\left( i^x + d, i^y \right)
+ *  \right\|^p}
+ *  = \widetilde{E}
+ * \f]
+ *
+ * Thus, \f$\widetilde{E}\f$ is a lower bound for the \f$E\f$.
+ * It appears that there are many other possible penalties,
+ * which lead to the same \f$E\left( k \right)\f$
+ * for specific labeling \f$k\f$.
+ * The following function we call a reparametrization
+ * (::DisparityGraph::reparametrization)
+ *
+ * \f[
+ *  \varphi: I^2 \times K \rightarrow \mathbb{R}
+ * \f]
+ *
+ * Let's introduce reparametrized energy function
+ *
+ * \f[
+ *  E\left( k; \varphi \right)
+ *      = \sum\limits_{i \in I} \left[
+ *          \left\|
+ *              R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
+ *          \right\|^p
+ *          + \sum\limits_{j \in \mathcal{N}_i}
+ *              \varphi_{i j}\left( k_i \right)
+ *      \right]
+ *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i} \left[
+ *          \left\| k_i - k_j \right\|^p
+ *          - \varphi_{i j}\left( k_i \right)
+ *          - \varphi_{j i}\left( k_j \right)
+ *      \right]
+ *  = E\left( k \right),
+ *  \quad \forall \varphi: I^2 \times K \rightarrow \mathbb{R}
+ * \f]
+ *
+ * Though, the lower boundary of reparametrized energy may change
+ *
+ * \f[
+ *  \widetilde{E}\left( \varphi \right)
+ *      = \sum\limits_{i \in I} \min_{d \in D}{\left[
+ *          \left\|
+ *              R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
+ *          \right\|^p
+ *          + \sum\limits_{j \in \mathcal{N}_i}
+ *              \varphi_{i j}\left( k_i \right)
+ *      \right]}
+ *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
+ *          \min_{d, d' \in D}{\left[
+ *              \left\| k_i - k_j \right\|^p
+ *              - \varphi_{i j}\left( k_i \right)
+ *              - \varphi_{j i}\left( k_j \right)
+ *          \right]}
+ *  \neq \widetilde{E}
+ * \f]
+ *
+ * If we will increase the lower boundary
+ * \f$\widetilde{E}\left( \varphi \right)\f$,
+ * it won't overflow the \f$E\left( k; \varphi \right)\f$,
+ * but, in some cases, may become as close to it,
+ * that the labels chosen in the lower boundary
+ * will be a solution to the minimization problem.
+ * We only need to find such \f$\varphi\f$
+ * that all \f$d\f$ and \f$d'\f$
+ * in the \f$\widetilde{E}\left( \varphi \right)\f$
+ * will be consistent, e. g., if each pixel
+ * will have only one disparity assigned to it.
+ *
+ * Dual problem to the original one is a maximization
+ * of the \f$\widetilde{E}\left( \varphi \right)\f$
+ *
+ * \f[
+ *  \sum\limits_{i \in I} \min_{d \in D}{\left[
+ *      \left\|
+ *          R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
+ *      \right\|^p
+ *      + \sum\limits_{j \in \mathcal{N}_i}
+ *          \varphi_{i j}\left( k_i \right)
+ *  \right]}
+ *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
+ *      \min_{d, d' \in D}{\left[
+ *          \left\| k_i - k_j \right\|^p
+ *          - \varphi_{i j}\left( k_i \right)
+ *          - \varphi_{j i}\left( k_j \right)
+ *      \right]}
+ *  \to \max_{\varphi: I^2 \times K \rightarrow \mathbb{R}}
+ * \f]
+ *
+ * You can find more information in the following sources
+ * - <a href="
+ *    https://hci.iwr.uni-heidelberg.de/vislearn/HTML/people/
+ *    bogdan/publications/papers/Dense-CombiLP-Haller-AAAI2017.pdf
+ *   ">
+ *   Exact MAP-inference by Confining Combinatorial Search
+ *   with LP Relaxation
+ *   </a> (2017)by Stefan Haller, Paul Swoboda and Bogdan Savchynskyy;
+ * - <a href="
+ *    http://cmp.felk.cvut.cz/~shekhovt/publications/
+ *    as-phd-thesis-TR.pdf
+ *   ">
+ *   Exact and Partial Energy Minimization in Computer Vision
+ *   </a> (2013) by Alexander Shekhovtsov.
  */
 struct DisparityGraph
 {
@@ -137,145 +281,6 @@ struct DisparityGraph
     /**
      * \brief Reparametrization is a helpful vector
      * for the optimization problem.
-     *
-     * It's easy to check that the following inequality holds
-     * for any norm and any labeling
-     *
-     * \f[
-     *  \min\limits_{k: I \rightarrow D}{E\left( k \right)}
-     *  = \min\limits_{k: I \rightarrow D}{\left\{
-     *      \sum\limits_{i \in I} \left\|
-     *          R\left( i^x, i^y \right)
-     *          - L\left( i^x + k_i, i^y \right)
-     *      \right\|^p
-     *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
-     *          \left\| k_i - k_j \right\|^p
-     *  \right\}}
-     *  \ge \sum\limits_{i \in I} \min\limits_{d \in D}{
-     *  \left\|
-     *      R\left( i^x, i^y \right)
-     *      - L\left( i^x + d, i^y \right)
-     *  \right\|^p}
-     *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
-     *      \min\limits_{d, d' \in D}{\left\| d - d' \right\|^p}
-     * \f]
-     *
-     * The last sum is zero, so
-     *
-     * \f[
-     *  \min\limits_{k: I \rightarrow D}{E\left( k \right)}
-     *  = \min\limits_{k: I \rightarrow D}{\left\{
-     *      \sum\limits_{i \in I} \left\|
-     *          R\left( i^x, i^y \right)
-     *          - L\left( i^x + k_i, i^y \right)
-     *      \right\|^p
-     *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
-     *          \left\| k_i - k_j \right\|^p
-     *  \right\}}
-     *  \ge \sum\limits_{i \in I} \min\limits_{d \in D}{
-     *  \left\|
-     *      R\left( i^x, i^y \right)
-     *      - L\left( i^x + d, i^y \right)
-     *  \right\|^p}
-     *  = \widetilde{E}
-     * \f]
-     *
-     * Thus, \f$\widetilde{E}\f$ is a lower bound for the \f$E\f$.
-     * It appears that there are many other possible penalties,
-     * which lead to the same \f$E\left( k \right)\f$
-     * for specific labeling \f$k\f$.
-     * The following function we call a parametrization
-     *
-     * \f[
-     *  \varphi: I^2 \times K \rightarrow \mathbb{R}
-     * \f]
-     *
-     * Let's introduce parametrized energy function
-     *
-     * \f[
-     *  E\left( k; \varphi \right)
-     *      = \sum\limits_{i \in I} \left[
-     *          \left\|
-     *              R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
-     *          \right\|^p
-     *          + \sum\limits_{j \in \mathcal{N}_i}
-     *              \varphi_{i j}\left( k_i \right)
-     *      \right]
-     *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i} \left[
-     *          \left\| k_i - k_j \right\|^p
-     *          - \varphi_{i j}\left( k_i \right)
-     *          - \varphi_{j i}\left( k_j \right)
-     *      \right]
-     *  = E\left( k \right),
-     *  \quad \forall \varphi: I^2 \times K \rightarrow \mathbb{R}
-     * \f]
-     *
-     * Though, the lower boundary of reparametrized energy may change
-     *
-     * \f[
-     *  \widetilde{E}\left( \varphi \right)
-     *      = \sum\limits_{i \in I} \min_{d \in D}{\left[
-     *          \left\|
-     *              R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
-     *          \right\|^p
-     *          + \sum\limits_{j \in \mathcal{N}_i}
-     *              \varphi_{i j}\left( k_i \right)
-     *      \right]}
-     *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
-     *          \min_{d, d' \in D}{\left[
-     *              \left\| k_i - k_j \right\|^p
-     *              - \varphi_{i j}\left( k_i \right)
-     *              - \varphi_{j i}\left( k_j \right)
-     *          \right]}
-     *  \neq \widetilde{E}
-     * \f]
-     *
-     * If we will increase the lower boundary
-     * \f$\widetilde{E}\left( \varphi \right)\f$,
-     * it won't overflow the \f$E\left( k; \varphi \right)\f$,
-     * but, in some cases, may become as close to it,
-     * that the labels chosen in the lower boundary
-     * will be a solution to the minimization problem.
-     * We only need to find such \f$\varphi\f$
-     * that all \f$d\f$ and \f$d'\f$
-     * in the \f$\widetilde{E}\left( \varphi \right)\f$
-     * will be consistent, e. g., if each pixel
-     * will have only one disparity assigned to it.
-     *
-     * Dual problem to the original one is a maximization
-     * of the \f$\widetilde{E}\left( \varphi \right)\f$
-     *
-     * \f[
-     *  \sum\limits_{i \in I} \min_{d \in D}{\left[
-     *      \left\|
-     *          R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
-     *      \right\|^p
-     *      + \sum\limits_{j \in \mathcal{N}_i}
-     *          \varphi_{i j}\left( k_i \right)
-     *  \right]}
-     *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
-     *      \min_{d, d' \in D}{\left[
-     *          \left\| k_i - k_j \right\|^p
-     *          - \varphi_{i j}\left( k_i \right)
-     *          - \varphi_{j i}\left( k_j \right)
-     *      \right]}
-     *  \to \max_{\varphi: I^2 \times K \rightarrow \mathbb{R}}
-     * \f]
-     *
-     * You can find more information in the following sources
-     * - <a href="
-     *    https://hci.iwr.uni-heidelberg.de/vislearn/HTML/people/
-     *    bogdan/publications/papers/Dense-CombiLP-Haller-AAAI2017.pdf
-     *   ">
-     *   Exact MAP-inference by Confining Combinatorial Search
-     *   with LP Relaxation
-     *   </a> (2017)by Stefan Haller, Paul Swoboda and Bogdan Savchynskyy;
-     * - <a href="
-     *    http://cmp.felk.cvut.cz/~shekhovt/publications/
-     *    as-phd-thesis-TR.pdf
-     *   ">
-     *   Exact and Partial Energy Minimization in Computer Vision
-     *   </a> (2013) by Alexander Shekhovtsov.
      */
     FLOAT_ARRAY reparametrization;
     DisparityGraph(
