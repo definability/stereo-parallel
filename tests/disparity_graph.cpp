@@ -27,8 +27,6 @@
 #include <image.hpp>
 #include <pgm_io.hpp>
 
-#include <cmath>
-
 BOOST_AUTO_TEST_SUITE(DisparityGraphTest)
 
 BOOST_AUTO_TEST_CASE(check_neighborhood)
@@ -183,31 +181,37 @@ BOOST_AUTO_TEST_CASE(check_initial_edges_penalties)
 
     // No floats? :O
     // https://www.boost.org/doc/libs/master/libs/test/doc/html/boost_test/testing_tools/extended_comparison/floating_point.html
-    BOOST_CHECK(
-        fabs(edge_penalty(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 0}}) - 0.0)
-        < 0.5
+    BOOST_CHECK_CLOSE(
+        edge_penalty({{{0, 0}, 0}, {{0, 1}, 0}}),
+        0.0,
+        0.5
     );
-    BOOST_CHECK(
-        fabs(edge_penalty(disparity_graph, {{{0, 0}, 0}, {{1, 0}, 1}}) - 1.0)
-        < 0.5
-    );
-
-    BOOST_CHECK(
-        fabs(edge_penalty(disparity_graph, {{{0, 1}, 1}, {{0, 2}, 0}}) - 1.0)
-        < 0.5
+    BOOST_CHECK_CLOSE(
+        edge_penalty({{{0, 0}, 0}, {{1, 0}, 1}}),
+        1.0,
+        0.5
     );
 
-    BOOST_CHECK(
-        fabs(edge_penalty(disparity_graph, {{{0, 1}, 0}, {{0, 0}, 2}}) - 4.0)
-        < 0.5
+    BOOST_CHECK_CLOSE(
+        edge_penalty({{{0, 1}, 1}, {{0, 2}, 0}}),
+        1.0,
+        0.5
     );
-    BOOST_CHECK(
-        fabs(edge_penalty(disparity_graph, {{{0, 1}, 2}, {{1, 0}, 0}}) - 4.0)
-        < 0.5
+
+    BOOST_CHECK_CLOSE(
+        edge_penalty({{{0, 1}, 0}, {{0, 0}, 2}}),
+        4.0,
+        0.5
     );
-    BOOST_CHECK(
-        fabs(edge_penalty(disparity_graph, {{{0, 1}, 2}, {{1, 1}, 2}}) - 0.0)
-        < 0.5
+    BOOST_CHECK_CLOSE(
+        edge_penalty({{{0, 1}, 2}, {{1, 0}, 0}}),
+        4.0,
+        0.5
+    );
+    BOOST_CHECK_CLOSE(
+        edge_penalty({{{0, 1}, 2}, {{1, 1}, 2}}),
+        0.0,
+        0.5
     );
 }
 
@@ -239,23 +243,23 @@ BOOST_AUTO_TEST_CASE(check_initial_nodes_penalties)
 
     struct DisparityGraph disparity_graph{left_image, right_image, 2};
 
-    BOOST_CHECK(fabs(node_penalty(disparity_graph, {{0, 0}, 0}) - 1.0) < 0.5);
-    BOOST_CHECK(fabs(node_penalty(disparity_graph, {{0, 0}, 1}) - 0.0) < 0.5);
-    BOOST_CHECK(fabs(node_penalty(disparity_graph, {{0, 0}, 2}) - 1.0) < 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 0}), 1.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 1}), 0.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 2}), 1.0, 0.5);
 
-    BOOST_CHECK(fabs(node_penalty(disparity_graph, {{0, 1}, 0}) - 1.0) < 0.5);
-    BOOST_CHECK(fabs(node_penalty(disparity_graph, {{0, 1}, 1}) - 4.0) < 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 1}, 0}), 1.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 1}, 1}), 4.0, 0.5);
 
-    BOOST_CHECK(fabs(node_penalty(disparity_graph, {{0, 2}, 0}) - 0.0) < 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 2}, 0}), 0.0, 0.5);
 
-    BOOST_CHECK(fabs(node_penalty(disparity_graph, {{1, 0}, 0}) - 0.0) < 0.5);
-    BOOST_CHECK(fabs(node_penalty(disparity_graph, {{1, 0}, 1}) - 4.0) < 0.5);
-    BOOST_CHECK(fabs(node_penalty(disparity_graph, {{1, 0}, 2}) - 1.0) < 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 0}), 0.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 1}), 4.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 2}), 1.0, 0.5);
 
-    BOOST_CHECK(fabs(node_penalty(disparity_graph, {{1, 1}, 0}) - 0.0) < 0.5);
-    BOOST_CHECK(fabs(node_penalty(disparity_graph, {{1, 1}, 1}) - 1.0) < 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 1}, 0}), 0.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 1}, 1}), 1.0, 0.5);
 
-    BOOST_CHECK(fabs(node_penalty(disparity_graph, {{1, 2}, 0}) - 0.0) < 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 2}, 0}), 0.0, 0.5);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
