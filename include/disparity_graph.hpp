@@ -387,34 +387,89 @@ bool edge_exists(
     const struct DisparityGraph& graph,
     struct Edge edge
 );
-ULONG potential_index_fast(
+
+/**
+ * \brief Get an index of DisparityGraph::reparametrization element
+ * using a Node and an index of its neighbor.
+ *
+ * The function doesn't check existence of neighbor.
+ * You should perform it by yourself
+ * using ::neighborhood_exists.
+ */
+ULONG reparametrization_index_fast(
     const struct DisparityGraph& graph,
     struct Node node,
     ULONG neighbor_index
 );
-ULONG potential_index(
+
+/**
+ * \brief Get an index of DisparityGraph::reparametrization element
+ * using a Node and a Pixel.
+ *
+ * The function doesn't check existence of neighbor.
+ * You should perform it by yourself
+ * using ::neighborhood_exists.
+ */
+ULONG reparametrization_index(
     const struct DisparityGraph& graph,
     struct Node node,
     struct Pixel neighbor
 );
-ULONG potential_index_slow(
+
+/**
+ * \brief Get an index of DisparityGraph::reparametrization element
+ * using an Edge.
+ *
+ * The function doesn't check existence of neighbor.
+ * You should perform it by yourself
+ * using ::neighborhood_exists.
+ */
+ULONG reparametrization_index_slow(
     const struct DisparityGraph& graph,
     struct Edge edge
 );
-FLOAT potential_value(
-    const struct DisparityGraph& graph,
-    struct Node node,
-    struct Pixel neighbor
-);
-FLOAT potential_value_slow(
-    const struct DisparityGraph& graph,
-    struct Edge edge
-);
-FLOAT potential_value_fast(
+
+/**
+ * \brief Get a value of DisparityGraph::reparametrization element
+ * using a Node and an index of its neighbor.
+ *
+ * The function doesn't check existence of neighbor.
+ * You should perform it by yourself
+ * using ::neighborhood_exists.
+ */
+FLOAT reparametrization_value_fast(
     const struct DisparityGraph& graph,
     struct Node node,
     ULONG neighbor_index
 );
+
+/**
+ * \brief Get a value of DisparityGraph::reparametrization element
+ * using a Node and a Pixel.
+ *
+ * The function doesn't check existence of neighbor.
+ * You should perform it by yourself
+ * using ::neighborhood_exists.
+ */
+FLOAT reparametrization_value(
+    const struct DisparityGraph& graph,
+    struct Node node,
+    struct Pixel neighbor
+);
+
+/**
+ * \brief Get a value of DisparityGraph::reparametrization element
+ * using an Edge.
+ *
+ * The function doesn't check existence of neighbor.
+ * You should perform it by yourself
+ * using ::neighborhood_exists.
+ */
+FLOAT reparametrization_value_slow(
+    const struct DisparityGraph& graph,
+    struct Edge edge
+);
+
 /**
  * \brief Calculate penalty of Edge without neighborhood check.
  *

@@ -289,7 +289,7 @@ BOOST_AUTO_TEST_CASE(check_edges_penalties)
     struct DisparityGraph disparity_graph{left_image, right_image, 2};
 
     disparity_graph.reparametrization[
-        potential_index(disparity_graph, {{0, 0}, 0}, {0, 1})
+        reparametrization_index(disparity_graph, {{0, 0}, 0}, {0, 1})
     ] = -2.0;
 
     BOOST_CHECK_CLOSE(
@@ -344,7 +344,7 @@ BOOST_AUTO_TEST_CASE(check_nodes_penalties)
     struct DisparityGraph disparity_graph{left_image, right_image, 2};
 
     disparity_graph.reparametrization[
-        potential_index(disparity_graph, {{0, 0}, 0}, {0, 1})
+        reparametrization_index(disparity_graph, {{0, 0}, 0}, {0, 1})
     ] = -2.0;
 
     BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 0}), 3.0, 0.5);
