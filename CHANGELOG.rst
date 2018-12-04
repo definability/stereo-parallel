@@ -65,6 +65,18 @@ Added
 - ``edge_exists`` checks existence of an edge.
 - ``edge_penalty`` calculates penalty of an edge.
 - ``node_penalty`` calculates penalty of a node.
+- ``reparametrization_index`` to get an index of reparametrization element
+  using a node and a pixel.
+- ``reparametrization_index_fast`` to get an index of reparametrization element
+  for given a node and its neighbor index.
+- ``reparametrization_index_slow`` to get an index of reparametrization element
+  by an edge.
+- ``reparametrization_value`` to get a value of reparametrization element
+  using a node and a pixel.
+- ``reparametrization_value_fast`` to get a value of reparametrization element
+  for given a node and its neighbor value.
+- ``reparametrization_value_slow`` to get a value of reparametrization element
+  by an edge.
 
 .. Remove these two lines and one indentation level of the next two lines
     when you will release the first version.
