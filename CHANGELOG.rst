@@ -37,6 +37,34 @@ Added
   in 1D intensities array.
 - ``get_pixel_value`` to fetch intensity of given pixel
   from 1D intensities array.
+- ``DisparityGraph`` to represent the problem using graphical model.
+  Contains
+
+  - ``left`` image,
+  - ``right`` image
+    (made on a camera located to the right of the ``left`` image),
+  - ``maximal_disparity`` is a limit for disparity
+    (the more it is, the more memory the graph consumes),
+  - ``reparametrization`` that allows to solve the dual problem.
+
+- ``Node`` of the ``DisparityGraph`` stores
+
+  - ``pixel`` it belongs to,
+  - ``disparity`` assigned to the ``pixel`` in the node.
+
+- ``Edge`` of the ``DisparityGraph`` is a tuple of two ``Node`` instances
+
+  - ``node`` is the start,
+  - ``neighbor`` is the end of the edge.
+
+- ``neighbor_index`` allows to get index of neighboring pixel for fast access.
+- ``neighborhood_exists`` checks whether two pixels are really neighbors.
+- ``neighborhood_exists_fast`` checks whether a pixel has a neighbor
+  with specified index.
+- ``node_exists`` checks existence of a node.
+- ``edge_exists`` checks existence of an edge.
+- ``edge_penalty`` calculates penalty of an edge.
+- ``node_penalty`` calculates penalty of a node.
 
 .. Remove these two lines and one indentation level of the next two lines
     when you will release the first version.
