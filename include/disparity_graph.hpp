@@ -254,7 +254,7 @@ bool edge_exists(
  * Otherwise, the penalty is a norm of a difference
  * between disparities of Node instances that the Edge connects.
  */
-FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge);
+FLOAT edge_penalty(struct Edge edge);
 /**
  * \brief Calculate penalty of Node.
  *
