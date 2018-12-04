@@ -78,6 +78,18 @@ DisparityGraph::DisparityGraph(
             "Maximal intensity of the images should be the same."
         );
     }
+
+    this->reparametrization.resize(
+        this->left.width
+        * this->left.height
+        * NEIGHBORS_COUNT
+        * this->maximal_disparity
+    );
+    fill(
+        this->reparametrization.begin(),
+        this->reparametrization.end(),
+        static_cast<FLOAT>(0)
+    );
 }
 
 ULONG neighbor_index(
@@ -189,10 +201,84 @@ bool edge_exists(
     return true;
 }
 
+ULONG potential_index_fast(
+    const struct DisparityGraph& graph,
+    struct Node node,
+    ULONG neighbor_index
+)
+{
+    ULONG index = 0;
+    index *= graph.right.width;
+    index += node.pixel.column;
+    index *= NEIGHBORS_COUNT;
+    index += neighbor_index;
+    index *= graph.maximal_disparity;
+    index += node.disparity;
+    index *= graph.left.height;
+    index += node.pixel.row;
+
+    return index;
+}
+
+ULONG potential_index(
+    const struct DisparityGraph& graph,
+    struct Node node,
+    struct Pixel neighbor
+)
+{
+    return potential_index_fast(
+        graph,
+        node,
+        neighbor_index(node.pixel, neighbor)
+    );
+}
+
+ULONG potential_index_slow(
+    const struct DisparityGraph& graph,
+    struct Edge edge
+)
+{
+    return potential_index_fast(
+        graph,
+        edge.node,
+        neighbor_index(edge.node.pixel, edge.neighbor.pixel)
+    );
+}
+
+FLOAT potential_value(
+    const struct DisparityGraph& graph,
+    struct Node node,
+    struct Pixel neighbor
+)
+{
+    return graph.reparametrization[potential_index(graph, node, neighbor)];
+}
+
+FLOAT potential_value_slow(
+    const struct DisparityGraph& graph,
+    struct Edge edge
+)
+{
+    return graph.reparametrization[potential_index_slow(graph, edge)];
+}
+
+FLOAT potential_value_fast(
+    const struct DisparityGraph& graph,
+    struct Node node,
+    ULONG neighbor_index
+)
+{
+    return graph.reparametrization[
+        potential_index_fast(graph, node, neighbor_index)
+    ];
+}
+
 FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge)
 {
     return
-        SQR(TO_FLOAT(edge.node.disparity) - TO_FLOAT(edge.neighbor.disparity));
+        SQR(TO_FLOAT(edge.node.disparity) - TO_FLOAT(edge.neighbor.disparity))
+        + potential_value_slow(graph, edge)
+        + potential_value(graph, edge.neighbor, edge.node.pixel);
 }
 
 FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node)
@@ -201,5 +287,9 @@ FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node)
     left_pixel.column += node.disparity;
     return
         SQR(TO_FLOAT(get_pixel_value(graph.right, node.pixel))
-            - TO_FLOAT(get_pixel_value(graph.left, left_pixel)));
+            - TO_FLOAT(get_pixel_value(graph.left, left_pixel)))
+        - potential_value_fast(graph, node, 0)
+        - potential_value_fast(graph, node, 1)
+        - potential_value_fast(graph, node, 2)
+        - potential_value_fast(graph, node, 3);
 }
