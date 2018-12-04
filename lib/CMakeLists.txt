@@ -21,6 +21,7 @@
 # SOFTWARE.
 add_library(image image.cpp)
 add_library(pgm_io pgm_io.cpp)
+add_library(disparity_graph disparity_graph.cpp)
 target_include_directories(
     image PUBLIC
     ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
@@ -29,8 +30,16 @@ target_include_directories(
     pgm_io PUBLIC
     ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
 )
+target_include_directories(
+    disparity_graph PUBLIC
+    ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
+)
 target_link_libraries(
     pgm_io
+    image
+)
+target_link_libraries(
+    disparity_graph
     image
 )
 
