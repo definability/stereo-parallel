@@ -58,6 +58,8 @@ const ULONG NEIGHBORS_COUNT = 4;
  * (Markov random field) for MAP (maximal a posteriory) problem
  * of stereo vision.
  *
+ * \section problem-statement Statement of the problem
+ *
  * Let's call width of images \f$w\f$ and height \f$h\f$,
  * introduce sets \f$X = \left\{ 1, \dots, w \right\}\f$
  * and \f$Y = \left\{ 1, \dots, h \right\}\f$,
@@ -80,8 +82,9 @@ const ULONG NEIGHBORS_COUNT = 4;
  * Disparity is a difference
  * between number of a column of a pixel of the left image
  * and number of a column of corresponding pixel of the right image.
- * Given maximal disparity \f$d\f$ and denoting
- * \f$D = \left\{ 1, \dots, d \right\}\f$,
+ * Given maximal disparity (DisparityGraph::maximal_disparity)
+ * \f$\max{D}\f$ and denoting
+ * \f$D = \left\{ 1, \dots, \max{D} \right\}\f$,
  * correspondence function is called labeling and its signature is
  *
  * \f[
@@ -118,6 +121,147 @@ const ULONG NEIGHBORS_COUNT = 4;
  *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
  *      \left\| k_i - k_j \right\|^p
  * \f]
+ *
+ * \section dual-problem Dual problem
+ *
+ * It's easy to check that the following inequality holds
+ * for any norm and any labeling
+ *
+ * \f[
+ *  \min\limits_{k: I \rightarrow D}{E\left( k \right)}
+ *  = \min\limits_{k: I \rightarrow D}{\left\{
+ *      \sum\limits_{i \in I} \left\|
+ *          R\left( i^x, i^y \right)
+ *          - L\left( i^x + k_i, i^y \right)
+ *      \right\|^p
+ *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
+ *          \left\| k_i - k_j \right\|^p
+ *  \right\}}
+ *  \ge \sum\limits_{i \in I} \min\limits_{d \in D}{
+ *  \left\|
+ *      R\left( i^x, i^y \right)
+ *      - L\left( i^x + d, i^y \right)
+ *  \right\|^p}
+ *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
+ *      \min\limits_{d, d' \in D}{\left\| d - d' \right\|^p}
+ * \f]
+ *
+ * The last sum is zero, so
+ *
+ * \f[
+ *  \min\limits_{k: I \rightarrow D}{E\left( k \right)}
+ *  = \min\limits_{k: I \rightarrow D}{\left\{
+ *      \sum\limits_{i \in I} \left\|
+ *          R\left( i^x, i^y \right)
+ *          - L\left( i^x + k_i, i^y \right)
+ *      \right\|^p
+ *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
+ *          \left\| k_i - k_j \right\|^p
+ *  \right\}}
+ *  \ge \sum\limits_{i \in I} \min\limits_{d \in D}{
+ *  \left\|
+ *      R\left( i^x, i^y \right)
+ *      - L\left( i^x + d, i^y \right)
+ *  \right\|^p}
+ *  = \widetilde{E}
+ * \f]
+ *
+ * Thus, \f$\widetilde{E}\f$ is a lower bound for the \f$E\f$.
+ * It appears that there are many other possible penalties,
+ * which lead to the same \f$E\left( k \right)\f$
+ * for specific labeling \f$k\f$.
+ * The following function we call a reparametrization
+ * (DisparityGraph::reparametrization)
+ *
+ * \f[
+ *  \varphi: I^2 \times K \rightarrow \mathbb{R}
+ * \f]
+ *
+ * Let's introduce reparametrized energy function
+ *
+ * \f[
+ *  E\left( k; \varphi \right)
+ *      = \sum\limits_{i \in I} \left[
+ *          \left\|
+ *              R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
+ *          \right\|^p
+ *          + \sum\limits_{j \in \mathcal{N}_i}
+ *              \varphi_{i j}\left( k_i \right)
+ *      \right]
+ *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i} \left[
+ *          \left\| k_i - k_j \right\|^p
+ *          - \varphi_{i j}\left( k_i \right)
+ *          - \varphi_{j i}\left( k_j \right)
+ *      \right]
+ *  = E\left( k \right),
+ *  \quad \forall \varphi: I^2 \times K \rightarrow \mathbb{R}
+ * \f]
+ *
+ * Though, the lower boundary of reparametrized energy may change
+ *
+ * \f[
+ *  \widetilde{E}\left( \varphi \right)
+ *      = \sum\limits_{i \in I} \min_{d \in D}{\left[
+ *          \left\|
+ *              R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
+ *          \right\|^p
+ *          + \sum\limits_{j \in \mathcal{N}_i}
+ *              \varphi_{i j}\left( k_i \right)
+ *      \right]}
+ *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
+ *          \min_{d, d' \in D}{\left[
+ *              \left\| k_i - k_j \right\|^p
+ *              - \varphi_{i j}\left( k_i \right)
+ *              - \varphi_{j i}\left( k_j \right)
+ *          \right]}
+ *  \neq \widetilde{E}
+ * \f]
+ *
+ * If we will increase the lower boundary
+ * \f$\widetilde{E}\left( \varphi \right)\f$,
+ * it won't overflow the \f$E\left( k; \varphi \right)\f$,
+ * but, in some cases, may become as close to it,
+ * that the labels chosen in the lower boundary
+ * will be a solution to the minimization problem.
+ * We only need to find such \f$\varphi\f$
+ * that all \f$d\f$ and \f$d'\f$
+ * in the \f$\widetilde{E}\left( \varphi \right)\f$
+ * will be consistent, e. g., if each pixel
+ * will have only one disparity assigned to it.
+ *
+ * Dual problem to the original one is a maximization
+ * of the \f$\widetilde{E}\left( \varphi \right)\f$
+ *
+ * \f[
+ *  \sum\limits_{i \in I} \min_{d \in D}{\left[
+ *      \left\|
+ *          R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
+ *      \right\|^p
+ *      + \sum\limits_{j \in \mathcal{N}_i}
+ *          \varphi_{i j}\left( k_i \right)
+ *  \right]}
+ *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
+ *      \min_{d, d' \in D}{\left[
+ *          \left\| k_i - k_j \right\|^p
+ *          - \varphi_{i j}\left( k_i \right)
+ *          - \varphi_{j i}\left( k_j \right)
+ *      \right]}
+ *  \to \max_{\varphi: I^2 \times K \rightarrow \mathbb{R}}
+ * \f]
+ *
+ * You can find more information in the following sources
+ * - <a href="
+ *    https://hci.iwr.uni-heidelberg.de/vislearn/HTML/people/
+ *bogdan/publications/papers/Dense-CombiLP-Haller-AAAI2017.pdf
+ *   ">
+ *   Exact MAP-inference by Confining Combinatorial Search
+ *   with LP Relaxation
+ *   </a> (2017) by Stefan Haller, Paul Swoboda and Bogdan Savchynskyy;
+ * - <a href="
+ *    http://cmp.felk.cvut.cz/~shekhovt/publications/as-phd-thesis-TR.pdf
+ *   ">
+ *   Exact and Partial Energy Minimization in Computer Vision
+ *   </a> (2013) by Alexander Shekhovtsov.
  */
 struct DisparityGraph
 {
@@ -134,6 +278,56 @@ struct DisparityGraph
      * that see the same 3D point.
      */
     ULONG maximal_disparity;
+    /**
+     * \brief Reparametrization is a helpful vector
+     * for the optimization problem.
+     *
+     * It assigns a floating point value
+     * to each pair of Node and neighboring Pixel instances
+     *
+     * \f[
+     *  \varphi: I^2 \times K \rightarrow \mathbb{R}
+     * \f]
+     *
+     * It's infeasible to use a tree for such purpose.
+     * Also, it may be slow to use an k-D array.
+     *
+     * The DisparityGraph::reparametrization is a 1D array,
+     * with specific indexing rules:
+     * it uses a generalization of row/column-major order.
+     *
+     * Used "dimensions" are following (upper ones are more nested):
+     *
+     * - Pixel::row of Node::pixel,
+     * - Node::disparity,
+     * - Index of current neighbor of Node instance,
+     * - Pixel::column of Node::pixel
+     *
+     * Index of an element of the DisparityGraph::reparametrization
+     * for specific Node and neighbor index
+     * can be calculated by formula
+     *
+     * \f[
+     *  k\left( \left\langle x, y \right\rangle, i, d \right) =
+     *      y + h \cdot \left(
+     *          d + \max{D} \cdot \left(
+     *              i + \max_j{\mathcal{N}_j} \cdot \left(
+     *                      x \cdot w
+     *                  \right)
+     *              \right)
+     *          \right),
+     * \f]
+     *
+     * where \f$\left\langle x, y \right\rangle\f$
+     * are coordinates of Node::pixel,
+     * \f$i\f$ is an index of used neighbor
+     * and \f$d\f$ is a Node::disparity.
+     */
+    FLOAT_ARRAY reparametrization;
+    /**
+     * \brief Create DisparityGraph entity
+     * and initialize its DisparityGraph::reparametrization.
+     */
     DisparityGraph(
         struct Image left,
         struct Image right,
@@ -147,16 +341,32 @@ struct DisparityGraph
  */
 struct Node
 {
+    /**
+     * \brief Pixel to which the Node instance belongs.
+     */
     struct Pixel pixel;
+    /**
+     * \brief Disparity assigned to the Node::pixel in the Node instance.
+     *
+     * Disparity specifies the difference between columns
+     * of current pixel on the right image
+     * and corresponding one on the left image.
+     */
     ULONG disparity;
 };
 
 /**
- * \brief Edge is a pair of two Node instances.
+ * \brief Edge is an ordered pair of two Node instances.
  */
 struct Edge
 {
+    /**
+     * \brief Start Node of the directed Edge.
+     */
     struct Node node;
+    /**
+     * \brief Start Node of the directed Edge.
+     */
     struct Node neighbor;
 };
 
@@ -182,7 +392,9 @@ ULONG neighbor_index(
 );
 
 /**
- * \brief Check existence of provided Pixel instances in given DisparityGraph.
+ * \brief Check wheter provided Pixel instances
+ * in given DisparityGraph are neighbors
+ * and exist at all.
  *
  * As it's explained in ::NEIGHBORS_COUNT,
  * there are four possible neighbors.
@@ -243,6 +455,89 @@ bool edge_exists(
     const struct DisparityGraph& graph,
     struct Edge edge
 );
+
+/**
+ * \brief Get an index of DisparityGraph::reparametrization element
+ * using a Node and an index of its neighbor.
+ *
+ * The function doesn't check existence of neighbor.
+ * You should perform it by yourself
+ * using ::neighborhood_exists.
+ */
+ULONG reparametrization_index_fast(
+    const struct DisparityGraph& graph,
+    struct Node node,
+    ULONG neighbor_index
+);
+
+/**
+ * \brief Get an index of DisparityGraph::reparametrization element
+ * using a Node and a Pixel.
+ *
+ * The function doesn't check existence of neighbor.
+ * You should perform it by yourself
+ * using ::neighborhood_exists.
+ */
+ULONG reparametrization_index(
+    const struct DisparityGraph& graph,
+    struct Node node,
+    struct Pixel neighbor
+);
+
+/**
+ * \brief Get an index of DisparityGraph::reparametrization element
+ * using an Edge.
+ *
+ * The function doesn't check existence of neighbor.
+ * You should perform it by yourself
+ * using ::neighborhood_exists.
+ */
+ULONG reparametrization_index_slow(
+    const struct DisparityGraph& graph,
+    struct Edge edge
+);
+
+/**
+ * \brief Get a value of DisparityGraph::reparametrization element
+ * using a Node and an index of its neighbor.
+ *
+ * The function doesn't check existence of neighbor.
+ * You should perform it by yourself
+ * using ::neighborhood_exists.
+ */
+FLOAT reparametrization_value_fast(
+    const struct DisparityGraph& graph,
+    struct Node node,
+    ULONG neighbor_index
+);
+
+/**
+ * \brief Get a value of DisparityGraph::reparametrization element
+ * using a Node and a Pixel.
+ *
+ * The function doesn't check existence of neighbor.
+ * You should perform it by yourself
+ * using ::neighborhood_exists.
+ */
+FLOAT reparametrization_value(
+    const struct DisparityGraph& graph,
+    struct Node node,
+    struct Pixel neighbor
+);
+
+/**
+ * \brief Get a value of DisparityGraph::reparametrization element
+ * using an Edge.
+ *
+ * The function doesn't check existence of neighbor.
+ * You should perform it by yourself
+ * using ::neighborhood_exists.
+ */
+FLOAT reparametrization_value_slow(
+    const struct DisparityGraph& graph,
+    struct Edge edge
+);
+
 /**
  * \brief Calculate penalty of Edge without neighborhood check.
  *
@@ -254,7 +549,7 @@ bool edge_exists(
  * Otherwise, the penalty is a norm of a difference
  * between disparities of Node instances that the Edge connects.
  */
-FLOAT edge_penalty(struct Edge edge);
+FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge);
 /**
  * \brief Calculate penalty of Node.
  *

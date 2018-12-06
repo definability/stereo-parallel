@@ -54,5 +54,6 @@ target_link_libraries(
     stereo_parallel
     image
     pgm_io
+    disparity_graph
     ${Boost_PROGRAM_OPTIONS_LIBRARY}
 )

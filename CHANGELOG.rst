@@ -37,6 +37,46 @@ Added
   in 1D intensities array.
 - ``get_pixel_value`` to fetch intensity of given pixel
   from 1D intensities array.
+- ``DisparityGraph`` to represent the problem using graphical model.
+  Contains
+
+  - ``left`` image,
+  - ``right`` image
+    (made on a camera located to the right of the ``left`` image),
+  - ``maximal_disparity`` is a limit for disparity
+    (the more it is, the more memory the graph consumes),
+  - ``reparametrization`` that allows to solve the dual problem.
+
+- ``Node`` of the ``DisparityGraph`` stores
+
+  - ``pixel`` it belongs to,
+  - ``disparity`` assigned to the ``pixel`` in the node.
+
+- ``Edge`` of the ``DisparityGraph`` is a tuple of two ``Node`` instances
+
+  - ``node`` is the start,
+  - ``neighbor`` is the end of the edge.
+
+- ``neighbor_index`` allows to get index of neighboring pixel for fast access.
+- ``neighborhood_exists`` checks whether two pixels are really neighbors.
+- ``neighborhood_exists_fast`` checks whether a pixel has a neighbor
+  with specified index.
+- ``node_exists`` checks existence of a node.
+- ``edge_exists`` checks existence of an edge.
+- ``edge_penalty`` calculates penalty of an edge.
+- ``node_penalty`` calculates penalty of a node.
+- ``reparametrization_index_fast`` to get an index of reparametrization element
+  for given a node and its neighbor index.
+- ``reparametrization_index`` to get an index of reparametrization element
+  using a node and a pixel.
+- ``reparametrization_index_slow`` to get an index of reparametrization element
+  by an edge.
+- ``reparametrization_value_fast`` to get a value of reparametrization element
+  for given a node and its neighbor value.
+- ``reparametrization_value`` to get a value of reparametrization element
+  using a node and a pixel.
+- ``reparametrization_value_slow`` to get a value of reparametrization element
+  by an edge.
 
 .. Remove these two lines and one indentation level of the next two lines
     when you will release the first version.
