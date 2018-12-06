@@ -8,6 +8,7 @@
 
 #include <image.hpp>
 #include <pgm_io.hpp>
+#include <disparity_graph.hpp>
 
 struct Image read_image(const std::string& image_path);
 
@@ -21,16 +22,34 @@ int main(int argc, char* argv[]) try
          "Left image")
         ("right-image,r",
          boost::program_options::value<std::string>(),
-         "Right image");
+         "Right image")
+        ("maximal-disparity,d",
+         boost::program_options::value<std::string>(),
+         "Maximal disparity");
 
     boost::program_options::variables_map vm;
-    boost::program_options::store(
-        boost::program_options::parse_command_line(argc, argv, desc),
-        vm
-    );
+    try
+    {
+        boost::program_options::store(
+            boost::program_options::parse_command_line(argc, argv, desc),
+            vm
+        );
+    }
+    catch (boost::program_options::multiple_occurrences& e)
+    {
+        std::cerr
+            << "You should specify each parameter only once: "
+            << e.what() << std::endl;
+        return 1;
+    }
+
     boost::program_options::notify(vm);   
 
-    if (vm.count("left-image") == 1 && vm.count("right-image") == 1)
+    if (
+        vm.count("left-image") == 1
+        && vm.count("right-image") == 1
+        && vm.count("maximal-disparity") <= 1
+    )
     {
         try
         {
@@ -39,6 +58,22 @@ int main(int argc, char* argv[]) try
             };
             struct Image right_image{
                 read_image(vm["right-image"].as<std::string>())
+            };
+            ULONG maximal_disparity = 0;
+            if (vm.count("maximal-disparity") == 0)
+            {
+                maximal_disparity = left_image.width - 1;
+            }
+            else
+            {
+                maximal_disparity = std::stoul(
+                    vm["maximal-disparity"].as<std::string>()
+                );
+            }
+            struct DisparityGraph disparity_graph{
+                left_image,
+                right_image,
+                maximal_disparity
             };
         }
         catch (std::invalid_argument& e)
@@ -49,6 +84,13 @@ int main(int argc, char* argv[]) try
         {
             std::cerr << "Logic error: " << e.what() << std::endl;
         }
+    }
+    else if (
+        vm.count("left-image") > 1
+        || vm.count("right-image") > 1
+        || vm.count("maximal-disparity") > 1
+    )
+    {
     }
     else if (vm.count("left-image") > 0 || vm.count("right-image") > 0)
     {
