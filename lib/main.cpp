@@ -6,9 +6,9 @@
 #include <stdexcept>
 #include <string>
 
+#include <disparity_graph.hpp>
 #include <image.hpp>
 #include <pgm_io.hpp>
-#include <disparity_graph.hpp>
 
 struct Image read_image(const std::string& image_path);
 
