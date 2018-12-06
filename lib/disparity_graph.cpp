@@ -22,7 +22,9 @@
  * SOFTWARE.
  */
 #include <disparity_graph.hpp>
+
 #include <stdexcept>
+#include <string>
 
 #define SQR(x) ((x) * (x))
 #define TO_FLOAT(x) (static_cast<FLOAT>(x))
@@ -38,15 +40,11 @@ DisparityGraph::DisparityGraph(
 {
     if (!image_valid(this->left))
     {
-        throw std::invalid_argument(
-            "Left image is invalid."
-        );
+        throw std::invalid_argument("Left image is invalid.");
     }
     if (!image_valid(this->right))
     {
-        throw std::invalid_argument(
-            "Right image is invalid."
-        );
+        throw std::invalid_argument("Right image is invalid.");
     }
     if (this->maximal_disparity == 0)
     {
@@ -57,25 +55,45 @@ DisparityGraph::DisparityGraph(
     if (this->maximal_disparity >= this->left.width)
     {
         throw std::invalid_argument(
-            "Maximal disparity should be less than width of the left image."
+            "Maximal disparity should be less than width of the left image. "
+            "Width of the left image is "
+            + std::to_string(this->left.width)
+            + ". Provided maximal disparity is "
+            + std::to_string(this->maximal_disparity)
+            + "."
         );
     }
     if (this->left.width != this->right.width)
     {
         throw std::invalid_argument(
-            "Number of columns of the images should be equal."
+            "Number of columns of the images should be equal. "
+            "Current left and right images have "
+            + std::to_string(this->left.width)
+            + " and "
+            + std::to_string(this->right.width)
+            + " columns respectively."
         );
     }
     if (this->left.height != this->right.height)
     {
         throw std::invalid_argument(
-            "Number of rows of the images should be equal."
+            "Number of rows of the images should be equal. "
+            "Current left and right images have "
+            + std::to_string(this->left.height)
+            + " and "
+            + std::to_string(this->right.height)
+            + " rows respectively."
         );
     }
     if (this->left.max_value != this->right.max_value)
     {
         throw std::invalid_argument(
-            "Maximal intensity of the images should be the same."
+            "Maximal intensity of the images should be the same. "
+            "Maximal intensity of provided left and right images "
+            + std::to_string(this->left.max_value)
+            + " and "
+            + std::to_string(this->right.max_value)
+            + "respectively."
         );
     }
 
