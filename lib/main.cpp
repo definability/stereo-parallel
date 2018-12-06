@@ -45,11 +45,7 @@ int main(int argc, char* argv[]) try
 
     boost::program_options::notify(vm);   
 
-    if (
-        vm.count("left-image") == 1
-        && vm.count("right-image") == 1
-        && vm.count("maximal-disparity") <= 1
-    )
+    if (vm.count("left-image") == 1 && vm.count("right-image") == 1)
     {
         try
         {
@@ -84,13 +80,6 @@ int main(int argc, char* argv[]) try
         {
             std::cerr << "Logic error: " << e.what() << std::endl;
         }
-    }
-    else if (
-        vm.count("left-image") > 1
-        || vm.count("right-image") > 1
-        || vm.count("maximal-disparity") > 1
-    )
-    {
     }
     else if (vm.count("left-image") > 0 || vm.count("right-image") > 0)
     {
