@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) try
         return 1;
     }
 
-    boost::program_options::notify(vm);   
+    boost::program_options::notify(vm);
 
     if (vm.count("left-image") == 1 && vm.count("right-image") == 1)
     {
