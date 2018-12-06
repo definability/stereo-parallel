@@ -252,14 +252,13 @@ const ULONG NEIGHBORS_COUNT = 4;
  * You can find more information in the following sources
  * - <a href="
  *    https://hci.iwr.uni-heidelberg.de/vislearn/HTML/people/
- *    bogdan/publications/papers/Dense-CombiLP-Haller-AAAI2017.pdf
+ *bogdan/publications/papers/Dense-CombiLP-Haller-AAAI2017.pdf
  *   ">
  *   Exact MAP-inference by Confining Combinatorial Search
  *   with LP Relaxation
- *   </a> (2017)by Stefan Haller, Paul Swoboda and Bogdan Savchynskyy;
+ *   </a> (2017) by Stefan Haller, Paul Swoboda and Bogdan Savchynskyy;
  * - <a href="
- *    http://cmp.felk.cvut.cz/~shekhovt/publications/
- *    as-phd-thesis-TR.pdf
+ *    http://cmp.felk.cvut.cz/~shekhovt/publications/as-phd-thesis-TR.pdf
  *   ">
  *   Exact and Partial Energy Minimization in Computer Vision
  *   </a> (2013) by Alexander Shekhovtsov.
