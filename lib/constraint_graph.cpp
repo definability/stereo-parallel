@@ -34,19 +34,19 @@ ULONG node_index(const struct DisparityGraph& graph, struct Node node)
 }
 
 void make_node_available(
-    struct ConstraintGraph& graph,
+    struct ConstraintGraph* graph,
     struct Node node
 )
 {
-    graph.nodes_availability[node_index(*graph.disparity_graph, node)] = true;
+    graph->nodes_availability[node_index(*graph.disparity_graph, node)] = true;
 }
 
 void make_node_unavailable(
-    struct ConstraintGraph& graph,
+    struct ConstraintGraph* graph,
     struct Node node
 )
 {
-    graph.nodes_availability[node_index(*graph.disparity_graph, node)] = false;
+    graph->nodes_availability[node_index(*graph.disparity_graph, node)] = false;
 }
 
 BOOL is_node_available(
@@ -117,7 +117,7 @@ struct ConstraintGraph disparity2constraint(
                     - minimal_penalty <= threshold
                 )
                 {
-                    make_node_available(constraint_graph, node);
+                    make_node_available(&constraint_graph, node);
                 }
             }
         }

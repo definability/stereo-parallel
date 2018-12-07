@@ -284,11 +284,11 @@ struct ConstraintGraph
 
 ULONG node_index(const struct DisparityGraph& graph, struct Node node);
 void make_node_available(
-    struct ConstraintGraph& graph,
+    struct ConstraintGraph* graph,
     struct Node node
 );
 void make_node_unavailable(
-    struct ConstraintGraph& graph,
+    struct ConstraintGraph* graph,
     struct Node node
 );
 BOOL is_node_available(
