@@ -262,29 +262,51 @@ using BOOL_ARRAY = std::vector<BOOL>;
 struct ConstraintGraph
 {
     /**
+     * \brief DisparityGraph instance
+     * for which the ConstraintGraph instance was created.
+     */
+    const struct DisparityGraph* disparity_graph;
+    /**
      * \brief Array that contains markers for availability of nodes.
      *
      * `false` means that the node cannot be chosen.
      * `true` means that the node can be chosen under applied constraints.
      */
     BOOL_ARRAY nodes_availability;
+    /**
+     * \brief Threshold to compare penalty of an edge with the minimal one
+     * against.
+     *
+     * \f$\varepsilon\f$ in formulas of the class description.
+     */
+    FLOAT threshold;
 };
 
+ULONG node_index(const struct DisparityGraph& graph, struct Node node);
+void make_node_available(
+    struct ConstraintGraph& graph,
+    struct Node node
+);
+void make_node_unavailable(
+    struct ConstraintGraph& graph,
+    struct Node node
+);
+BOOL is_node_available(
+    const struct ConstraintGraph& graph,
+    struct Node node
+);
 /**
  * \brief Build a CSP problem for given DisparityGraph.
  *
  * Corresponding ConstraintGraph should have
- * the same amount of nodes and edges as corresponding DisparityGraph.
+ * the same amount of nodes as corresponding DisparityGraph.
  *
  * First, all nodes and edges assumed to be unavailable.
  * Then, each Node that has a penalty that differs from the minimal
  * less than by `threshold`, is marked as available one.
- * The same procedure is performed for each Edge:
- * if an Edge is worse than the best one not more than for `threshold`,
- * then it's marked as available.
  */
 struct ConstraintGraph disparity2constraint(
-    const struct DisparityGraph& disparity_graph,
+    const struct DisparityGraph* disparity_graph,
     FLOAT threshold
 );
 
