@@ -124,4 +124,5 @@ struct ConstraintGraph disparity2constraint(
             }
         }
     }
+    return constraint_graph;
 }
