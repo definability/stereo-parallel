@@ -122,6 +122,31 @@ const ULONG NEIGHBORS_COUNT = 4;
  *      \left\| k_i - k_j \right\|^p
  * \f]
  *
+ * Denoting vertex penalty
+ *
+ * \f[
+ *  q_i\left( d \right)
+ *  = \left\|
+ *        R\left( i^x, i^y \right) - L\left( i^x + d, i^y \right)
+ *    \right\|^p
+ * \f]
+ *
+ * and edge penalty
+ *
+ * \f[
+ *  g_{ij}\left( d, d' \right)
+ *  = \left\| d - d' \right\|^p,
+ * \f]
+ *
+ * it's needed to solve
+ *
+ * \f[
+ *  \sum\limits_{i \in I} q_i\left( k_i \right)
+ *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
+ *      g_{ij}\left( k_i, k_j \right)
+ *  \to \min\limits_{k: I \rightarrow D}.
+ * \f]
+ *
  * \section dual-problem Dual problem
  *
  * It's easy to check that the following inequality holds
@@ -247,6 +272,34 @@ const ULONG NEIGHBORS_COUNT = 4;
  *          - \varphi_{j i}\left( d' \right)
  *      \right]}
  *  \to \max_{\varphi: I^2 \times K \rightarrow \mathbb{R}}
+ * \f]
+ *
+ * Introducing reparametrized vertex penalty
+ *
+ * \f[
+ *  q_i\left( d; \varphi \right)
+ *  = q_i\left( d \right)
+ *    + \sum\limits_{j \in \mathcal{N}_i}
+ *        \varphi_{i j}\left( d \right)
+ * \f]
+ *
+ * and reparametrized edge penalty
+ *
+ * \f[
+ *  g_{ij}\left( d, d'; \varphi \right)
+ *  = g_{ij}\left( d, d' \right)
+ *    - \varphi_{i j}\left( d \right)
+ *    - \varphi_{j i}\left( d' \right),
+ * \f]
+ *
+ * now we need to find such \f$\varphi\f$ that
+ *
+ * \f[
+ *  \sum\limits_{i \in I} \min\limits_{d \in D}{q_i\left( d; \varphi \right)}
+ *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
+ *      \min\limits_{\left\langle d, d' \right\rangle \in D^2}
+ *          g_{ij}\left( d, d'; \varphi \right)
+ *  \to \max\limits_{\varphi: I^2 \times K \rightarrow \mathbb{R}}.
  * \f]
  *
  * You can find more information in the following sources
