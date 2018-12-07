@@ -203,16 +203,16 @@ const ULONG NEIGHBORS_COUNT = 4;
  *  \widetilde{E}\left( \varphi \right)
  *      = \sum\limits_{i \in I} \min_{d \in D}{\left[
  *          \left\|
- *              R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
+ *              R\left( i^x, i^y \right) - L\left( i^x + d, i^y \right)
  *          \right\|^p
  *          + \sum\limits_{j \in \mathcal{N}_i}
- *              \varphi_{i j}\left( k_i \right)
+ *              \varphi_{i j}\left( d \right)
  *      \right]}
  *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
  *          \min_{d, d' \in D}{\left[
- *              \left\| k_i - k_j \right\|^p
- *              - \varphi_{i j}\left( k_i \right)
- *              - \varphi_{j i}\left( k_j \right)
+ *              \left\| d - d' \right\|^p
+ *              - \varphi_{i j}\left( d \right)
+ *              - \varphi_{j i}\left( d' \right)
  *          \right]}
  *  \neq \widetilde{E}
  * \f]
@@ -235,16 +235,16 @@ const ULONG NEIGHBORS_COUNT = 4;
  * \f[
  *  \sum\limits_{i \in I} \min_{d \in D}{\left[
  *      \left\|
- *          R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
+ *          R\left( i^x, i^y \right) - L\left( i^x + d, i^y \right)
  *      \right\|^p
  *      + \sum\limits_{j \in \mathcal{N}_i}
- *          \varphi_{i j}\left( k_i \right)
+ *          \varphi_{i j}\left( d \right)
  *  \right]}
  *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
  *      \min_{d, d' \in D}{\left[
- *          \left\| k_i - k_j \right\|^p
- *          - \varphi_{i j}\left( k_i \right)
- *          - \varphi_{j i}\left( k_j \right)
+ *          \left\| d - d' \right\|^p
+ *          - \varphi_{i j}\left( d \right)
+ *          - \varphi_{j i}\left( d' \right)
  *      \right]}
  *  \to \max_{\varphi: I^2 \times K \rightarrow \mathbb{R}}
  * \f]
