@@ -38,8 +38,7 @@ void make_node_available(
     struct Node node
 )
 {
-    graph.nodes_availability[node_index(*graph.disparity_graph, node)] =
-        static_cast<BOOL>(1);
+    graph.nodes_availability[node_index(*graph.disparity_graph, node)] = true;
 }
 
 void make_node_unavailable(
@@ -47,8 +46,7 @@ void make_node_unavailable(
     struct Node node
 )
 {
-    graph.nodes_availability[node_index(*graph.disparity_graph, node)] =
-        static_cast<BOOL>(0);
+    graph.nodes_availability[node_index(*graph.disparity_graph, node)] = false;
 }
 
 BOOL is_node_available(
@@ -76,7 +74,7 @@ struct ConstraintGraph disparity2constraint(
     fill(
         constraint_graph.nodes_availability.begin(),
         constraint_graph.nodes_availability.end(),
-        static_cast<BOOL>(0)
+        false
     );
 
     Node node{{0, 0}, 0};
