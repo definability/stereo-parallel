@@ -306,7 +306,7 @@ BOOL is_node_available(
  * less than by `threshold`, is marked as available one.
  */
 struct ConstraintGraph disparity2constraint(
-    const struct DisparityGraph* disparity_graph,
+    const struct DisparityGraph& disparity_graph,
     FLOAT threshold
 );
 
