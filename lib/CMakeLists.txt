@@ -49,6 +49,7 @@ target_link_libraries(
 )
 target_link_libraries(
     constraint_graph
+    disparity_graph
     image
 )
 
@@ -64,5 +65,6 @@ target_link_libraries(
     image
     pgm_io
     disparity_graph
+    constraint_graph
     ${Boost_PROGRAM_OPTIONS_LIBRARY}
 )
