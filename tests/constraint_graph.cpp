@@ -144,4 +144,88 @@ BOOST_AUTO_TEST_CASE(check_equal_images)
     BOOST_CHECK(!is_node_available(constraint_graph, {{1, 0}, 2}));
 }
 
+BOOST_AUTO_TEST_CASE(check_disparity_loop)
+{
+    PGM_IO pgm_io;
+    std::istringstream left_image_content{R"image(
+    P2
+    3 2
+    10
+    8 7 10
+    0 0 0
+    )image"};
+    std::istringstream right_image_content{R"image(
+    P2
+    3 2
+    10
+    10 0 0
+    0 0 0
+    )image"};
+
+    left_image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image left_image{*pgm_io.get_image()};
+
+    right_image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image right_image{*pgm_io.get_image()};
+
+    struct DisparityGraph disparity_graph{left_image, right_image, 1};
+    struct ConstraintGraph constraint_graph{disparity2constraint(disparity_graph, 15)};
+    BOOST_REQUIRE_EQUAL(constraint_graph.disparity_graph, &disparity_graph);
+    BOOST_CHECK_CLOSE(constraint_graph.threshold, 15, 1);
+
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 0}), 4, 1);
+    BOOST_CHECK(is_node_available(constraint_graph, {{0, 0}, 0}));
+
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 1}), 9, 1);
+    BOOST_CHECK(is_node_available(constraint_graph, {{0, 0}, 1}));
+}
+
+/**
+ * When minimal node penalty
+ * is calculated with disparity left from the previous iteration,
+ * it's possible that on the last column the value will be wrong,
+ * because, if disparity is more than zero,
+ * this will cause index to go out of bounds
+ * of penalties of nodes of the row.
+ * So, the penalty of the cell with the one from the next row
+ * will be initial minimal value.
+ * This may lead to bad bugs that are really hard to find.
+ */
+BOOST_AUTO_TEST_CASE(check_minimal_node_value_calculation)
+{
+    PGM_IO pgm_io;
+    std::istringstream left_image_content{R"image(
+    P2
+    3 2
+    1
+    0 0 1
+    0 0 0
+    )image"};
+    std::istringstream right_image_content{R"image(
+    P2
+    3 2
+    1
+    0 0 0
+    0 0 0
+    )image"};
+
+    left_image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image left_image{*pgm_io.get_image()};
+
+    right_image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image right_image{*pgm_io.get_image()};
+
+    struct DisparityGraph disparity_graph{left_image, right_image, 2};
+    struct ConstraintGraph constraint_graph{disparity2constraint(disparity_graph, 0.5)};
+    BOOST_REQUIRE_EQUAL(constraint_graph.disparity_graph, &disparity_graph);
+    BOOST_CHECK_CLOSE(constraint_graph.threshold, 0.5, 1);
+
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 2}, 0}), 1, 1);
+    BOOST_CHECK(is_node_available(constraint_graph, {{0, 2}, 0}));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
