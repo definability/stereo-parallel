@@ -95,11 +95,13 @@ struct ConstraintGraph disparity2constraint(
             ++node.pixel.row
         )
         {
+            node.disparity = 0;
             minimal_penalty = node_penalty(disparity_graph, node);
             for (
                 node.disparity = 0;
                 node.pixel.column + node.disparity
-                    < disparity_graph.left.width;
+                    < disparity_graph.left.width
+                && node.disparity <= disparity_graph.maximal_disparity;
                 ++node.disparity
             )
             {
@@ -112,7 +114,8 @@ struct ConstraintGraph disparity2constraint(
             for (
                 node.disparity = 0;
                 node.pixel.column + node.disparity
-                    < disparity_graph.left.width;
+                    < disparity_graph.left.width
+                && node.disparity <= disparity_graph.maximal_disparity;
                 ++node.disparity
             )
             {
