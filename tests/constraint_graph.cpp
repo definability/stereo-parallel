@@ -30,6 +30,32 @@
 
 BOOST_AUTO_TEST_SUITE(DisparityGraphTest)
 
+BOOST_AUTO_TEST_CASE(check_nodes_indexing)
+{
+    PGM_IO pgm_io;
+    std::istringstream image_content{R"image(
+    P2
+    3 2
+    2
+    0 0 0
+    0 0 0
+    )image"};
+
+    image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image image{*pgm_io.get_image()};
+
+    struct DisparityGraph disparity_graph{image, image, 2};
+    struct ConstraintGraph constraint_graph{disparity2constraint(disparity_graph, 1)};
+    BOOST_REQUIRE_EQUAL(constraint_graph.disparity_graph, &disparity_graph);
+
+    BOOST_CHECK_EQUAL(node_index(*(constraint_graph.disparity_graph), {{0, 0}, 0}), 0);
+    BOOST_CHECK_EQUAL(node_index(*(constraint_graph.disparity_graph), {{0, 0}, 2}), 2);
+    BOOST_CHECK_EQUAL(node_index(*(constraint_graph.disparity_graph), {{1, 0}, 0}), 3);
+    BOOST_CHECK_EQUAL(node_index(*(constraint_graph.disparity_graph), {{1, 0}, 2}), 5);
+    BOOST_CHECK_EQUAL(node_index(*(constraint_graph.disparity_graph), {{0, 1}, 0}), 6);
+}
+
 BOOST_AUTO_TEST_CASE(check_black_images)
 {
     PGM_IO pgm_io;
@@ -77,6 +103,45 @@ BOOST_AUTO_TEST_CASE(check_black_images)
             }
         }
     }
+}
+
+BOOST_AUTO_TEST_CASE(check_equal_images)
+{
+    PGM_IO pgm_io;
+    std::istringstream image_content{R"image(
+    P2
+    3 2
+    256
+    0   127 256
+    256 127 0
+    )image"};
+
+    image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image image{*pgm_io.get_image()};
+
+    struct DisparityGraph disparity_graph{image, image, 2};
+    struct ConstraintGraph constraint_graph{disparity2constraint(disparity_graph, 128 * 128)};
+    BOOST_REQUIRE_EQUAL(constraint_graph.disparity_graph, &disparity_graph);
+    BOOST_CHECK_CLOSE(constraint_graph.threshold, 128 * 128, 1);
+
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 0}), 0, 1);
+    BOOST_CHECK(is_node_available(constraint_graph, {{0, 0}, 0}));
+
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 1}), 127 * 127, 1);
+    BOOST_CHECK(is_node_available(constraint_graph, {{0, 0}, 1}));
+
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 2}), 256 * 256, 1);
+    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 0}, 2}));
+
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 0}), 0, 1);
+    BOOST_CHECK(is_node_available(constraint_graph, {{1, 0}, 0}));
+
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 1}), 129 * 129, 1);
+    BOOST_CHECK(!is_node_available(constraint_graph, {{1, 0}, 1}));
+
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 2}), 256 * 256, 1);
+    BOOST_CHECK(!is_node_available(constraint_graph, {{1, 0}, 2}));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
