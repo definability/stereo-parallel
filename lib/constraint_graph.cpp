@@ -29,7 +29,7 @@
 
 ULONG node_index(const struct DisparityGraph& graph, struct Node node)
 {
-    return node.disparity + graph.maximal_disparity
+    return node.disparity + (graph.maximal_disparity + 1)
         * (node.pixel.row + graph.right.height * node.pixel.column);
 }
 
@@ -71,7 +71,7 @@ struct ConstraintGraph disparity2constraint(
         BOOL_ARRAY(
             disparity_graph.right.width
             * disparity_graph.right.height
-            * disparity_graph.maximal_disparity
+            * (disparity_graph.maximal_disparity + 1)
         ),
         threshold
     };
