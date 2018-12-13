@@ -271,6 +271,20 @@ struct ConstraintGraph
      *
      * `false` means that the node cannot be chosen.
      * `true` means that the node can be chosen under applied constraints.
+     *
+     * Index of availability
+     * of specific Node from ConstraintGraph::nodes_availability
+     * can be calculated by formula
+     *
+     * \f[
+     *  k\left( \left\langle x, y \right\rangle, d \right) =
+     *  d + \max{D} \cdot \left( y + h \cdot x \right),
+     * \f]
+     *
+     * where \f$\left\langle x, y \right\rangle\f$
+     * are coordinates of Node::pixel,
+     * \f$i\f$ is an index of used neighbor
+     * and \f$d\f$ is a Node::disparity.
      */
     BOOL_ARRAY nodes_availability;
     /**
@@ -281,16 +295,44 @@ struct ConstraintGraph
      */
     FLOAT threshold;
 };
-
+/**
+ * \brief Get an index of ConstraintGraph::nodes_availability element
+ * using a Node.
+ *
+ * The function doesn't check existence of the Node.
+ * You should perform it by yourself
+ * using ::node_exists.
+ */
 ULONG node_index(const struct DisparityGraph& graph, struct Node node);
+/**
+ * \brief Mark specific Node as available (`true`).
+ *
+ * The function doesn't check existence of the Node.
+ * You should perform it by yourself
+ * using ::node_exists.
+ */
 void make_node_available(
     struct ConstraintGraph* graph,
     struct Node node
 );
+/**
+ * \brief Mark specific Node as unavailable (`false`).
+ *
+ * The function doesn't check existence of the Node.
+ * You should perform it by yourself
+ * using ::node_exists.
+ */
 void make_node_unavailable(
     struct ConstraintGraph* graph,
     struct Node node
 );
+/**
+ * \brief Check whether the Node is still available.
+ *
+ * The function doesn't check existence of the Node.
+ * You should perform it by yourself
+ * using ::node_exists.
+ */
 BOOL is_node_available(
     const struct ConstraintGraph& graph,
     struct Node node
