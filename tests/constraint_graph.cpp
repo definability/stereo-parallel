@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE(check_black_images)
     BOOST_REQUIRE_EQUAL(constraint_graph.disparity_graph, &disparity_graph);
     BOOST_CHECK_CLOSE(constraint_graph.threshold, 1, 1);
 
-    struct Node node;
+    struct Node node{{0, 0}, 0};
     for (
         node.pixel.column = 0;
         node.pixel.column < disparity_graph.right.width;
