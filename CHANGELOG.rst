@@ -84,8 +84,6 @@ Added
 
   - ``nodes_availability`` array that contains information about ability
     of each ``Node`` to be chosen,
-  - ``edges_availability`` array that contains information about ability
-    of each ``Edge`` to be chosen.
 
 .. Remove these two lines and one indentation level of the next two lines
     when you will release the first version.
