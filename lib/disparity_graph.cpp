@@ -168,17 +168,15 @@ bool neighborhood_exists_fast(
 }
 
 bool node_exists(
-    ULONG maximal_disparity,
-    const struct Image& image,
-    const struct Image& another_image,
+    const struct DisparityGraph& graph,
     struct Node node
 )
 {
     return !(
-        node.disparity > maximal_disparity
-        || node.pixel.row >= image.height
-        || node.pixel.column >= image.width
-        || node.pixel.column + node.disparity >= another_image.width
+        node.disparity > graph.maximal_disparity
+        || node.pixel.row >= graph.right.height
+        || node.pixel.column >= graph.right.width
+        || node.pixel.column + node.disparity >= graph.left.width
     );
 }
 
@@ -187,11 +185,11 @@ bool edge_exists(
     struct Edge edge
 )
 {
-    if (!node_exists(graph.maximal_disparity, graph.left, graph.right, edge.node))
+    if (!node_exists(graph, edge.node))
     {
         return false;
     }
-    if (!node_exists(graph.maximal_disparity, graph.left, graph.right, edge.neighbor))
+    if (!node_exists(graph, edge.neighbor))
     {
         return false;
     }

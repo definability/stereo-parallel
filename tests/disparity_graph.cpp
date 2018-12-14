@@ -29,6 +29,42 @@
 
 BOOST_AUTO_TEST_SUITE(DisparityGraphTest)
 
+BOOST_AUTO_TEST_CASE(check_nodes_existence)
+{
+    PGM_IO pgm_io;
+    std::istringstream image_content{R"image(
+    P2
+    3 2
+    2
+    0 0 0
+    0 0 0
+    )image"};
+
+    image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image image{*pgm_io.get_image()};
+
+    struct DisparityGraph disparity_graph{image, image, 1};
+
+    for (ULONG row = 0; row < 2; ++row)
+    {
+        BOOST_CHECK(node_exists(disparity_graph, {{row, 0}, 0}));
+        BOOST_CHECK(node_exists(disparity_graph, {{row, 1}, 0}));
+        BOOST_CHECK(node_exists(disparity_graph, {{row, 2}, 0}));
+
+        BOOST_CHECK(node_exists(disparity_graph, {{row, 0}, 1}));
+        BOOST_CHECK(node_exists(disparity_graph, {{row, 1}, 1}));
+
+        BOOST_CHECK(!node_exists(disparity_graph, {{row, 0}, 2}));
+        BOOST_CHECK(!node_exists(disparity_graph, {{row, 1}, 2}));
+
+        BOOST_CHECK(!node_exists(disparity_graph, {{row, 2}, 1}));
+    }
+    BOOST_CHECK(!node_exists(disparity_graph, {{2, 0}, 0}));
+    BOOST_CHECK(!node_exists(disparity_graph, {{0, 3}, 2}));
+    BOOST_CHECK(!node_exists(disparity_graph, {{2, 3}, 2}));
+}
+
 BOOST_AUTO_TEST_CASE(check_neighborhood)
 {
     PGM_IO pgm_io;
