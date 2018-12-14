@@ -84,8 +84,18 @@ Added
 
   - ``nodes_availability`` array that contains information about ability
     of each ``Node`` to be chosen,
-  - ``edges_availability`` array that contains information about ability
-    of each ``Edge`` to be chosen.
+  - ``disparity_graph`` constant pointer to ``DisparityGraph`` instance
+    from which the ``ConstraintGraph`` was built.
+  - ``threshold`` parameter to calculate `epsilon`-consistent nodes.
+
+- ``node_exists`` function to check whether specified ``Node``
+  is marked as available in ``ConstraintGraph``.
+- ``make_node_available`` mark specified ``Node``
+  as available in ``ConstraintGraph``.
+- ``make_node_unavailable`` mark specified ``Node``
+  as unavailable in ``ConstraintGraph``.
+- ``disparity2constraint`` function
+  to construct a ``ConstraintGraph`` given ``DisparityGraph``.
 
 .. Remove these two lines and one indentation level of the next two lines
     when you will release the first version.

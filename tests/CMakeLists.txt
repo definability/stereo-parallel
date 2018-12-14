@@ -27,6 +27,7 @@ add_executable(
     image.cpp
     pgm_io.cpp
     disparity_graph.cpp
+    constraint_graph.cpp
 )
 target_include_directories(test_executable PRIVATE ${BOOST_INCLUDE_DIRS})
 target_link_libraries(
@@ -34,6 +35,7 @@ target_link_libraries(
     image
     pgm_io
     disparity_graph
+    constraint_graph
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 target_compile_definitions(

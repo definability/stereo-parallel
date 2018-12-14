@@ -22,3 +22,112 @@
  * SOFTWARE.
  */
 #include <constraint_graph.hpp>
+
+#include <disparity_graph.hpp>
+
+#define MIN(x, y) (((x) <= (y)) ? (x) : (y))
+
+ULONG node_index(const struct DisparityGraph& graph, struct Node node)
+{
+    return node.disparity + (graph.maximal_disparity + 1)
+        * (node.pixel.row + graph.right.height * node.pixel.column);
+}
+
+void make_node_available(
+    struct ConstraintGraph* graph,
+    struct Node node
+)
+{
+    graph->nodes_availability[node_index(*(graph->disparity_graph), node)]
+        = true;
+}
+
+void make_node_unavailable(
+    struct ConstraintGraph* graph,
+    struct Node node
+)
+{
+    graph->nodes_availability[node_index(*(graph->disparity_graph), node)]
+        = false;
+}
+
+BOOL is_node_available(
+    const struct ConstraintGraph& graph,
+    struct Node node
+)
+{
+    return graph.nodes_availability[
+        node_index(*(graph.disparity_graph), node)
+    ];
+}
+
+struct ConstraintGraph disparity2constraint(
+    const struct DisparityGraph& disparity_graph,
+    FLOAT threshold
+)
+{
+    struct ConstraintGraph constraint_graph{
+        &disparity_graph,
+        BOOL_ARRAY(
+            disparity_graph.right.width
+            * disparity_graph.right.height
+            * (disparity_graph.maximal_disparity + 1)
+        ),
+        threshold
+    };
+    fill(
+        constraint_graph.nodes_availability.begin(),
+        constraint_graph.nodes_availability.end(),
+        false
+    );
+
+    Node node{{0, 0}, 0};
+    FLOAT minimal_penalty = 0;
+    for (
+        node.pixel.column = 0;
+        node.pixel.column < disparity_graph.right.width;
+        ++node.pixel.column
+    )
+    {
+        for (
+            node.pixel.row = 0;
+            node.pixel.row < disparity_graph.right.height;
+            ++node.pixel.row
+        )
+        {
+            node.disparity = 0;
+            minimal_penalty = node_penalty(disparity_graph, node);
+            for (
+                node.disparity = 0;
+                node.pixel.column + node.disparity
+                    < disparity_graph.left.width
+                && node.disparity <= disparity_graph.maximal_disparity;
+                ++node.disparity
+            )
+            {
+                minimal_penalty = MIN(
+                    node_penalty(disparity_graph, node),
+                    minimal_penalty
+                );
+            }
+
+            for (
+                node.disparity = 0;
+                node.pixel.column + node.disparity
+                    < disparity_graph.left.width
+                && node.disparity <= disparity_graph.maximal_disparity;
+                ++node.disparity
+            )
+            {
+                if (
+                    node_penalty(disparity_graph, node)
+                    - minimal_penalty <= threshold
+                )
+                {
+                    make_node_available(&constraint_graph, node);
+                }
+            }
+        }
+    }
+    return constraint_graph;
+}
