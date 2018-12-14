@@ -486,14 +486,15 @@ bool neighborhood_exists_fast(
 /**
  * \brief Check existence of provided Node.
  *
- * Node exists if position of its pixel doesn't overflow its image
- * and corresponding pixel (calculated by the disparity)
- * doesn't overflow another image.
+ * Node exists if position of its pixel doesn't overflow
+ * DisparityGraph::right image,
+ * corresponding pixel (calculated by the disparity)
+ * doesn't overflow the DisparityGraph::left image,
+ * and its disparity doesn't overflow
+ * the maximal allowed.
  */
 bool node_exists(
-    ULONG maximal_disparity,
-    const struct Image& image,
-    const struct Image& another_image,
+    const struct DisparityGraph& graph,
     struct Node node
 );
 
