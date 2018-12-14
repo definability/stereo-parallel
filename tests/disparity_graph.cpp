@@ -43,8 +43,7 @@ BOOST_AUTO_TEST_CASE(check_nodes_existence)
     image_content >> pgm_io;
     BOOST_REQUIRE(pgm_io.get_image());
     struct Image image{*pgm_io.get_image()};
-
-    struct DisparityGraph disparity_graph{image, image, 1};
+    struct DisparityGraph disparity_graph{image, image, 2};
 
     for (ULONG row = 0; row < 2; ++row)
     {
@@ -63,6 +62,41 @@ BOOST_AUTO_TEST_CASE(check_nodes_existence)
     BOOST_CHECK(!node_exists(disparity_graph, {{2, 0}, 0}));
     BOOST_CHECK(!node_exists(disparity_graph, {{0, 3}, 2}));
     BOOST_CHECK(!node_exists(disparity_graph, {{2, 3}, 2}));
+}
+
+BOOST_AUTO_TEST_CASE(check_reparametrization_indexing)
+{
+    PGM_IO pgm_io;
+    std::istringstream image_content{R"image(
+    P2
+    3 2
+    2
+    0 0 0
+    0 0 0
+    )image"};
+
+    image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image image{*pgm_io.get_image()};
+
+    struct DisparityGraph disparity_graph{image, image, 3};
+
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 0}, 0), 0);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 0}, 0}, 0), 1);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 1}, 0), 2);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 2}, 0), 4);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 0}, 2}, 0), 5);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 0}, 1), 6);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 0}, 0}, 1), 7);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 1}, 1), 8);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 0}, 1}, 1), 9);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 2}, 1), 10);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 0}, 2}, 1), 11);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 0}, 2), 12);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 0}, 3), 18);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 0}, 2}, 3), 23);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 1}, 0}, 0), 24);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 1}, 2}, 3), 47);
 }
 
 BOOST_AUTO_TEST_CASE(check_neighborhood)
@@ -91,7 +125,7 @@ BOOST_AUTO_TEST_CASE(check_neighborhood)
     BOOST_REQUIRE(pgm_io.get_image());
     struct Image right_image{*pgm_io.get_image()};
 
-    struct DisparityGraph disparity_graph{left_image, right_image, 2};
+    struct DisparityGraph disparity_graph{left_image, right_image, 3};
 
     BOOST_CHECK(neighborhood_exists(disparity_graph, {0, 0}, {0, 1}));
     BOOST_CHECK(neighborhood_exists(disparity_graph, {0, 0}, {1, 0}));
@@ -137,7 +171,7 @@ BOOST_AUTO_TEST_CASE(check_edges_existence)
     BOOST_REQUIRE(pgm_io.get_image());
     struct Image right_image{*pgm_io.get_image()};
 
-    struct DisparityGraph disparity_graph{left_image, right_image, 1};
+    struct DisparityGraph disparity_graph{left_image, right_image, 2};
 
     BOOST_CHECK(edge_exists(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 0}}));
     BOOST_CHECK(edge_exists(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 1}}));
@@ -178,7 +212,7 @@ BOOST_AUTO_TEST_CASE(check_continuity_constraint)
     BOOST_REQUIRE(pgm_io.get_image());
     struct Image right_image{*pgm_io.get_image()};
 
-    struct DisparityGraph disparity_graph{left_image, right_image, 2};
+    struct DisparityGraph disparity_graph{left_image, right_image, 3};
 
     BOOST_CHECK(!edge_exists(disparity_graph, {{{0, 0}, 2}, {{0, 1}, 0}}));
     BOOST_CHECK(!edge_exists(disparity_graph, {{{0, 1}, 0}, {{0, 0}, 2}}));
@@ -213,7 +247,7 @@ BOOST_AUTO_TEST_CASE(check_initial_edges_penalties)
     BOOST_REQUIRE(pgm_io.get_image());
     struct Image right_image{*pgm_io.get_image()};
 
-    struct DisparityGraph disparity_graph{left_image, right_image, 2};
+    struct DisparityGraph disparity_graph{left_image, right_image, 3};
 
     BOOST_CHECK_CLOSE(
         edge_penalty(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 0}}),
@@ -275,7 +309,7 @@ BOOST_AUTO_TEST_CASE(check_initial_nodes_penalties)
     BOOST_REQUIRE(pgm_io.get_image());
     struct Image right_image{*pgm_io.get_image()};
 
-    struct DisparityGraph disparity_graph{left_image, right_image, 2};
+    struct DisparityGraph disparity_graph{left_image, right_image, 3};
 
     BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 0}), 1.0, 0.5);
     BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 1}), 0.0, 0.5);
@@ -322,7 +356,7 @@ BOOST_AUTO_TEST_CASE(check_edges_penalties)
     BOOST_REQUIRE(pgm_io.get_image());
     struct Image right_image{*pgm_io.get_image()};
 
-    struct DisparityGraph disparity_graph{left_image, right_image, 2};
+    struct DisparityGraph disparity_graph{left_image, right_image, 3};
 
     disparity_graph.reparametrization[
         reparametrization_index(disparity_graph, {{0, 0}, 0}, {0, 1})
@@ -377,7 +411,7 @@ BOOST_AUTO_TEST_CASE(check_nodes_penalties)
     BOOST_REQUIRE(pgm_io.get_image());
     struct Image right_image{*pgm_io.get_image()};
 
-    struct DisparityGraph disparity_graph{left_image, right_image, 2};
+    struct DisparityGraph disparity_graph{left_image, right_image, 3};
 
     disparity_graph.reparametrization[
         reparametrization_index(disparity_graph, {{0, 0}, 0}, {0, 1})

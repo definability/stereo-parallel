@@ -23,9 +23,9 @@ int main(int argc, char* argv[]) try
         ("right-image,r",
          boost::program_options::value<std::string>(),
          "Right image")
-        ("maximal-disparity,d",
+        ("disparity-levels,d",
          boost::program_options::value<std::string>(),
-         "Maximal disparity");
+         "Number of disparity levels");
 
     boost::program_options::variables_map vm;
     try
@@ -55,21 +55,21 @@ int main(int argc, char* argv[]) try
             struct Image right_image{
                 read_image(vm["right-image"].as<std::string>())
             };
-            ULONG maximal_disparity = 0;
-            if (vm.count("maximal-disparity") == 0)
+            ULONG disparity_levels = 0;
+            if (vm.count("disparity-levels") == 0)
             {
-                maximal_disparity = left_image.width - 1;
+                disparity_levels = left_image.width;
             }
             else
             {
-                maximal_disparity = std::stoul(
-                    vm["maximal-disparity"].as<std::string>()
+                disparity_levels = std::stoul(
+                    vm["disparity-levels"].as<std::string>()
                 );
             }
             struct DisparityGraph disparity_graph{
                 left_image,
                 right_image,
-                maximal_disparity
+                disparity_levels
             };
         }
         catch (std::invalid_argument& e)

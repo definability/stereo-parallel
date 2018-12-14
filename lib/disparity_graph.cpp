@@ -32,11 +32,11 @@
 DisparityGraph::DisparityGraph(
     struct Image left,
     struct Image right,
-    ULONG maximal_disparity
+    ULONG disparity_levels
 )
     : left{std::move(left)}
     , right{std::move(right)}
-    , maximal_disparity{maximal_disparity}
+    , disparity_levels{disparity_levels}
 {
     if (!image_valid(this->left))
     {
@@ -46,20 +46,21 @@ DisparityGraph::DisparityGraph(
     {
         throw std::invalid_argument("Right image is invalid.");
     }
-    if (this->maximal_disparity == 0)
+    if (this->disparity_levels <= 1)
     {
         throw std::invalid_argument(
-            "Maximal disparity should be greater than zero."
+            "Number of disparity levels should be greater than one."
         );
     }
-    if (this->maximal_disparity >= this->left.width)
+    if (this->disparity_levels > this->left.width)
     {
         throw std::invalid_argument(
-            "Maximal disparity should be less than width of the left image. "
+            "Number of disparity levels "
+            "should not be greater than width of the left image. "
             "Width of the left image is "
             + std::to_string(this->left.width)
-            + ". Provided maximal disparity is "
-            + std::to_string(this->maximal_disparity)
+            + ". Provided number of disparity levels is "
+            + std::to_string(this->disparity_levels)
             + "."
         );
     }
@@ -101,7 +102,7 @@ DisparityGraph::DisparityGraph(
         this->left.width
         * this->left.height
         * NEIGHBORS_COUNT
-        * this->maximal_disparity
+        * this->disparity_levels
     );
     fill(
         this->reparametrization.begin(),
@@ -173,7 +174,7 @@ bool node_exists(
 )
 {
     return !(
-        node.disparity > graph.maximal_disparity
+        node.disparity >= graph.disparity_levels
         || node.pixel.row >= graph.right.height
         || node.pixel.column >= graph.right.width
         || node.pixel.column + node.disparity >= graph.left.width
@@ -228,7 +229,7 @@ ULONG reparametrization_index_fast(
     index += node.pixel.column;
     index *= NEIGHBORS_COUNT;
     index += neighbor_index;
-    index *= graph.maximal_disparity;
+    index *= graph.disparity_levels;
     index += node.disparity;
     index *= graph.left.height;
     index += node.pixel.row;

@@ -82,9 +82,9 @@ const ULONG NEIGHBORS_COUNT = 4;
  * Disparity is a difference
  * between number of a column of a pixel of the left image
  * and number of a column of corresponding pixel of the right image.
- * Given maximal disparity (DisparityGraph::maximal_disparity)
- * \f$\max{D}\f$ and denoting
- * \f$D = \left\{ 1, \dots, \max{D} \right\}\f$,
+ * Given number of disparities (DisparityGraph::disparity_levels)
+ * \f$\left| D \right|\f$ and denoting
+ * \f$D = \left\{ 0, \dots, \max{D} \right\}\f$,
  * correspondence function is called labeling and its signature is
  *
  * \f[
@@ -327,10 +327,26 @@ struct DisparityGraph
      */
     struct Image right;
     /**
-     * \brief Maximal distance between positions of pixels
-     * that see the same 3D point.
+     * \brief Number of disparity levels.
+     *
+     * Number of disparity levels is more generic value
+     * than maximal disparity level.
+     * This measure may be applied in the case
+     * when we use pyramidal disparity map search
+     * and thus have initial values for different pixels.
+     * In this situation,
+     * we can set the disparity map we've got
+     * as the middle of disparity scale of a pixel,
+     * and find finer disparity map
+     * using DisparityGraph::disparity_levels disparity values.
+     *
+     * For now,
+     * we assume the minimal disparity for each pixel to be equal `0`,
+     * so the DisparityGraph::disparity_levels is used simply as
+     * \f$\max{D} - 1\f$ in set of available disparities
+     * \f$D = \left\{ 0, 1, \dots, \max{D} - 1 \right\}\f$.
      */
-    ULONG maximal_disparity;
+    ULONG disparity_levels;
     /**
      * \brief Reparametrization is a helpful vector
      * for the optimization problem.
@@ -363,10 +379,8 @@ struct DisparityGraph
      * \f[
      *  k\left( \left\langle x, y \right\rangle, i, d \right) =
      *      y + h \cdot \left(
-     *          d + \max{D} \cdot \left(
-     *              i + \max_j{\mathcal{N}_j} \cdot \left(
-     *                      x \cdot w
-     *                  \right)
+     *          d + \left| D \right| \cdot \left(
+     *              i + \max_j{\mathcal{N}_j} \cdot x \cdot w
      *              \right)
      *          \right),
      * \f]
@@ -384,7 +398,7 @@ struct DisparityGraph
     DisparityGraph(
         struct Image left,
         struct Image right,
-        ULONG maximal_disparity
+        ULONG disparity_levels
     );
 };
 
