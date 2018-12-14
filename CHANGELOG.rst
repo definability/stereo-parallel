@@ -43,7 +43,7 @@ Added
   - ``left`` image,
   - ``right`` image
     (made on a camera located to the right of the ``left`` image),
-  - ``maximal_disparity`` is a limit for disparity
+  - ``disparity_levels`` is the number of different disparity levels
     (the more it is, the more memory the graph consumes),
   - ``reparametrization`` that allows to solve the dual problem.
 
