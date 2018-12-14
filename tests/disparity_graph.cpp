@@ -29,6 +29,41 @@
 
 BOOST_AUTO_TEST_SUITE(DisparityGraphTest)
 
+BOOST_AUTO_TEST_CASE(check_reparametrization_indexing)
+{
+    PGM_IO pgm_io;
+    std::istringstream image_content{R"image(
+    P2
+    3 2
+    2
+    0 0 0
+    0 0 0
+    )image"};
+
+    image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image image{*pgm_io.get_image()};
+
+    struct DisparityGraph disparity_graph{image, image, 3};
+
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 0}, 0), 0);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 0}, 0}, 0), 1);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 1}, 0), 2);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 2}, 0), 4);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 0}, 2}, 0), 5);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 0}, 1), 6);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 0}, 0}, 1), 7);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 1}, 1), 8);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 0}, 1}, 1), 9);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 2}, 1), 10);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 0}, 2}, 1), 11);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 0}, 2), 12);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 0}, 3), 18);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 0}, 2}, 3), 23);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 1}, 0}, 0), 24);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 1}, 2}, 3), 47);
+}
+
 BOOST_AUTO_TEST_CASE(check_neighborhood)
 {
     PGM_IO pgm_io;
