@@ -174,7 +174,7 @@ bool node_exists(
 )
 {
     return !(
-        node.disparity > graph.maximal_disparity
+        node.disparity >= graph.disparity_levels
         || node.pixel.row >= graph.right.height
         || node.pixel.column >= graph.right.width
         || node.pixel.column + node.disparity >= graph.left.width
