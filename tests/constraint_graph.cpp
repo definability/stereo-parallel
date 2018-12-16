@@ -28,7 +28,7 @@
 #include <image.hpp>
 #include <pgm_io.hpp>
 
-BOOST_AUTO_TEST_SUITE(DisparityGraphTest)
+BOOST_AUTO_TEST_SUITE(ConstraintGraphTest)
 
 BOOST_AUTO_TEST_CASE(check_nodes_indexing)
 {
