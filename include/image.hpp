@@ -89,13 +89,13 @@ struct Image
 struct Pixel
 {
     /**
-     * \brief Row (vertical offset) of the pixel.
-     */
-    ULONG row;
-    /**
      * \brief Column (horizontal offset) of the pixel.
      */
     ULONG column;
+    /**
+     * \brief Row (vertical offset) of the pixel.
+     */
+    ULONG row;
 };
 
 /**

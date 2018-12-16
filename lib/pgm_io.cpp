@@ -104,7 +104,7 @@ std::ostream& operator<<(std::ostream& out, const PGM_IO& ppm_io)
     {
         for (unsigned column = 0; column < image->width; ++column)
         {
-            out << image->data[get_pixel_index(*image, {row, column})];
+            out << image->data[get_pixel_index(*image, {column, row})];
             if (column == 0 || (column + 1) % PGM_IO::MAX_NUMBERS_PER_ROW != 0)
             {
                 if (column + 1 < image->width)
@@ -162,7 +162,7 @@ std::istream& operator>>(std::istream& in, PGM_IO& ppm_io)
         {
             try
             {
-                image->data[get_pixel_index(*image, {row, column})] =
+                image->data[get_pixel_index(*image, {column, row})] =
                     std::stoul(PGM_IO::read_pgm_instruction(in));
             }
             catch (std::invalid_argument&)
