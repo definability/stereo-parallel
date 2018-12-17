@@ -30,7 +30,7 @@
 ULONG node_index(const struct DisparityGraph& graph, struct Node node)
 {
     return node.disparity + graph.disparity_levels
-        * (node.pixel.row + graph.right.height * node.pixel.column);
+        * (node.pixel.y + graph.right.height * node.pixel.x);
 }
 
 void make_node_available(
@@ -84,22 +84,22 @@ struct ConstraintGraph disparity2constraint(
     Node node{{0, 0}, 0};
     FLOAT minimal_penalty = 0;
     for (
-        node.pixel.column = 0;
-        node.pixel.column < disparity_graph.right.width;
-        ++node.pixel.column
+        node.pixel.x = 0;
+        node.pixel.x < disparity_graph.right.width;
+        ++node.pixel.x
     )
     {
         for (
-            node.pixel.row = 0;
-            node.pixel.row < disparity_graph.right.height;
-            ++node.pixel.row
+            node.pixel.y = 0;
+            node.pixel.y < disparity_graph.right.height;
+            ++node.pixel.y
         )
         {
             node.disparity = 0;
             minimal_penalty = node_penalty(disparity_graph, node);
             for (
                 node.disparity = 0;
-                node.pixel.column + node.disparity
+                node.pixel.x + node.disparity
                     < disparity_graph.left.width
                 && node.disparity < disparity_graph.disparity_levels;
                 ++node.disparity
@@ -113,7 +113,7 @@ struct ConstraintGraph disparity2constraint(
 
             for (
                 node.disparity = 0;
-                node.pixel.column + node.disparity
+                node.pixel.x + node.disparity
                     < disparity_graph.left.width
                 && node.disparity < disparity_graph.disparity_levels;
                 ++node.disparity

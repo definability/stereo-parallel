@@ -66,11 +66,11 @@ BOOST_AUTO_TEST_CASE(check_get_pixel_index)
     BOOST_CHECK_EQUAL(image.width, 3);
     BOOST_CHECK_EQUAL(image.height, 2);
     BOOST_CHECK_EQUAL(get_pixel_index(image, {0, 0}), 0);
-    BOOST_CHECK_EQUAL(get_pixel_index(image, {0, 1}), 1);
-    BOOST_CHECK_EQUAL(get_pixel_index(image, {0, 2}), 2);
-    BOOST_CHECK_EQUAL(get_pixel_index(image, {1, 0}), 3);
+    BOOST_CHECK_EQUAL(get_pixel_index(image, {1, 0}), 1);
+    BOOST_CHECK_EQUAL(get_pixel_index(image, {2, 0}), 2);
+    BOOST_CHECK_EQUAL(get_pixel_index(image, {0, 1}), 3);
     BOOST_CHECK_EQUAL(get_pixel_index(image, {1, 1}), 4);
-    BOOST_CHECK_EQUAL(get_pixel_index(image, {1, 2}), 5);
+    BOOST_CHECK_EQUAL(get_pixel_index(image, {2, 1}), 5);
 }
 
 BOOST_AUTO_TEST_CASE(check_get_pixel_value)
@@ -80,11 +80,11 @@ BOOST_AUTO_TEST_CASE(check_get_pixel_value)
     BOOST_CHECK_EQUAL(image.width, 3);
     BOOST_CHECK_EQUAL(image.height, 2);
     BOOST_CHECK_EQUAL(get_pixel_value(image, {0, 0}), 5);
-    BOOST_CHECK_EQUAL(get_pixel_value(image, {0, 1}), 4);
-    BOOST_CHECK_EQUAL(get_pixel_value(image, {0, 2}), 3);
-    BOOST_CHECK_EQUAL(get_pixel_value(image, {1, 0}), 2);
+    BOOST_CHECK_EQUAL(get_pixel_value(image, {1, 0}), 4);
+    BOOST_CHECK_EQUAL(get_pixel_value(image, {2, 0}), 3);
+    BOOST_CHECK_EQUAL(get_pixel_value(image, {0, 1}), 2);
     BOOST_CHECK_EQUAL(get_pixel_value(image, {1, 1}), 1);
-    BOOST_CHECK_EQUAL(get_pixel_value(image, {1, 2}), 0);
+    BOOST_CHECK_EQUAL(get_pixel_value(image, {2, 1}), 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

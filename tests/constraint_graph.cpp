@@ -28,7 +28,7 @@
 #include <image.hpp>
 #include <pgm_io.hpp>
 
-BOOST_AUTO_TEST_SUITE(DisparityGraphTest)
+BOOST_AUTO_TEST_SUITE(ConstraintGraphTest)
 
 BOOST_AUTO_TEST_CASE(check_nodes_indexing)
 {
@@ -51,9 +51,9 @@ BOOST_AUTO_TEST_CASE(check_nodes_indexing)
 
     BOOST_CHECK_EQUAL(node_index(*(constraint_graph.disparity_graph), {{0, 0}, 0}), 0);
     BOOST_CHECK_EQUAL(node_index(*(constraint_graph.disparity_graph), {{0, 0}, 2}), 2);
-    BOOST_CHECK_EQUAL(node_index(*(constraint_graph.disparity_graph), {{1, 0}, 0}), 3);
-    BOOST_CHECK_EQUAL(node_index(*(constraint_graph.disparity_graph), {{1, 0}, 2}), 5);
-    BOOST_CHECK_EQUAL(node_index(*(constraint_graph.disparity_graph), {{0, 1}, 0}), 6);
+    BOOST_CHECK_EQUAL(node_index(*(constraint_graph.disparity_graph), {{0, 1}, 0}), 3);
+    BOOST_CHECK_EQUAL(node_index(*(constraint_graph.disparity_graph), {{0, 1}, 2}), 5);
+    BOOST_CHECK_EQUAL(node_index(*(constraint_graph.disparity_graph), {{1, 0}, 0}), 6);
 }
 
 BOOST_AUTO_TEST_CASE(check_black_images)
@@ -78,15 +78,15 @@ BOOST_AUTO_TEST_CASE(check_black_images)
 
     struct Node node{{0, 0}, 0};
     for (
-        node.pixel.column = 0;
-        node.pixel.column < disparity_graph.right.width;
-        ++node.pixel.column
+        node.pixel.x = 0;
+        node.pixel.x < disparity_graph.right.width;
+        ++node.pixel.x
     )
     {
         for (
-            node.pixel.row = 0;
-            node.pixel.row < disparity_graph.right.height;
-            ++node.pixel.row
+            node.pixel.y = 0;
+            node.pixel.y < disparity_graph.right.height;
+            ++node.pixel.y
         )
         {
             for (
@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_CASE(check_black_images)
             {
                 BOOST_CHECK_EQUAL(
                     is_node_available(constraint_graph, node),
-                    node.pixel.column + node.disparity
+                    node.pixel.x + node.disparity
                     < disparity_graph.left.width
                 );
             }
@@ -134,14 +134,14 @@ BOOST_AUTO_TEST_CASE(check_equal_images)
     BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 2}), 256 * 256, 1);
     BOOST_CHECK(!is_node_available(constraint_graph, {{0, 0}, 2}));
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 0}), 0, 1);
-    BOOST_CHECK(is_node_available(constraint_graph, {{1, 0}, 0}));
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 1}, 0}), 0, 1);
+    BOOST_CHECK(is_node_available(constraint_graph, {{0, 1}, 0}));
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 1}), 129 * 129, 1);
-    BOOST_CHECK(!is_node_available(constraint_graph, {{1, 0}, 1}));
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 1}, 1}), 129 * 129, 1);
+    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 1}, 1}));
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 2}), 256 * 256, 1);
-    BOOST_CHECK(!is_node_available(constraint_graph, {{1, 0}, 2}));
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 1}, 2}), 256 * 256, 1);
+    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 1}, 2}));
 }
 
 BOOST_AUTO_TEST_CASE(check_disparity_loop)
@@ -224,8 +224,8 @@ BOOST_AUTO_TEST_CASE(check_minimal_node_value_calculation)
     BOOST_REQUIRE_EQUAL(constraint_graph.disparity_graph, &disparity_graph);
     BOOST_CHECK_CLOSE(constraint_graph.threshold, 0.5, 1);
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 2}, 0}), 1, 1);
-    BOOST_CHECK(is_node_available(constraint_graph, {{0, 2}, 0}));
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{2, 0}, 0}), 1, 1);
+    BOOST_CHECK(is_node_available(constraint_graph, {{2, 0}, 0}));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

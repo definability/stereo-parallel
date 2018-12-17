@@ -29,8 +29,8 @@ Added
 - ``Pixel`` structure to represent position of a pixel.
   Contains
 
-  - ``row`` (vertical offset) of a pixel,
-  - ``column`` (horizontal offset) of a pixel.
+  - ``x`` (horizontal offset, column) of a pixel.
+  - ``y`` (vertical offset, row) of a pixel,
 
 - ``image_valid`` function to check validity of ``Image``.
 - ``get_pixel_index`` to calculate index of given pixel
