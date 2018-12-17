@@ -100,21 +100,21 @@ std::ostream& operator<<(std::ostream& out, const PGM_IO& ppm_io)
     out << PGM_IO::FORMAT_CODE << std::endl;
     out << image->width << " " << image->height << std::endl;
     out << image->max_value << std::endl;
-    for (unsigned row = 0; row < image->height; ++row)
+    for (ULONG y = 0; y < image->height; ++y)
     {
-        for (unsigned column = 0; column < image->width; ++column)
+        for (ULONG x = 0; x < image->width; ++x)
         {
-            out << image->data[get_pixel_index(*image, {column, row})];
-            if (column == 0 || (column + 1) % PGM_IO::MAX_NUMBERS_PER_ROW != 0)
+            out << image->data[get_pixel_index(*image, {x, y})];
+            if (x == 0 || (x + 1) % PGM_IO::MAX_NUMBERS_PER_ROW != 0)
             {
-                if (column + 1 < image->width)
+                if (x + 1 < image->width)
                 {
                     out << " ";
                 }
             }
             else
             {
-                if (column + 1 < image->width)
+                if (x + 1 < image->width)
                 {
                     out << std::endl;
                 }
@@ -156,13 +156,13 @@ std::istream& operator>>(std::istream& in, PGM_IO& ppm_io)
     }
     image->data.resize(image->width * image->height);
 
-    for (unsigned row = 0; row < image->height; ++row)
+    for (ULONG y = 0; y < image->height; ++y)
     {
-        for (unsigned column = 0; column < image->width; ++column)
+        for (ULONG x = 0; x < image->width; ++x)
         {
             try
             {
-                image->data[get_pixel_index(*image, {column, row})] =
+                image->data[get_pixel_index(*image, {x, y})] =
                     std::stoul(PGM_IO::read_pgm_instruction(in));
             }
             catch (std::invalid_argument&)

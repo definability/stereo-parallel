@@ -78,15 +78,15 @@ BOOST_AUTO_TEST_CASE(check_black_images)
 
     struct Node node{{0, 0}, 0};
     for (
-        node.pixel.column = 0;
-        node.pixel.column < disparity_graph.right.width;
-        ++node.pixel.column
+        node.pixel.x = 0;
+        node.pixel.x < disparity_graph.right.width;
+        ++node.pixel.x
     )
     {
         for (
-            node.pixel.row = 0;
-            node.pixel.row < disparity_graph.right.height;
-            ++node.pixel.row
+            node.pixel.y = 0;
+            node.pixel.y < disparity_graph.right.height;
+            ++node.pixel.y
         )
         {
             for (
@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_CASE(check_black_images)
             {
                 BOOST_CHECK_EQUAL(
                     is_node_available(constraint_graph, node),
-                    node.pixel.column + node.disparity
+                    node.pixel.x + node.disparity
                     < disparity_graph.left.width
                 );
             }

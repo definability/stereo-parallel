@@ -45,19 +45,19 @@ BOOST_AUTO_TEST_CASE(check_nodes_existence)
     struct Image image{*pgm_io.get_image()};
     struct DisparityGraph disparity_graph{image, image, 2};
 
-    for (ULONG row = 0; row < 2; ++row)
+    for (ULONG y = 0; y < 2; ++y)
     {
-        BOOST_CHECK(node_exists(disparity_graph, {{0, row}, 0}));
-        BOOST_CHECK(node_exists(disparity_graph, {{1, row}, 0}));
-        BOOST_CHECK(node_exists(disparity_graph, {{2, row}, 0}));
+        BOOST_CHECK(node_exists(disparity_graph, {{0, y}, 0}));
+        BOOST_CHECK(node_exists(disparity_graph, {{1, y}, 0}));
+        BOOST_CHECK(node_exists(disparity_graph, {{2, y}, 0}));
 
-        BOOST_CHECK(node_exists(disparity_graph, {{0, row}, 1}));
-        BOOST_CHECK(node_exists(disparity_graph, {{1, row}, 1}));
+        BOOST_CHECK(node_exists(disparity_graph, {{0, y}, 1}));
+        BOOST_CHECK(node_exists(disparity_graph, {{1, y}, 1}));
 
-        BOOST_CHECK(!node_exists(disparity_graph, {{0, row}, 2}));
-        BOOST_CHECK(!node_exists(disparity_graph, {{1, row}, 2}));
+        BOOST_CHECK(!node_exists(disparity_graph, {{0, y}, 2}));
+        BOOST_CHECK(!node_exists(disparity_graph, {{1, y}, 2}));
 
-        BOOST_CHECK(!node_exists(disparity_graph, {{2, row}, 1}));
+        BOOST_CHECK(!node_exists(disparity_graph, {{2, y}, 1}));
     }
     BOOST_CHECK(!node_exists(disparity_graph, {{0, 2}, 0}));
     BOOST_CHECK(!node_exists(disparity_graph, {{3, 0}, 2}));

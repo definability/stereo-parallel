@@ -367,10 +367,10 @@ struct DisparityGraph
      *
      * Used "dimensions" are following (upper ones are more nested):
      *
-     * - Pixel::row of Node::pixel,
+     * - Pixel::y of Node::pixel,
      * - Node::disparity,
      * - Index of current neighbor of Node instance,
-     * - Pixel::column of Node::pixel
+     * - Pixel::x of Node::pixel
      *
      * Index of an element of the DisparityGraph::reparametrization
      * for specific Node and neighbor index

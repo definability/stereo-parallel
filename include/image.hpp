@@ -91,11 +91,11 @@ struct Pixel
     /**
      * \brief Column (horizontal offset) of the pixel.
      */
-    ULONG column;
+    ULONG x;
     /**
      * \brief Row (vertical offset) of the pixel.
      */
-    ULONG row;
+    ULONG y;
 };
 
 /**

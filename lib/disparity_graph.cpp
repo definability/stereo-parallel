@@ -116,23 +116,23 @@ ULONG neighbor_index(
     struct Pixel neighbor
 )
 {
-    if (pixel.column != neighbor.column && pixel.row != neighbor.row)
+    if (pixel.x != neighbor.x && pixel.y != neighbor.y)
     {
         return NEIGHBORS_COUNT;
     }
-    if (pixel.column + 1 == neighbor.column)
+    if (pixel.x + 1 == neighbor.x)
     {
         return 0;
     }
-    if (pixel.column == neighbor.column + 1)
+    if (pixel.x == neighbor.x + 1)
     {
         return 1;
     }
-    if (pixel.row + 1 == neighbor.row)
+    if (pixel.y + 1 == neighbor.y)
     {
         return 2;
     }
-    if (pixel.row == neighbor.row + 1)
+    if (pixel.y == neighbor.y + 1)
     {
         return 3;
     }
@@ -159,12 +159,12 @@ bool neighborhood_exists_fast(
 )
 {
     return !(neighbor_index > 3
-        || pixel.row >= graph.right.height
-        || pixel.column >= graph.right.width
-        || (pixel.column + 1 == graph.left.width && neighbor_index == 0)
-        || (pixel.column == 0 && neighbor_index == 1)
-        || (pixel.row + 1 == graph.left.height && neighbor_index == 2)
-        || (pixel.row == 0 && neighbor_index == 3)
+        || pixel.y >= graph.right.height
+        || pixel.x >= graph.right.width
+        || (pixel.x + 1 == graph.left.width && neighbor_index == 0)
+        || (pixel.x == 0 && neighbor_index == 1)
+        || (pixel.y + 1 == graph.left.height && neighbor_index == 2)
+        || (pixel.y == 0 && neighbor_index == 3)
     );
 }
 
@@ -175,9 +175,9 @@ bool node_exists(
 {
     return !(
         node.disparity >= graph.disparity_levels
-        || node.pixel.row >= graph.right.height
-        || node.pixel.column >= graph.right.width
-        || node.pixel.column + node.disparity >= graph.left.width
+        || node.pixel.y >= graph.right.height
+        || node.pixel.x >= graph.right.width
+        || node.pixel.x + node.disparity >= graph.left.width
     );
 }
 
@@ -199,17 +199,17 @@ bool edge_exists(
         return false;
     }
 
-    if (edge.node.pixel.row != edge.neighbor.pixel.row)
+    if (edge.node.pixel.y != edge.neighbor.pixel.y)
     {
         return true;
     }
 
-    if (edge.node.pixel.column + 1 == edge.neighbor.pixel.column
+    if (edge.node.pixel.x + 1 == edge.neighbor.pixel.x
         && edge.node.disparity > edge.neighbor.disparity + 1)
     {
         return false;
     }
-    if (edge.node.pixel.column == edge.neighbor.pixel.column + 1
+    if (edge.node.pixel.x == edge.neighbor.pixel.x + 1
         && edge.node.disparity + 1 < edge.neighbor.disparity)
     {
         return false;
@@ -226,13 +226,13 @@ ULONG reparametrization_index_fast(
 {
     ULONG index = 0;
     index *= graph.right.width;
-    index += node.pixel.column;
+    index += node.pixel.x;
     index *= NEIGHBORS_COUNT;
     index += neighbor_index;
     index *= graph.disparity_levels;
     index += node.disparity;
     index *= graph.left.height;
-    index += node.pixel.row;
+    index += node.pixel.y;
 
     return index;
 }
@@ -301,7 +301,7 @@ FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge)
 FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node)
 {
     Pixel left_pixel = node.pixel;
-    left_pixel.column += node.disparity;
+    left_pixel.x += node.disparity;
     return
         SQR(TO_FLOAT(get_pixel_value(graph.right, node.pixel))
             - TO_FLOAT(get_pixel_value(graph.left, left_pixel)))

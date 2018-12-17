@@ -41,7 +41,7 @@ bool image_valid(const struct Image& image)
 
 ULONG get_pixel_index(const struct Image& image, struct Pixel pixel)
 {
-    return image.width * pixel.row + pixel.column;
+    return image.width * pixel.y + pixel.x;
 }
 
 ULONG get_pixel_value(const struct Image& image, struct Pixel pixel)
