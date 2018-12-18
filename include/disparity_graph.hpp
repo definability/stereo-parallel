@@ -69,14 +69,14 @@ const ULONG NEIGHBORS_COUNT = 4;
  * One element of the index set \f$I\f$ can be written as
  *
  * \f[
- *  I \ni i = \left\langle i^x, i^y \right\rangle
+ *  I \ni i = \left\langle i^x, i^y \right\rangle.
  * \f]
  *
  * We can represent images as mappings
  *
  * \f[
- *  L: I \rightarrow C \\
- *  R: I \rightarrow C \\
+ *  L: I \rightarrow C, \\
+ *  R: I \rightarrow C. \\
  * \f]
  *
  * Disparity is a difference
@@ -88,7 +88,7 @@ const ULONG NEIGHBORS_COUNT = 4;
  * correspondence function is called labeling and its signature is
  *
  * \f[
- *  k: I \rightarrow D
+ *  k: I \rightarrow D.
  * \f]
  *
  * Thus, given an index \f$i_R\f$ of a pixel on the right image
@@ -97,7 +97,7 @@ const ULONG NEIGHBORS_COUNT = 4;
  * by the formula
  *
  * \f[
- *  i_L = \left\langle i_R^x + k_{i_R}, i_R^y \right\rangle
+ *  i_L = \left\langle i_R^x + k_{i_R}, i_R^y \right\rangle.
  * \f]
  *
  * Set of all neighbors of a pixel will be noted \f$\mathcal{N}_i\f$.
@@ -155,40 +155,16 @@ const ULONG NEIGHBORS_COUNT = 4;
  * \f[
  *  \min\limits_{k: I \rightarrow D}{E\left( k \right)}
  *  = \min\limits_{k: I \rightarrow D}{\left\{
- *      \sum\limits_{i \in I} \left\|
- *          R\left( i^x, i^y \right)
- *          - L\left( i^x + k_i, i^y \right)
- *      \right\|^p
+ *      \sum\limits_{i \in I} q_i\left( k_i \right)
  *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
- *          \left\| k_i - k_j \right\|^p
+ *          g_{ij}\left( k_i, k_j \right)
  *  \right\}}
  *  \ge \sum\limits_{i \in I} \min\limits_{d \in D}{
- *  \left\|
- *      R\left( i^x, i^y \right)
- *      - L\left( i^x + d, i^y \right)
- *  \right\|^p}
+ *      q_i\left( d \right)
+ *  }
  *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
- *      \min\limits_{d, d' \in D}{\left\| d - d' \right\|^p}
- * \f]
- *
- * The last sum is zero, so
- *
- * \f[
- *  \min\limits_{k: I \rightarrow D}{E\left( k \right)}
- *  = \min\limits_{k: I \rightarrow D}{\left\{
- *      \sum\limits_{i \in I} \left\|
- *          R\left( i^x, i^y \right)
- *          - L\left( i^x + k_i, i^y \right)
- *      \right\|^p
- *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
- *          \left\| k_i - k_j \right\|^p
- *  \right\}}
- *  \ge \sum\limits_{i \in I} \min\limits_{d \in D}{
- *  \left\|
- *      R\left( i^x, i^y \right)
- *      - L\left( i^x + d, i^y \right)
- *  \right\|^p}
- *  = \widetilde{E}
+ *      \min\limits_{d, d' \in D}{g_{ij}\left( d, d' \right)}
+ *  = \widetilde{E}.
  * \f]
  *
  * Thus, \f$\widetilde{E}\f$ is a lower bound for the \f$E\f$.
@@ -199,7 +175,7 @@ const ULONG NEIGHBORS_COUNT = 4;
  * (DisparityGraph::reparametrization)
  *
  * \f[
- *  \varphi: I^2 \times K \rightarrow \mathbb{R}
+ *  \varphi: I^2 \times K \rightarrow \mathbb{R}.
  * \f]
  *
  * Let's introduce reparametrized energy function
@@ -207,39 +183,36 @@ const ULONG NEIGHBORS_COUNT = 4;
  * \f[
  *  E\left( k; \varphi \right)
  *      = \sum\limits_{i \in I} \left[
- *          \left\|
- *              R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
- *          \right\|^p
+ *          q_i\left( k_i \right)
  *          + \sum\limits_{j \in \mathcal{N}_i}
  *              \varphi_{i j}\left( k_i \right)
  *      \right]
  *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i} \left[
- *          \left\| k_i - k_j \right\|^p
+ *          g_{ij}\left( k_i, k_j \right)
  *          - \varphi_{i j}\left( k_i \right)
  *          - \varphi_{j i}\left( k_j \right)
  *      \right]
  *  = E\left( k \right),
- *  \quad \forall \varphi: I^2 \times K \rightarrow \mathbb{R}
+ *  \quad \forall \varphi: I^2 \times K \rightarrow \mathbb{R},
  * \f]
  *
- * Though, the lower boundary of reparametrized energy may change
+ * On the other hand,
+ * the lower boundary of the reparametrized energy may change
  *
  * \f[
  *  \widetilde{E}\left( \varphi \right)
  *      = \sum\limits_{i \in I} \min_{d \in D}{\left[
- *          \left\|
- *              R\left( i^x, i^y \right) - L\left( i^x + d, i^y \right)
- *          \right\|^p
+ *          q_i\left( d \right)
  *          + \sum\limits_{j \in \mathcal{N}_i}
  *              \varphi_{i j}\left( d \right)
  *      \right]}
  *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
  *          \min_{d, d' \in D}{\left[
- *              \left\| d - d' \right\|^p
+ *              g_{ij}\left( d, d' \right)
  *              - \varphi_{i j}\left( d \right)
  *              - \varphi_{j i}\left( d' \right)
  *          \right]}
- *  \neq \widetilde{E}
+ *  \neq \widetilde{E}.
  * \f]
  *
  * If we will increase the lower boundary
@@ -259,19 +232,17 @@ const ULONG NEIGHBORS_COUNT = 4;
  *
  * \f[
  *  \sum\limits_{i \in I} \min_{d \in D}{\left[
- *      \left\|
- *          R\left( i^x, i^y \right) - L\left( i^x + d, i^y \right)
- *      \right\|^p
+ *      q_i\left( d \right)
  *      + \sum\limits_{j \in \mathcal{N}_i}
  *          \varphi_{i j}\left( d \right)
  *  \right]}
  *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
  *      \min_{d, d' \in D}{\left[
- *          \left\| d - d' \right\|^p
+ *          g_{ij}\left( d, d' \right)
  *          - \varphi_{i j}\left( d \right)
  *          - \varphi_{j i}\left( d' \right)
  *      \right]}
- *  \to \max_{\varphi: I^2 \times K \rightarrow \mathbb{R}}
+ *  \to \max_{\varphi: I^2 \times K \rightarrow \mathbb{R}}.
  * \f]
  *
  * Introducing reparametrized vertex penalty
