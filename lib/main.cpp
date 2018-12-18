@@ -25,7 +25,14 @@ int main(int argc, char* argv[]) try
          "Right image")
         ("disparity-levels,d",
          boost::program_options::value<std::string>(),
-         "Number of disparity levels");
+         "Number of disparity levels")
+        ("smoothness,s",
+         boost::program_options::value<std::string>(),
+         "Smoothness weight")
+        ("cleanness,c",
+         boost::program_options::value<std::string>(),
+         "Cleanness weight")
+    ;
 
     boost::program_options::variables_map vm;
     try
@@ -66,10 +73,26 @@ int main(int argc, char* argv[]) try
                     vm["disparity-levels"].as<std::string>()
                 );
             }
+            FLOAT cleanness = 1;
+            if (vm.count("cleanness") == 1)
+            {
+                cleanness = std::stoul(
+                    vm["cleanness"].as<std::string>()
+                );
+            }
+            FLOAT smoothness = 1;
+            if (vm.count("smoothness") == 1)
+            {
+                smoothness = std::stoul(
+                    vm["smoothness"].as<std::string>()
+                );
+            }
             struct DisparityGraph disparity_graph{
                 left_image,
                 right_image,
-                disparity_levels
+                disparity_levels,
+                cleanness,
+                smoothness
             };
         }
         catch (std::invalid_argument& e)
