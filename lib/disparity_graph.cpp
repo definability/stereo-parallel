@@ -331,7 +331,8 @@ FLOAT reparametrization_value_fast(
 FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge)
 {
     return
-        SQR(TO_FLOAT(edge.node.disparity) - TO_FLOAT(edge.neighbor.disparity))
+        graph.smoothness
+        * SQR(TO_FLOAT(edge.node.disparity) - TO_FLOAT(edge.neighbor.disparity))
         + reparametrization_value_slow(graph, edge)
         + reparametrization_value(graph, edge.neighbor, edge.node.pixel);
 }
@@ -341,7 +342,8 @@ FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node)
     Pixel left_pixel = node.pixel;
     left_pixel.x += node.disparity;
     return
-        SQR(TO_FLOAT(get_pixel_value(graph.right, node.pixel))
+        graph.cleanness
+        * SQR(TO_FLOAT(get_pixel_value(graph.right, node.pixel))
             - TO_FLOAT(get_pixel_value(graph.left, left_pixel)))
         - reparametrization_value_fast(graph, node, 0)
         - reparametrization_value_fast(graph, node, 1)
