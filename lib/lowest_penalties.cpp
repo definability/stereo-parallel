@@ -25,9 +25,3 @@
 
 #include <disparity_graph.hpp>
 #include <image.hpp>
-
-ULONG node_index(const struct DisparityGraph& graph, struct Node node)
-{
-    return node.disparity + graph.disparity_levels
-        * (node.pixel.y + graph.right.height * node.pixel.x);
-}

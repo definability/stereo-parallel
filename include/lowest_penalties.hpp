@@ -23,19 +23,16 @@
  */
 #ifndef LOWEST_PENALTIES_HPP
 #define LOWEST_PENALTIES_HPP
+
 #include <image.hpp>
 
 struct LowestPenalties
 {
+    const struct DisparityGraph* disparity_graph;
+    FLOAT_ARRAY pixels;
+    FLOAT_ARRAY neighborhoods;
 };
-/**
- * \brief Get an index of LowestPenalties::nodes element
- * using a Node.
- *
- * The function doesn't check existence of the Node.
- * You should perform it by yourself
- * using ::node_exists.
- */
-ULONG node_index(const struct DisparityGraph& graph, struct Node node);
+ULONG pixel_index(const struct DisparityGraph& graph, struct Pixel pixel);
+ULONG neighborhood_index(const struct DisparityGraph& graph, struct Pixel pixel, ULONG neighborhood_index);
 
 #endif
