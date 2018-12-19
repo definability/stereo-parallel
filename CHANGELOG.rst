@@ -44,6 +44,8 @@ Added
   - ``right`` image
     (made on a camera located to the right of the ``left`` image),
   - ``disparity_levels`` is the number of different disparity levels
+  - ``cleanness`` weight of ``Node`` penalty.
+  - ``smoothness`` weight of ``Edge`` penalty.
     (the more it is, the more memory the graph consumes),
   - ``reparametrization`` that allows to solve the dual problem.
 
