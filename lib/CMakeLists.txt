@@ -59,6 +59,7 @@ target_link_libraries(
 )
 target_link_libraries(
     constraint_graph
+    lowest_penalties
     disparity_graph
     image
 )

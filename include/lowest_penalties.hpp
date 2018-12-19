@@ -24,6 +24,9 @@
 #ifndef LOWEST_PENALTIES_HPP
 #define LOWEST_PENALTIES_HPP
 
+#define MIN(x, y) (((x) <= (y)) ? (x) : (y))
+
+#include <disparity_graph.hpp>
 #include <image.hpp>
 
 struct LowestPenalties
