@@ -32,7 +32,41 @@ struct LowestPenalties
     FLOAT_ARRAY pixels;
     FLOAT_ARRAY neighborhoods;
 };
-ULONG pixel_index(const struct DisparityGraph& graph, struct Pixel pixel);
-ULONG neighborhood_index(const struct DisparityGraph& graph, struct Pixel pixel, ULONG neighborhood_index);
+ULONG pixel_index(
+    const struct DisparityGraph& graph,
+    struct Pixel pixel
+);
+ULONG neighborhood_index_fast(
+    const struct DisparityGraph& graph,
+    struct Pixel pixel,
+    ULONG neighbor_index
+);
+ULONG neighborhood_index(
+    const struct DisparityGraph& graph,
+    struct Pixel pixel,
+    struct Pixel neighbor
+);
+ULONG neighborhood_index_slow(
+    const struct DisparityGraph& graph,
+    struct Edge edge
+);
+FLOAT lowest_pixel_penalty(
+    const struct DisparityGraph& graph,
+    struct Pixel pixel
+);
+FLOAT lowest_neighborhood_penalty_fast(
+    const struct DisparityGraph& graph,
+    struct Pixel pixel,
+    ULONG neighbor_index
+);
+FLOAT lowest_neighborhood_penalty(
+    const struct DisparityGraph& graph,
+    struct Pixel pixel,
+    struct Pixel neighbor
+);
+FLOAT lowest_neighborhood_penalty_slow(
+    const struct DisparityGraph& graph,
+    struct Edge edge
+);
 
 #endif
