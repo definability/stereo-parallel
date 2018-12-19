@@ -23,6 +23,7 @@
  */
 #include <disparity_graph.hpp>
 
+#include <limits>
 #include <stdexcept>
 #include <string>
 
@@ -32,11 +33,15 @@
 DisparityGraph::DisparityGraph(
     struct Image left,
     struct Image right,
-    ULONG disparity_levels
+    ULONG disparity_levels,
+    FLOAT cleanness,
+    FLOAT smoothness
 )
     : left{std::move(left)}
     , right{std::move(right)}
     , disparity_levels{disparity_levels}
+    , cleanness{cleanness}
+    , smoothness{smoothness}
 {
     if (!image_valid(this->left))
     {
@@ -95,6 +100,39 @@ DisparityGraph::DisparityGraph(
             + " and "
             + std::to_string(this->right.max_value)
             + "respectively."
+        );
+    }
+    if (this->cleanness < 0)
+    {
+        throw std::invalid_argument(
+            "Cleanness weight should not be negative. "
+            "Actual value is "
+            + std::to_string(this->cleanness)
+            + "."
+        );
+    }
+    if (this->smoothness < 0)
+    {
+        throw std::invalid_argument(
+            "Smoothness weight should not be negative. "
+            "Actual value is "
+            + std::to_string(this->smoothness)
+            + "."
+        );
+    }
+    if (
+        this->cleanness < std::numeric_limits<FLOAT>::epsilon()
+        && this->smoothness < std::numeric_limits<FLOAT>::epsilon()
+    )
+    {
+        throw std::invalid_argument(
+            "Either cleanness or smoothness, or both, "
+            "should be creater than zero. "
+            "You've provided smoothness "
+            + std::to_string(this->smoothness)
+            + " and cleanness "
+            + std::to_string(this->cleanness)
+            + "."
         );
     }
 
@@ -293,9 +331,10 @@ FLOAT reparametrization_value_fast(
 FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge)
 {
     return
-        SQR(TO_FLOAT(edge.node.disparity) - TO_FLOAT(edge.neighbor.disparity))
-        + reparametrization_value_slow(graph, edge)
-        + reparametrization_value(graph, edge.neighbor, edge.node.pixel);
+        graph.smoothness
+        * SQR(TO_FLOAT(edge.node.disparity) - TO_FLOAT(edge.neighbor.disparity))
+        - reparametrization_value_slow(graph, edge)
+        - reparametrization_value(graph, edge.neighbor, edge.node.pixel);
 }
 
 FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node)
@@ -303,10 +342,11 @@ FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node)
     Pixel left_pixel = node.pixel;
     left_pixel.x += node.disparity;
     return
-        SQR(TO_FLOAT(get_pixel_value(graph.right, node.pixel))
+        graph.cleanness
+        * SQR(TO_FLOAT(get_pixel_value(graph.right, node.pixel))
             - TO_FLOAT(get_pixel_value(graph.left, left_pixel)))
-        - reparametrization_value_fast(graph, node, 0)
-        - reparametrization_value_fast(graph, node, 1)
-        - reparametrization_value_fast(graph, node, 2)
-        - reparametrization_value_fast(graph, node, 3);
+        + reparametrization_value_fast(graph, node, 0)
+        + reparametrization_value_fast(graph, node, 1)
+        + reparametrization_value_fast(graph, node, 2)
+        + reparametrization_value_fast(graph, node, 3);
 }

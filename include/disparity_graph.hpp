@@ -69,14 +69,14 @@ const ULONG NEIGHBORS_COUNT = 4;
  * One element of the index set \f$I\f$ can be written as
  *
  * \f[
- *  I \ni i = \left\langle i^x, i^y \right\rangle
+ *  I \ni i = \left\langle i^x, i^y \right\rangle.
  * \f]
  *
  * We can represent images as mappings
  *
  * \f[
- *  L: I \rightarrow C \\
- *  R: I \rightarrow C \\
+ *  L: I \rightarrow C, \\
+ *  R: I \rightarrow C. \\
  * \f]
  *
  * Disparity is a difference
@@ -88,7 +88,7 @@ const ULONG NEIGHBORS_COUNT = 4;
  * correspondence function is called labeling and its signature is
  *
  * \f[
- *  k: I \rightarrow D
+ *  k: I \rightarrow D.
  * \f]
  *
  * Thus, given an index \f$i_R\f$ of a pixel on the right image
@@ -97,8 +97,18 @@ const ULONG NEIGHBORS_COUNT = 4;
  * by the formula
  *
  * \f[
- *  i_L = \left\langle i_R^x + k_{i_R}, i_R^y \right\rangle
+ *  i_L = \left\langle i_R^x + k_{i_R}, i_R^y \right\rangle.
  * \f]
+ *
+ * Color scales may be different,
+ * as well as noise level of images.
+ * Weight \f$\alpha\f$ (DisparityGraph::cleanness)
+ * allows to control these factors.
+ *
+ * Observed scene may be smooth or sharp.
+ * Also, it may be inconvenient to use \f$\alpha\f$ parameter
+ * because it needs to be too small or too high.
+ * \f$\beta\f$ weight (DisparityGraph::smoothness) serves in this case.
  *
  * Set of all neighbors of a pixel will be noted \f$\mathcal{N}_i\f$.
  * Set with right and buttom neighbors
@@ -114,19 +124,19 @@ const ULONG NEIGHBORS_COUNT = 4;
  *
  * \f[
  *  E\left( k \right) =
- *  \sum\limits_{i \in I} \left\|
+ *  \sum\limits_{i \in I} \alpha \cdot \left\|
  *      R\left( i^x, i^y \right)
  *      - L\left( i^x + k_i, i^y \right)
  *  \right\|^p
  *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
- *      \left\| k_i - k_j \right\|^p
+ *      \beta \cdot \left\| k_i - k_j \right\|^p.
  * \f]
  *
  * Denoting vertex penalty
  *
  * \f[
  *  q_i\left( d \right)
- *  = \left\|
+ *  = \alpha \cdot \left\|
  *        R\left( i^x, i^y \right) - L\left( i^x + d, i^y \right)
  *    \right\|^p
  * \f]
@@ -135,7 +145,7 @@ const ULONG NEIGHBORS_COUNT = 4;
  *
  * \f[
  *  g_{ij}\left( d, d' \right)
- *  = \left\| d - d' \right\|^p,
+ *  = \beta \cdot \left\| d - d' \right\|^p,
  * \f]
  *
  * it's needed to solve
@@ -155,40 +165,16 @@ const ULONG NEIGHBORS_COUNT = 4;
  * \f[
  *  \min\limits_{k: I \rightarrow D}{E\left( k \right)}
  *  = \min\limits_{k: I \rightarrow D}{\left\{
- *      \sum\limits_{i \in I} \left\|
- *          R\left( i^x, i^y \right)
- *          - L\left( i^x + k_i, i^y \right)
- *      \right\|^p
+ *      \sum\limits_{i \in I} q_i\left( k_i \right)
  *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
- *          \left\| k_i - k_j \right\|^p
+ *          g_{ij}\left( k_i, k_j \right)
  *  \right\}}
  *  \ge \sum\limits_{i \in I} \min\limits_{d \in D}{
- *  \left\|
- *      R\left( i^x, i^y \right)
- *      - L\left( i^x + d, i^y \right)
- *  \right\|^p}
+ *      q_i\left( d \right)
+ *  }
  *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
- *      \min\limits_{d, d' \in D}{\left\| d - d' \right\|^p}
- * \f]
- *
- * The last sum is zero, so
- *
- * \f[
- *  \min\limits_{k: I \rightarrow D}{E\left( k \right)}
- *  = \min\limits_{k: I \rightarrow D}{\left\{
- *      \sum\limits_{i \in I} \left\|
- *          R\left( i^x, i^y \right)
- *          - L\left( i^x + k_i, i^y \right)
- *      \right\|^p
- *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
- *          \left\| k_i - k_j \right\|^p
- *  \right\}}
- *  \ge \sum\limits_{i \in I} \min\limits_{d \in D}{
- *  \left\|
- *      R\left( i^x, i^y \right)
- *      - L\left( i^x + d, i^y \right)
- *  \right\|^p}
- *  = \widetilde{E}
+ *      \min\limits_{d, d' \in D}{g_{ij}\left( d, d' \right)}
+ *  = \widetilde{E}.
  * \f]
  *
  * Thus, \f$\widetilde{E}\f$ is a lower bound for the \f$E\f$.
@@ -199,7 +185,7 @@ const ULONG NEIGHBORS_COUNT = 4;
  * (DisparityGraph::reparametrization)
  *
  * \f[
- *  \varphi: I^2 \times K \rightarrow \mathbb{R}
+ *  \varphi: I^2 \times K \rightarrow \mathbb{R}.
  * \f]
  *
  * Let's introduce reparametrized energy function
@@ -207,39 +193,36 @@ const ULONG NEIGHBORS_COUNT = 4;
  * \f[
  *  E\left( k; \varphi \right)
  *      = \sum\limits_{i \in I} \left[
- *          \left\|
- *              R\left( i^x, i^y \right) - L\left( i^x + k_i, i^y \right)
- *          \right\|^p
+ *          q_i\left( k_i \right)
  *          + \sum\limits_{j \in \mathcal{N}_i}
  *              \varphi_{i j}\left( k_i \right)
  *      \right]
  *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i} \left[
- *          \left\| k_i - k_j \right\|^p
+ *          g_{ij}\left( k_i, k_j \right)
  *          - \varphi_{i j}\left( k_i \right)
  *          - \varphi_{j i}\left( k_j \right)
  *      \right]
  *  = E\left( k \right),
- *  \quad \forall \varphi: I^2 \times K \rightarrow \mathbb{R}
+ *  \quad \forall \varphi: I^2 \times K \rightarrow \mathbb{R},
  * \f]
  *
- * Though, the lower boundary of reparametrized energy may change
+ * On the other hand,
+ * the lower boundary of the reparametrized energy may change
  *
  * \f[
  *  \widetilde{E}\left( \varphi \right)
  *      = \sum\limits_{i \in I} \min_{d \in D}{\left[
- *          \left\|
- *              R\left( i^x, i^y \right) - L\left( i^x + d, i^y \right)
- *          \right\|^p
+ *          q_i\left( d \right)
  *          + \sum\limits_{j \in \mathcal{N}_i}
  *              \varphi_{i j}\left( d \right)
  *      \right]}
  *      + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
  *          \min_{d, d' \in D}{\left[
- *              \left\| d - d' \right\|^p
+ *              g_{ij}\left( d, d' \right)
  *              - \varphi_{i j}\left( d \right)
  *              - \varphi_{j i}\left( d' \right)
  *          \right]}
- *  \neq \widetilde{E}
+ *  \neq \widetilde{E}.
  * \f]
  *
  * If we will increase the lower boundary
@@ -259,19 +242,17 @@ const ULONG NEIGHBORS_COUNT = 4;
  *
  * \f[
  *  \sum\limits_{i \in I} \min_{d \in D}{\left[
- *      \left\|
- *          R\left( i^x, i^y \right) - L\left( i^x + d, i^y \right)
- *      \right\|^p
+ *      q_i\left( d \right)
  *      + \sum\limits_{j \in \mathcal{N}_i}
  *          \varphi_{i j}\left( d \right)
  *  \right]}
  *  + \sum\limits_{i \in I} \sum\limits_{j \in N_i}
  *      \min_{d, d' \in D}{\left[
- *          \left\| d - d' \right\|^p
+ *          g_{ij}\left( d, d' \right)
  *          - \varphi_{i j}\left( d \right)
  *          - \varphi_{j i}\left( d' \right)
  *      \right]}
- *  \to \max_{\varphi: I^2 \times K \rightarrow \mathbb{R}}
+ *  \to \max_{\varphi: I^2 \times K \rightarrow \mathbb{R}}.
  * \f]
  *
  * Introducing reparametrized vertex penalty
@@ -392,13 +373,36 @@ struct DisparityGraph
      */
     FLOAT_ARRAY reparametrization;
     /**
+     * \brief Weight of difference in colors
+     * between pixel and its neighbor.
+     * Noted ad \f$\alpha\f$ in problem description.
+     *
+     * Heigher value means that the image is clean
+     * and you trust its color information
+     * in a sense that one vertex of displayed object
+     * has the same color from both images.
+     * The weight is opposite to DisparityGraph::smoothness.
+     */
+    FLOAT cleanness;
+    /**
+     * \brief Weight of difference between disparities of neighboring nodes.
+     * Noted ad \f$\beta\f$ in problem description.
+     *
+     * Heigher value means that the surface you observe
+     * tends to be smooth rather than sharp.
+     * The weight is opposite to DisparityGraph::cleanness.
+     */
+    FLOAT smoothness;
+    /**
      * \brief Create DisparityGraph entity
      * and initialize its DisparityGraph::reparametrization.
      */
     DisparityGraph(
         struct Image left,
         struct Image right,
-        ULONG disparity_levels
+        ULONG disparity_levels,
+        FLOAT cleanness,
+        FLOAT smoothness
     );
 };
 

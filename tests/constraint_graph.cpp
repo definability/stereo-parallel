@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE(check_nodes_indexing)
     BOOST_REQUIRE(pgm_io.get_image());
     struct Image image{*pgm_io.get_image()};
 
-    struct DisparityGraph disparity_graph{image, image, 3};
+    struct DisparityGraph disparity_graph{image, image, 3, 1, 1};
     struct ConstraintGraph constraint_graph{disparity2constraint(disparity_graph, 1)};
     BOOST_REQUIRE_EQUAL(constraint_graph.disparity_graph, &disparity_graph);
 
@@ -71,7 +71,7 @@ BOOST_AUTO_TEST_CASE(check_black_images)
     BOOST_REQUIRE(pgm_io.get_image());
     struct Image image{*pgm_io.get_image()};
 
-    struct DisparityGraph disparity_graph{image, image, 3};
+    struct DisparityGraph disparity_graph{image, image, 3, 1, 1};
     struct ConstraintGraph constraint_graph{disparity2constraint(disparity_graph, 1)};
     BOOST_REQUIRE_EQUAL(constraint_graph.disparity_graph, &disparity_graph);
     BOOST_CHECK_CLOSE(constraint_graph.threshold, 1, 1);
@@ -120,7 +120,7 @@ BOOST_AUTO_TEST_CASE(check_equal_images)
     BOOST_REQUIRE(pgm_io.get_image());
     struct Image image{*pgm_io.get_image()};
 
-    struct DisparityGraph disparity_graph{image, image, 3};
+    struct DisparityGraph disparity_graph{image, image, 3, 1, 1};
     struct ConstraintGraph constraint_graph{disparity2constraint(disparity_graph, 128 * 128)};
     BOOST_REQUIRE_EQUAL(constraint_graph.disparity_graph, &disparity_graph);
     BOOST_CHECK_CLOSE(constraint_graph.threshold, 128 * 128, 1);
@@ -170,7 +170,7 @@ BOOST_AUTO_TEST_CASE(check_disparity_loop)
     BOOST_REQUIRE(pgm_io.get_image());
     struct Image right_image{*pgm_io.get_image()};
 
-    struct DisparityGraph disparity_graph{left_image, right_image, 2};
+    struct DisparityGraph disparity_graph{left_image, right_image, 2, 1, 1};
     struct ConstraintGraph constraint_graph{disparity2constraint(disparity_graph, 15)};
     BOOST_REQUIRE_EQUAL(constraint_graph.disparity_graph, &disparity_graph);
     BOOST_CHECK_CLOSE(constraint_graph.threshold, 15, 1);
@@ -219,7 +219,7 @@ BOOST_AUTO_TEST_CASE(check_minimal_node_value_calculation)
     BOOST_REQUIRE(pgm_io.get_image());
     struct Image right_image{*pgm_io.get_image()};
 
-    struct DisparityGraph disparity_graph{left_image, right_image, 3};
+    struct DisparityGraph disparity_graph{left_image, right_image, 3, 1, 1};
     struct ConstraintGraph constraint_graph{disparity2constraint(disparity_graph, 0.5)};
     BOOST_REQUIRE_EQUAL(constraint_graph.disparity_graph, &disparity_graph);
     BOOST_CHECK_CLOSE(constraint_graph.threshold, 0.5, 1);
