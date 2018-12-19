@@ -296,15 +296,6 @@ struct ConstraintGraph
     FLOAT threshold;
 };
 /**
- * \brief Get an index of ConstraintGraph::nodes_availability element
- * using a Node.
- *
- * The function doesn't check existence of the Node.
- * You should perform it by yourself
- * using ::node_exists.
- */
-ULONG node_index(const struct DisparityGraph& graph, struct Node node);
-/**
  * \brief Mark specific Node as available (`true`).
  *
  * The function doesn't check existence of the Node.

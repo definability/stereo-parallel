@@ -36,6 +36,7 @@ target_link_libraries(
     pgm_io
     disparity_graph
     constraint_graph
+    lowest_penalties
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 target_compile_definitions(
