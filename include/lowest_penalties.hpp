@@ -53,21 +53,16 @@ ULONG neighborhood_index_slow(
     const struct DisparityGraph& graph,
     struct Edge edge
 );
-FLOAT lowest_pixel_penalty(
+FLOAT calculate_lowest_pixel_penalty(
     const struct DisparityGraph& graph,
     struct Pixel pixel
 );
-FLOAT lowest_neighborhood_penalty_fast(
-    const struct DisparityGraph& graph,
-    struct Pixel pixel,
-    ULONG neighbor_index
-);
-FLOAT lowest_neighborhood_penalty(
+FLOAT calculate_lowest_neighborhood_penalty(
     const struct DisparityGraph& graph,
     struct Pixel pixel,
     struct Pixel neighbor
 );
-FLOAT lowest_neighborhood_penalty_slow(
+FLOAT calculate_lowest_neighborhood_penalty_fast(
     const struct DisparityGraph& graph,
     struct Edge edge
 );
