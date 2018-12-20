@@ -134,3 +134,32 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
     }
     return minimal_penalty;
 }
+
+FLOAT lowest_pixel_penalty(
+    const struct LowestPenalties& penalties,
+    struct Pixel pixel
+)
+{
+    return penalties.pixels[pixel_index(penalties.disparity_graph, pixel)];
+}
+
+FLOAT lowest_neighborhood_penalty_fast(
+    const struct LowestPenalties& penalties,
+    struct Pixel pixel,
+    struct Pixel neighbor
+)
+{
+    return penalties.neighborhoods[
+        neighborhood_index(penalties.disparity_graph, pixel, neighbor)
+    ];
+}
+
+FLOAT lowest_neighborhood_penalty(
+    const struct LowestPenalties& penalties,
+    struct Edge edge
+)
+{
+    return penalties.neighborhoods[
+        neighborhood_index_slow(penalties.disparity_graph, edge)
+    ];
+}
