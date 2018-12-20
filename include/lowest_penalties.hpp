@@ -66,6 +66,11 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
     const struct DisparityGraph& graph,
     struct Edge edge
 );
+FLOAT calculate_lowest_neighborhood_penalty_slow(
+    const struct DisparityGraph& graph,
+    struct Pixel pixel,
+    ULONG neighbor_index
+);
 FLOAT lowest_pixel_penalty(
     const struct LowestPenalties& penalties,
     struct Pixel pixel
@@ -79,5 +84,6 @@ FLOAT lowest_neighborhood_penalty(
     const struct LowestPenalties& penalties,
     struct Edge edge
 );
+struct LowestPenalties disparity2lowest(struct DisparityGraph& graph);
 
 #endif
