@@ -46,13 +46,13 @@ BOOST_AUTO_TEST_CASE(check_pixels_indexing)
     struct Image image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{image, image, 3, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity2lowest(disparity_graph)};
-    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.disparity_graph, {0, 0}), 0);
-    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.disparity_graph, {0, 1}), 1);
-    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.disparity_graph, {1, 0}), 2);
-    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.disparity_graph, {1, 1}), 3);
-    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.disparity_graph, {2, 0}), 4);
-    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.disparity_graph, {2, 1}), 5);
+    struct LowestPenalties lowest_penalties{disparity_graph};
+    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.graph, {0, 0}), 0);
+    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.graph, {0, 1}), 1);
+    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.graph, {1, 0}), 2);
+    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.graph, {1, 1}), 3);
+    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.graph, {2, 0}), 4);
+    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.graph, {2, 1}), 5);
 }
 
 BOOST_AUTO_TEST_CASE(check_neighborhoods_indexing)
@@ -71,235 +71,235 @@ BOOST_AUTO_TEST_CASE(check_neighborhoods_indexing)
     struct Image image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{image, image, 3, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity2lowest(disparity_graph)};
+    struct LowestPenalties lowest_penalties{disparity_graph};
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {0, 0}, 0),
+        neighborhood_index_fast(lowest_penalties.graph, {0, 0}, 0),
         0
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {0, 0}, {1, 0}),
+        neighborhood_index(lowest_penalties.graph, {0, 0}, {1, 0}),
         0
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {0, 0}, 0)
+        neighborhood_exists_fast(lowest_penalties.graph, {0, 0}, 0)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {0, 0}, 1),
+        neighborhood_index_fast(lowest_penalties.graph, {0, 0}, 1),
         1
     );
     BOOST_CHECK(
-        !neighborhood_exists_fast(lowest_penalties.disparity_graph, {0, 0}, 1)
+        !neighborhood_exists_fast(lowest_penalties.graph, {0, 0}, 1)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {0, 0}, 2),
+        neighborhood_index_fast(lowest_penalties.graph, {0, 0}, 2),
         2
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {0, 0}, {0, 1}),
+        neighborhood_index(lowest_penalties.graph, {0, 0}, {0, 1}),
         2
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {0, 0}, 2)
+        neighborhood_exists_fast(lowest_penalties.graph, {0, 0}, 2)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {0, 0}, 3),
+        neighborhood_index_fast(lowest_penalties.graph, {0, 0}, 3),
         3
     );
     BOOST_CHECK(
-        !neighborhood_exists_fast(lowest_penalties.disparity_graph, {0, 0}, 3)
+        !neighborhood_exists_fast(lowest_penalties.graph, {0, 0}, 3)
     );
 
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {0, 1}, 0),
+        neighborhood_index_fast(lowest_penalties.graph, {0, 1}, 0),
         4
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {0, 1}, {1, 1}),
+        neighborhood_index(lowest_penalties.graph, {0, 1}, {1, 1}),
         4
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {0, 1}, 0)
+        neighborhood_exists_fast(lowest_penalties.graph, {0, 1}, 0)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {0, 1}, 1),
+        neighborhood_index_fast(lowest_penalties.graph, {0, 1}, 1),
         5
     );
     BOOST_CHECK(
-        !neighborhood_exists_fast(lowest_penalties.disparity_graph, {0, 1}, 1)
+        !neighborhood_exists_fast(lowest_penalties.graph, {0, 1}, 1)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {0, 1}, 2),
+        neighborhood_index_fast(lowest_penalties.graph, {0, 1}, 2),
         6
     );
     BOOST_CHECK(
-        !neighborhood_exists_fast(lowest_penalties.disparity_graph, {0, 1}, 2)
+        !neighborhood_exists_fast(lowest_penalties.graph, {0, 1}, 2)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {0, 1}, 3),
+        neighborhood_index_fast(lowest_penalties.graph, {0, 1}, 3),
         7
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {0, 1}, {0, 0}),
+        neighborhood_index(lowest_penalties.graph, {0, 1}, {0, 0}),
         7
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {0, 1}, 3)
+        neighborhood_exists_fast(lowest_penalties.graph, {0, 1}, 3)
     );
 
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {1, 0}, 0),
+        neighborhood_index_fast(lowest_penalties.graph, {1, 0}, 0),
         8
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {1, 0}, {2, 0}),
+        neighborhood_index(lowest_penalties.graph, {1, 0}, {2, 0}),
         8
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {1, 0}, 0)
+        neighborhood_exists_fast(lowest_penalties.graph, {1, 0}, 0)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {1, 0}, 1),
+        neighborhood_index_fast(lowest_penalties.graph, {1, 0}, 1),
         9
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {1, 0}, {0, 0}),
+        neighborhood_index(lowest_penalties.graph, {1, 0}, {0, 0}),
         9
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {1, 0}, 1)
+        neighborhood_exists_fast(lowest_penalties.graph, {1, 0}, 1)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {1, 0}, 2),
+        neighborhood_index_fast(lowest_penalties.graph, {1, 0}, 2),
         10
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {1, 0}, {1, 1}),
+        neighborhood_index(lowest_penalties.graph, {1, 0}, {1, 1}),
         10
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {1, 0}, 2)
+        neighborhood_exists_fast(lowest_penalties.graph, {1, 0}, 2)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {1, 0}, 3),
+        neighborhood_index_fast(lowest_penalties.graph, {1, 0}, 3),
         11
     );
     BOOST_CHECK(
-        !neighborhood_exists_fast(lowest_penalties.disparity_graph, {1, 0}, 3)
+        !neighborhood_exists_fast(lowest_penalties.graph, {1, 0}, 3)
     );
 
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {1, 1}, 0),
+        neighborhood_index_fast(lowest_penalties.graph, {1, 1}, 0),
         12
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {1, 1}, {2, 1}),
+        neighborhood_index(lowest_penalties.graph, {1, 1}, {2, 1}),
         12
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {1, 1}, 0)
+        neighborhood_exists_fast(lowest_penalties.graph, {1, 1}, 0)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {1, 1}, 1),
+        neighborhood_index_fast(lowest_penalties.graph, {1, 1}, 1),
         13
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {1, 1}, {0, 1}),
+        neighborhood_index(lowest_penalties.graph, {1, 1}, {0, 1}),
         13
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {1, 1}, 1)
+        neighborhood_exists_fast(lowest_penalties.graph, {1, 1}, 1)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {1, 1}, 2),
+        neighborhood_index_fast(lowest_penalties.graph, {1, 1}, 2),
         14
     );
     BOOST_CHECK(
-        !neighborhood_exists_fast(lowest_penalties.disparity_graph, {1, 1}, 2)
+        !neighborhood_exists_fast(lowest_penalties.graph, {1, 1}, 2)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {1, 1}, 3),
+        neighborhood_index_fast(lowest_penalties.graph, {1, 1}, 3),
         15
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {1, 1}, {1, 0}),
+        neighborhood_index(lowest_penalties.graph, {1, 1}, {1, 0}),
         15
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {1, 1}, 3)
+        neighborhood_exists_fast(lowest_penalties.graph, {1, 1}, 3)
     );
 
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {2, 0}, 0),
+        neighborhood_index_fast(lowest_penalties.graph, {2, 0}, 0),
         16
     );
     BOOST_CHECK(
-        !neighborhood_exists_fast(lowest_penalties.disparity_graph, {2, 0}, 0)
+        !neighborhood_exists_fast(lowest_penalties.graph, {2, 0}, 0)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {2, 0}, 1),
+        neighborhood_index_fast(lowest_penalties.graph, {2, 0}, 1),
         17
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {2, 0}, {1, 0}),
+        neighborhood_index(lowest_penalties.graph, {2, 0}, {1, 0}),
         17
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {2, 0}, 1)
+        neighborhood_exists_fast(lowest_penalties.graph, {2, 0}, 1)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {2, 0}, 2),
+        neighborhood_index_fast(lowest_penalties.graph, {2, 0}, 2),
         18
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {2, 0}, {2, 1}),
+        neighborhood_index(lowest_penalties.graph, {2, 0}, {2, 1}),
         18
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {2, 0}, 2)
+        neighborhood_exists_fast(lowest_penalties.graph, {2, 0}, 2)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {2, 0}, 3),
+        neighborhood_index_fast(lowest_penalties.graph, {2, 0}, 3),
         19
     );
     BOOST_CHECK(
-        !neighborhood_exists_fast(lowest_penalties.disparity_graph, {2, 0}, 3)
+        !neighborhood_exists_fast(lowest_penalties.graph, {2, 0}, 3)
     );
 
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {2, 1}, 0),
+        neighborhood_index_fast(lowest_penalties.graph, {2, 1}, 0),
         20
     );
     BOOST_CHECK(
-        !neighborhood_exists_fast(lowest_penalties.disparity_graph, {2, 1}, 0)
+        !neighborhood_exists_fast(lowest_penalties.graph, {2, 1}, 0)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {2, 1}, 1),
+        neighborhood_index_fast(lowest_penalties.graph, {2, 1}, 1),
         21
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {2, 1}, {1, 1}),
+        neighborhood_index(lowest_penalties.graph, {2, 1}, {1, 1}),
         21
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {2, 1}, 1)
+        neighborhood_exists_fast(lowest_penalties.graph, {2, 1}, 1)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {2, 1}, 2),
+        neighborhood_index_fast(lowest_penalties.graph, {2, 1}, 2),
         22
     );
     BOOST_CHECK(
-        !neighborhood_exists_fast(lowest_penalties.disparity_graph, {2, 1}, 2)
+        !neighborhood_exists_fast(lowest_penalties.graph, {2, 1}, 2)
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index_fast(lowest_penalties.disparity_graph, {2, 1}, 3),
+        neighborhood_index_fast(lowest_penalties.graph, {2, 1}, 3),
         23
     );
     BOOST_CHECK_EQUAL(
-        neighborhood_index(lowest_penalties.disparity_graph, {2, 1}, {2, 0}),
+        neighborhood_index(lowest_penalties.graph, {2, 1}, {2, 0}),
         23
     );
     BOOST_CHECK(
-        neighborhood_exists_fast(lowest_penalties.disparity_graph, {2, 1}, 3)
+        neighborhood_exists_fast(lowest_penalties.graph, {2, 1}, 3)
     );
 }
 

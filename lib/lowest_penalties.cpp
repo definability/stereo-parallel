@@ -26,8 +26,6 @@
 #include <disparity_graph.hpp>
 #include <image.hpp>
 
-#include <utility>
-
 LowestPenalties::LowestPenalties(const struct DisparityGraph& graph)
     : graph{graph}
     , pixels(graph.right.height * graph.right.width)
