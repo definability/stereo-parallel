@@ -31,9 +31,10 @@
 
 struct LowestPenalties
 {
-    const struct DisparityGraph& disparity_graph;
+    const struct DisparityGraph& graph;
     FLOAT_ARRAY pixels;
     FLOAT_ARRAY neighborhoods;
+    explicit LowestPenalties(const struct DisparityGraph& graph);
 };
 ULONG pixel_index(
     const struct DisparityGraph& graph,
@@ -84,6 +85,5 @@ FLOAT lowest_neighborhood_penalty(
     const struct LowestPenalties& penalties,
     struct Edge edge
 );
-struct LowestPenalties disparity2lowest(struct DisparityGraph& graph);
 
 #endif

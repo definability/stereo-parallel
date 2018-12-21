@@ -26,6 +26,60 @@
 #include <disparity_graph.hpp>
 #include <image.hpp>
 
+#include <utility>
+
+LowestPenalties::LowestPenalties(const struct DisparityGraph& graph)
+    : graph{graph}
+    , pixels(graph.right.height * graph.right.width)
+    , neighborhoods(
+        NEIGHBORS_COUNT
+        * graph.right.height
+        * graph.right.width
+    )
+{
+    fill(this->pixels.begin(), this->pixels.end(), 0);
+    fill(this->neighborhoods.begin(), this->neighborhoods.end(), 0);
+    struct Pixel pixel{0, 0};
+    for (pixel.x = 0; pixel.x < this->graph.right.width; ++pixel.x)
+    {
+        for (
+            pixel.y = 0;
+            pixel.y < this->graph.right.height;
+            ++pixel.y)
+        {
+            this->pixels[
+                pixel_index(this->graph, pixel)
+            ] = calculate_lowest_pixel_penalty(
+                this->graph,
+                pixel
+            );
+            for (
+                ULONG neighbor_index = 0;
+                neighbor_index < NEIGHBORS_COUNT;
+                ++neighbor_index
+            )
+            {
+                if (
+                    !neighborhood_exists_fast(
+                        this->graph, pixel, neighbor_index
+                    )
+                )
+                {
+                    continue;
+                }
+                this->neighborhoods[
+                    neighborhood_index_fast(
+                        this->graph, pixel, neighbor_index
+                    )
+                ] = calculate_lowest_neighborhood_penalty_slow(
+                    this->graph,
+                    pixel,
+                    neighbor_index
+                );
+            }
+        }
+    }
+}
 ULONG pixel_index(
     const struct DisparityGraph& graph,
     struct Pixel pixel
@@ -169,7 +223,7 @@ FLOAT lowest_pixel_penalty(
     struct Pixel pixel
 )
 {
-    return penalties.pixels[pixel_index(penalties.disparity_graph, pixel)];
+    return penalties.pixels[pixel_index(penalties.graph, pixel)];
 }
 
 FLOAT lowest_neighborhood_penalty_fast(
@@ -179,7 +233,7 @@ FLOAT lowest_neighborhood_penalty_fast(
 )
 {
     return penalties.neighborhoods[
-        neighborhood_index(penalties.disparity_graph, pixel, neighbor)
+        neighborhood_index(penalties.graph, pixel, neighbor)
     ];
 }
 
@@ -189,46 +243,6 @@ FLOAT lowest_neighborhood_penalty(
 )
 {
     return penalties.neighborhoods[
-        neighborhood_index_slow(penalties.disparity_graph, edge)
+        neighborhood_index_slow(penalties.graph, edge)
     ];
-}
-
-struct LowestPenalties disparity2lowest(struct DisparityGraph& graph)
-{
-    FLOAT_ARRAY pixels(graph.right.height * graph.right.width);
-    FLOAT_ARRAY neighborhoods(
-        NEIGHBORS_COUNT * graph.right.height * graph.right.width
-    );
-    fill(pixels.begin(), pixels.end(), 0);
-    fill(neighborhoods.begin(), neighborhoods.end(), 0);
-    struct Pixel pixel{0, 0};
-    for (pixel.x = 0; pixel.x < graph.right.width; ++pixel.x)
-    {
-        for (pixel.y = 0; pixel.y < graph.right.height; ++pixel.y)
-        {
-            pixels[pixel_index(graph, pixel)] = calculate_lowest_pixel_penalty(
-                graph,
-                pixel
-            );
-            for (
-                ULONG neighbor_index = 0;
-                neighbor_index < NEIGHBORS_COUNT;
-                ++neighbor_index
-            )
-            {
-                if (!neighborhood_exists_fast(graph, pixel, neighbor_index))
-                {
-                    continue;
-                }
-                neighborhoods[
-                    neighborhood_index_fast(graph, pixel, neighbor_index)
-                ] = calculate_lowest_neighborhood_penalty_slow(
-                    graph,
-                    pixel,
-                    neighbor_index
-                );
-            }
-        }
-    }
-    return {graph, pixels, neighborhoods};
 }
