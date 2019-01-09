@@ -23,9 +23,9 @@
  */
 #include <boost/test/unit_test.hpp>
 
-#include <lowest_penalties.hpp>
 #include <disparity_graph.hpp>
 #include <image.hpp>
+#include <lowest_penalties.hpp>
 #include <pgm_io.hpp>
 
 BOOST_AUTO_TEST_SUITE(LowestPenaltiesTest)
