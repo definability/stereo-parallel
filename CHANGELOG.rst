@@ -99,6 +99,43 @@ Added
 - ``disparity2constraint`` function
   to construct a ``ConstraintGraph`` given ``DisparityGraph``.
 
+- ``LowestPenalties`` to store minimal penalties of pixels and neighborhoods.
+  Contains
+
+  - ``graph`` constant reference to ``DisparityGraph`` instance
+    from which the ``LowestPenalties`` was built.
+  - ``pixels`` array with minimal penalties of pixels
+    calculated from correspondent nodes.
+  - ``neighborhoods`` array with minimal penalties of neighborhoods
+    calculated from correspondent edges.
+
+- ``pixel_index`` to get index of a pixel
+  from ``pixels`` of ``LowestPenalties``.
+- ``neighborhood_index_fast`` to get index of a neighborhood
+  from ``neighborhoods`` of ``LowestPenalties``
+  using pixel coordinates and its neighbor index.
+- ``neighborhood_index`` to get index of a neighborhood
+  from ``neighborhoods`` of ``LowestPenalties``
+  using coordinates of pixel and its neighbor.
+- ``neighborhood_index_slow`` to get index of a neighborhood
+  from ``neighborhoods`` of ``LowestPenalties``
+  using ``Edge`` instance.
+- ``calculate_lowest_pixel_penalty`` to calculate minimal penalty of a pixel.
+- ``calculate_lowest_neighborhood_penalty`` to calculate minimal penalty
+  of a neighborhood given coordinates of a pixel and its neighbor.
+- ``calculate_lowest_neighborhood_penalty_fast`` to calculate minimal penalty
+  of a neighborhood using corresponding ``Edge`` instance.
+- ``calculate_lowest_neighborhood_penalty_slow`` to calculate minimal penalty
+  of a neighborhood given pixel coordinates and index of its neighbor.
+- ``lowest_pixel_penalty`` to get minimal penalty of a pixel
+  from ``pixels`` of ``LowestPenalties``.
+- ``lowest_neighborhood_penalty`` to get minimal penalty
+  of a neighborhood from ``neighborhoods`` of ``LowestPenalties``
+  using corresponding ``Edge`` instance.
+- ``lowest_neighborhood_penalty_fast`` to get minimal penalty
+  of a neighborhood from ``neighborhoods`` of ``LowestPenalties``
+  given coordinates of a pixel and its neighbor.
+
 .. Remove these two lines and one indentation level of the next two lines
     when you will release the first version.
     .. _Unreleased:

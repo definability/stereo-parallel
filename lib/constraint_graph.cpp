@@ -24,8 +24,7 @@
 #include <constraint_graph.hpp>
 
 #include <disparity_graph.hpp>
-
-#define MIN(x, y) (((x) <= (y)) ? (x) : (y))
+#include <lowest_penalties.hpp>
 
 ULONG node_index(const struct DisparityGraph& graph, struct Node node)
 {
@@ -95,22 +94,10 @@ struct ConstraintGraph disparity2constraint(
             ++node.pixel.y
         )
         {
-            node.disparity = 0;
-            minimal_penalty = node_penalty(disparity_graph, node);
-            for (
-                node.disparity = 0;
-                node.pixel.x + node.disparity
-                    < disparity_graph.left.width
-                && node.disparity < disparity_graph.disparity_levels;
-                ++node.disparity
-            )
-            {
-                minimal_penalty = MIN(
-                    node_penalty(disparity_graph, node),
-                    minimal_penalty
-                );
-            }
-
+            minimal_penalty = calculate_lowest_pixel_penalty(
+                disparity_graph,
+                node.pixel
+            );
             for (
                 node.disparity = 0;
                 node.pixel.x + node.disparity

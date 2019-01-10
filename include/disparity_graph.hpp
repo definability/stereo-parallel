@@ -361,7 +361,7 @@ struct DisparityGraph
      *  k\left( \left\langle x, y \right\rangle, i, d \right) =
      *      y + h \cdot \left(
      *          d + \left| D \right| \cdot \left(
-     *              i + \max_j{\mathcal{N}_j} \cdot x \cdot w
+     *              i + \max_j{\left| \mathcal{N}_j \right|} \cdot x \cdot w
      *              \right)
      *          \right),
      * \f]
