@@ -127,12 +127,12 @@ Added
   of a neighborhood using corresponding ``Edge`` instance.
 - ``calculate_lowest_neighborhood_penalty_slow`` to calculate minimal penalty
   of a neighborhood given pixel coordinates and index of its neighbor.
-- ``calculate_lowest_pixel_penalty`` to get minimal penalty of a pixel
+- ``lowest_pixel_penalty`` to get minimal penalty of a pixel
   from ``pixels`` of ``LowestPenalties``.
-- ``calculate_lowest_neighborhood_penalty`` to get minimal penalty
+- ``lowest_neighborhood_penalty`` to get minimal penalty
   of a neighborhood from ``neighborhoods`` of ``LowestPenalties``
   using corresponding ``Edge`` instance.
-- ``calculate_lowest_neighborhood_penalty`` to get minimal penalty
+- ``lowest_neighborhood_penalty_fast`` to get minimal penalty
   of a neighborhood from ``neighborhoods`` of ``LowestPenalties``
   given coordinates of a pixel and its neighbor.
 
