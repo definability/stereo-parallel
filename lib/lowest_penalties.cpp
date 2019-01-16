@@ -161,6 +161,7 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
 )
 {
     FLOAT minimal_penalty = edge_penalty(graph, edge);
+    ULONG initial_disparity = 0;
     for (
         edge.node.disparity = 0;
         edge.node.pixel.x + edge.node.disparity < graph.left.width
@@ -168,11 +169,17 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
         ++edge.node.disparity
     )
     {
-        ULONG initial_disparity =
+        if (
             edge.node.disparity <= 1
-                || edge.neighbor.pixel.x == edge.node.pixel.x
-            ? 0
-            : edge.node.disparity - 1;
+            || edge.neighbor.pixel.x == edge.node.pixel.x
+        )
+        {
+            initial_disparity = 0;
+        }
+        else
+        {
+            initial_disparity = edge.node.disparity - 1;
+        }
         for (
             edge.neighbor.disparity = initial_disparity;
             edge.neighbor.pixel.x + edge.neighbor.disparity < graph.left.width
