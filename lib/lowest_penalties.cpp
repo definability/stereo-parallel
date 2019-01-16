@@ -168,7 +168,9 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
         ++edge.node.disparity
     )
     {
-        ULONG initial_disparity = edge.node.disparity <= 1
+        ULONG initial_disparity =
+            edge.node.disparity <= 1
+                || edge.neighbor.pixel.x == edge.node.pixel.x
             ? 0
             : edge.node.disparity - 1;
         for (
