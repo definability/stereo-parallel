@@ -265,7 +265,8 @@ struct ConstraintGraph
      * \brief DisparityGraph instance
      * for which the ConstraintGraph instance was created.
      */
-    const struct DisparityGraph* disparity_graph;
+    const struct DisparityGraph& disparity_graph;
+    const struct LowestPenalties& lowest_penalties;
     /**
      * \brief Array that contains markers for availability of nodes.
      *
@@ -294,6 +295,24 @@ struct ConstraintGraph
      * \f$\varepsilon\f$ in formulas of the class description.
      */
     FLOAT threshold;
+    /**
+     * \brief Build a CSP problem for given DisparityGraph.
+     *
+     * Corresponding ConstraintGraph should have
+     * the same amount of nodes as corresponding DisparityGraph.
+     *
+     * First, all nodes and edges assumed to be unavailable.
+     * Then, each Node that has a penalty that differs from the minimal
+     * less than by `threshold`, is marked as available one.
+     *
+     * To not recalculate lowest penalties,
+     * it's good to have precalculated LowestPenalties instance.
+     */
+    ConstraintGraph(
+        const struct DisparityGraph& disparity_graph,
+        const struct LowestPenalties& lowest_penalties,
+        FLOAT threshold
+    );
 };
 /**
  * \brief Get an index of ConstraintGraph::nodes_availability element
@@ -329,6 +348,8 @@ void make_node_unavailable(
 /**
  * \brief Check whether the Node is still available.
  *
+ * Takes value from ConstraintGraph::nodes_availability array.
+ *
  * The function doesn't check existence of the Node.
  * You should perform it by yourself
  * using ::node_exists.
@@ -336,20 +357,6 @@ void make_node_unavailable(
 BOOL is_node_available(
     const struct ConstraintGraph& graph,
     struct Node node
-);
-/**
- * \brief Build a CSP problem for given DisparityGraph.
- *
- * Corresponding ConstraintGraph should have
- * the same amount of nodes as corresponding DisparityGraph.
- *
- * First, all nodes and edges assumed to be unavailable.
- * Then, each Node that has a penalty that differs from the minimal
- * less than by `threshold`, is marked as available one.
- */
-struct ConstraintGraph disparity2constraint(
-    const struct DisparityGraph& disparity_graph,
-    FLOAT threshold
 );
 
 #endif

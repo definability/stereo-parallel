@@ -26,6 +26,60 @@
 #include <disparity_graph.hpp>
 #include <lowest_penalties.hpp>
 
+ConstraintGraph::ConstraintGraph(
+    const struct DisparityGraph& disparity_graph,
+    const struct LowestPenalties& lowest_penalties,
+    FLOAT threshold
+)
+    : disparity_graph{disparity_graph}
+    , lowest_penalties{lowest_penalties}
+    , threshold{threshold}
+{
+    this->nodes_availability = BOOL_ARRAY(
+        disparity_graph.right.width
+        * disparity_graph.right.height
+        * disparity_graph.disparity_levels
+    );
+    fill(
+        this->nodes_availability.begin(),
+        this->nodes_availability.end(),
+        false
+    );
+
+    Node node{{0, 0}, 0};
+    for (
+        node.pixel.x = 0;
+        node.pixel.x < this->disparity_graph.right.width;
+        ++node.pixel.x
+    )
+    {
+        for (
+            node.pixel.y = 0;
+            node.pixel.y < this->disparity_graph.right.height;
+            ++node.pixel.y
+        )
+        {
+            for (
+                node.disparity = 0;
+                node.pixel.x + node.disparity
+                    < this->disparity_graph.left.width
+                && node.disparity < this->disparity_graph.disparity_levels;
+                ++node.disparity
+            )
+            {
+                if (
+                    node_penalty(this->disparity_graph, node)
+                    - lowest_pixel_penalty(this->lowest_penalties, node.pixel)
+                    <= threshold
+                )
+                {
+                    make_node_available(this, node);
+                }
+            }
+        }
+    }
+}
+
 ULONG node_index(const struct DisparityGraph& graph, struct Node node)
 {
     return node.disparity + graph.disparity_levels
@@ -37,7 +91,7 @@ void make_node_available(
     struct Node node
 )
 {
-    graph->nodes_availability[node_index(*(graph->disparity_graph), node)]
+    graph->nodes_availability[node_index(graph->disparity_graph, node)]
         = true;
 }
 
@@ -46,7 +100,7 @@ void make_node_unavailable(
     struct Node node
 )
 {
-    graph->nodes_availability[node_index(*(graph->disparity_graph), node)]
+    graph->nodes_availability[node_index(graph->disparity_graph, node)]
         = false;
 }
 
@@ -56,65 +110,7 @@ BOOL is_node_available(
 )
 {
     return graph.nodes_availability[
-        node_index(*(graph.disparity_graph), node)
+        node_index(graph.disparity_graph, node)
     ];
 }
 
-struct ConstraintGraph disparity2constraint(
-    const struct DisparityGraph& disparity_graph,
-    FLOAT threshold
-)
-{
-    struct ConstraintGraph constraint_graph{
-        &disparity_graph,
-        BOOL_ARRAY(
-            disparity_graph.right.width
-            * disparity_graph.right.height
-            * disparity_graph.disparity_levels
-        ),
-        threshold
-    };
-    fill(
-        constraint_graph.nodes_availability.begin(),
-        constraint_graph.nodes_availability.end(),
-        false
-    );
-
-    Node node{{0, 0}, 0};
-    FLOAT minimal_penalty = 0;
-    for (
-        node.pixel.x = 0;
-        node.pixel.x < disparity_graph.right.width;
-        ++node.pixel.x
-    )
-    {
-        for (
-            node.pixel.y = 0;
-            node.pixel.y < disparity_graph.right.height;
-            ++node.pixel.y
-        )
-        {
-            minimal_penalty = calculate_lowest_pixel_penalty(
-                disparity_graph,
-                node.pixel
-            );
-            for (
-                node.disparity = 0;
-                node.pixel.x + node.disparity
-                    < disparity_graph.left.width
-                && node.disparity < disparity_graph.disparity_levels;
-                ++node.disparity
-            )
-            {
-                if (
-                    node_penalty(disparity_graph, node)
-                    - minimal_penalty <= threshold
-                )
-                {
-                    make_node_available(&constraint_graph, node);
-                }
-            }
-        }
-    }
-    return constraint_graph;
-}
