@@ -114,3 +114,40 @@ BOOL is_node_available(
     ];
 }
 
+BOOL is_edge_available(
+    const struct ConstraintGraph& graph,
+    struct Edge edge
+)
+{
+    return
+        (edge_penalty(graph.disparity_graph, edge)
+         - lowest_neighborhood_penalty(graph.lowest_penalties, edge)
+         <= graph.threshold)
+        && is_node_available(graph, edge.node)
+        && is_node_available(graph, edge.neighbor);
+}
+
+BOOL should_remove_node(
+    const struct ConstraintGraph& graph,
+    struct Node node
+)
+{
+    Edge edge{node, node};
+    if (neighborhood_exists_fast(graph.disparity_graph, node.pixel, 0))
+    {
+        ULONG initial_disparity = edge.node.disparity <= 1
+            ? 0
+            : edge.node.disparity - 1;
+        for (
+            edge.neighbor.disparity = initial_disparity;
+            edge.neighbor.pixel.x + edge.neighbor.disparity
+                < graph.disparity_graph.left.width
+            && edge.neighbor.disparity
+                < graph.disparity_graph.disparity_levels;
+            ++edge.neighbor.disparity
+        )
+        {
+        }
+    }
+    return is_node_available(graph, node);
+}

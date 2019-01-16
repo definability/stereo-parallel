@@ -358,5 +358,36 @@ BOOL is_node_available(
     const struct ConstraintGraph& graph,
     struct Node node
 );
+/**
+ * \brief Check whether the Edge is still available.
+ *
+ * Compares penalty of the Edge with given ConstraintGraph::threshold
+ * and checks whether two nodes of the Edge are available
+ * using ConstraintGraph::is_node_available.
+ *
+ * The function doesn't check existence of the Edge.
+ * You should perform it by yourself
+ * using ::edge_exists.
+ */
+BOOL is_edge_available(
+    const struct ConstraintGraph& graph,
+    struct Edge edge
+);
+/**
+ * \brief Check whether the Node should be removed.
+ *
+ * If for each neighbor of the Node
+ * there exists at least one Edge that was not removed,
+ * the Node is still available.
+ * Otherwise, it should be marked as removed.
+ *
+ * The function doesn't check existence of the Node.
+ * You should perform it by yourself
+ * using ::node_exists.
+ */
+BOOL should_remove_node(
+    const struct ConstraintGraph& graph,
+    struct Node node
+);
 
 #endif
