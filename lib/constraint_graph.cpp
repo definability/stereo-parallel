@@ -104,6 +104,21 @@ void make_node_unavailable(
         = false;
 }
 
+void make_all_nodes_unavailable(struct ConstraintGraph* graph)
+{
+    for (
+        ULONG index = 0;
+        index <
+            graph->disparity_graph.right.width
+            * graph->disparity_graph.right.height
+            * graph->disparity_graph.disparity_levels;
+        ++index
+    )
+    {
+        graph->nodes_availability[index] = false;
+    }
+}
+
 BOOL is_node_available(
     const struct ConstraintGraph& graph,
     struct Node node

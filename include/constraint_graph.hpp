@@ -346,6 +346,10 @@ void make_node_unavailable(
     struct Node node
 );
 /**
+ * \brief Mark all nodes as unavailable.
+ */
+void make_all_nodes_unavailable(struct ConstraintGraph* graph);
+/**
  * \brief Check whether the Node is still available.
  *
  * Takes value from ConstraintGraph::nodes_availability array.
