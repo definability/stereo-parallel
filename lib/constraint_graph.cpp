@@ -282,6 +282,8 @@ BOOL solution_iteration(struct ConstraintGraph* graph)
 
 BOOL solve(struct ConstraintGraph* graph)
 {
-    while (solution_iteration(graph));
+    while (solution_iteration(graph))
+    {
+    }
     return check_nodes_left(*graph);
 }
