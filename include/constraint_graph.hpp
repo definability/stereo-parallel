@@ -393,5 +393,28 @@ BOOL should_remove_node(
     const struct ConstraintGraph& graph,
     struct Node node
 );
+/**
+ * \brief Perform one iteration of ::solve.
+ *
+ * @return
+ *  Boolean flag.
+ *  `true` if availability of one node was changed.
+ *  `false` if a solution was found (at least, an empty one)
+ *  and nothing was changed during iteration.
+ */
+BOOL solution_iteration(struct ConstraintGraph* graph);
+/**
+ * \brief Remove all nodes that don't belong to any soluton.
+ *
+ * @return
+ *  Boolean flag.
+ *  `true` if nonempty solution was found.
+ *  `false` if all nodes were removed --- the problem is unsolvable.
+ */
+BOOL solve(struct ConstraintGraph* graph);
+/**
+ * \brief Check whether at least one node is available.
+ */
+BOOL check_nodes_left(const struct ConstraintGraph& graph);
 
 #endif
