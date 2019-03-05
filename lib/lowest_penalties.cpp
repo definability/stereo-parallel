@@ -121,6 +121,31 @@ ULONG neighborhood_index_slow(
     );
 }
 
+Pixel neighbor_by_index(
+    struct Pixel pixel,
+    ULONG neighbor_index
+)
+{
+    struct Pixel neighbor{pixel};
+    if (neighbor_index == 0)
+    {
+        ++neighbor.x;
+    }
+    else if (neighbor_index == 1)
+    {
+        --neighbor.x;
+    }
+    else if (neighbor_index == 2)
+    {
+        ++neighbor.y;
+    }
+    else if (neighbor_index == 3)
+    {
+        --neighbor.y;
+    }
+    return neighbor;
+}
+
 FLOAT calculate_lowest_pixel_penalty(
     const struct DisparityGraph& graph,
     struct Pixel pixel
@@ -202,26 +227,9 @@ FLOAT calculate_lowest_neighborhood_penalty_slow(
     ULONG neighbor_index
 )
 {
-    struct Pixel neighbor{pixel};
-    if (neighbor_index == 0)
-    {
-        ++neighbor.x;
-    }
-    else if (neighbor_index == 1)
-    {
-        --neighbor.x;
-    }
-    else if (neighbor_index == 2)
-    {
-        ++neighbor.y;
-    }
-    else if (neighbor_index == 3)
-    {
-        --neighbor.y;
-    }
     return calculate_lowest_neighborhood_penalty_fast(
         graph,
-        {{pixel, 0}, {neighbor, 0}}
+        {{pixel, 0}, {neighbor_by_index(pixel, neighbor_index), 0}}
     );
 }
 

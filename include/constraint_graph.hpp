@@ -265,7 +265,8 @@ struct ConstraintGraph
      * \brief DisparityGraph instance
      * for which the ConstraintGraph instance was created.
      */
-    const struct DisparityGraph* disparity_graph;
+    const struct DisparityGraph& disparity_graph;
+    const struct LowestPenalties& lowest_penalties;
     /**
      * \brief Array that contains markers for availability of nodes.
      *
@@ -294,6 +295,24 @@ struct ConstraintGraph
      * \f$\varepsilon\f$ in formulas of the class description.
      */
     FLOAT threshold;
+    /**
+     * \brief Build a CSP problem for given DisparityGraph.
+     *
+     * Corresponding ConstraintGraph should have
+     * the same amount of nodes as corresponding DisparityGraph.
+     *
+     * First, all nodes and edges assumed to be unavailable.
+     * Then, each Node that has a penalty that differs from the minimal
+     * less than by `threshold`, is marked as available one.
+     *
+     * To not recalculate lowest penalties,
+     * it's good to have precalculated LowestPenalties instance.
+     */
+    ConstraintGraph(
+        const struct DisparityGraph& disparity_graph,
+        const struct LowestPenalties& lowest_penalties,
+        FLOAT threshold
+    );
 };
 /**
  * \brief Get an index of ConstraintGraph::nodes_availability element
@@ -327,7 +346,13 @@ void make_node_unavailable(
     struct Node node
 );
 /**
+ * \brief Mark all nodes as unavailable.
+ */
+void make_all_nodes_unavailable(struct ConstraintGraph* graph);
+/**
  * \brief Check whether the Node is still available.
+ *
+ * Takes value from ConstraintGraph::nodes_availability array.
  *
  * The function doesn't check existence of the Node.
  * You should perform it by yourself
@@ -338,18 +363,57 @@ BOOL is_node_available(
     struct Node node
 );
 /**
- * \brief Build a CSP problem for given DisparityGraph.
+ * \brief Check whether the Edge is still available.
  *
- * Corresponding ConstraintGraph should have
- * the same amount of nodes as corresponding DisparityGraph.
+ * Compares penalty of the Edge with given ConstraintGraph::threshold
+ * and checks whether two nodes of the Edge are available
+ * using ConstraintGraph::is_node_available.
  *
- * First, all nodes and edges assumed to be unavailable.
- * Then, each Node that has a penalty that differs from the minimal
- * less than by `threshold`, is marked as available one.
+ * The function checks existence of the Edge
+ * using ::edge_exists.
  */
-struct ConstraintGraph disparity2constraint(
-    const struct DisparityGraph& disparity_graph,
-    FLOAT threshold
+BOOL is_edge_available(
+    const struct ConstraintGraph& graph,
+    struct Edge edge
 );
+/**
+ * \brief Check whether the Node should be removed.
+ *
+ * If for each neighbor of the Node
+ * there exists at least one Edge that was not removed,
+ * the Node is still available.
+ * Otherwise, it should be marked as removed.
+ *
+ * The function doesn't check existence of the Node.
+ * You should perform it by yourself
+ * using ::node_exists.
+ */
+BOOL should_remove_node(
+    const struct ConstraintGraph& graph,
+    struct Node node
+);
+/**
+ * \brief Perform one iteration of ::solve_csp.
+ *
+ * @return
+ *  Boolean flag.
+ *  `true` if availability of one node was changed.
+ *  `false` if a solution was found (at least, an empty one)
+ *  and nothing was changed during iteration.
+ */
+BOOL csp_solution_iteration(struct ConstraintGraph* graph);
+/**
+ * \brief Remove all nodes that don't belong to any soluton.
+ *
+ * @return
+ *  Boolean flag.
+ *  `true` if nonempty solution was found.
+ *  `false` if all nodes were removed --- the problem is unsolvable.
+ */
+BOOL solve_csp(struct ConstraintGraph* graph);
+/**
+ * \brief Check whether at least one node is available.
+ */
+BOOL check_nodes_left(const struct ConstraintGraph& graph);
 
 #endif

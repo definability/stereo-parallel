@@ -60,6 +60,8 @@ Added
   - ``neighbor`` is the end of the edge.
 
 - ``neighbor_index`` allows to get index of neighboring pixel for fast access.
+- ``neighbor_by_index`` allows to get a neighboring pixel
+  of the ``Node`` by index of the neighbor.
 - ``neighborhood_exists`` checks whether two pixels are really neighbors.
 - ``neighborhood_exists_fast`` checks whether a pixel has a neighbor
   with specified index.
@@ -84,6 +86,7 @@ Added
   after optimization of ``DisparityGraph``.
   Contains
 
+  - Constructor to build a ``ConstraintGraph`` given ``DisparityGraph``.
   - ``nodes_availability`` array that contains information about ability
     of each ``Node`` to be chosen,
   - ``disparity_graph`` constant pointer to ``DisparityGraph`` instance
@@ -92,12 +95,20 @@ Added
 
 - ``node_exists`` function to check whether specified ``Node``
   is marked as available in ``ConstraintGraph``.
-- ``make_node_available`` mark specified ``Node``
+- ``make_node_available`` to mark specified ``Node``
   as available in ``ConstraintGraph``.
-- ``make_node_unavailable`` mark specified ``Node``
+- ``make_node_unavailable`` to mark specified ``Node``
   as unavailable in ``ConstraintGraph``.
-- ``disparity2constraint`` function
-  to construct a ``ConstraintGraph`` given ``DisparityGraph``.
+- ``make_all_nodes_unavailable`` to mark all ``Node`` instances
+  as unavailable in ``ConstraintGraph``.
+- ``solve_csp`` to solve a CSP problem given ``ConstraintGraph``.
+- ``csp_solution_iteration`` to make a step in ``solve_csp``.
+- ``should_remove_node`` to check whether we need to remove the node.
+- ``is_edge_available`` to check edge existence.
+- ``is_node_available`` to check node existence.
+- ``node_index`` to get index of the node in ``nodes_availability`` array.
+- ``check_nodes_left`` to check whether there are nodes left
+  in ``ConstraintGraph``.
 
 - ``LowestPenalties`` to store minimal penalties of pixels and neighborhoods.
   Contains

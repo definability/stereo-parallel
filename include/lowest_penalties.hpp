@@ -143,6 +143,16 @@ ULONG neighborhood_index_slow(
     struct Edge edge
 );
 /**
+ * \brief Get neighbor pixel to current one using neighbor index.
+ *
+ * Note that the function doesn't check existence of provided neighborhood.
+ * Use ::neighborhood_exists to make sure that you use it right.
+ */
+Pixel neighbor_by_index(
+    struct Pixel pixel,
+    ULONG neighbor_index
+);
+/**
  * \brief Calculate minimal penalty among nodes of a pixel.
  */
 FLOAT calculate_lowest_pixel_penalty(
