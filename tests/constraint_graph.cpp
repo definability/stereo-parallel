@@ -229,4 +229,62 @@ BOOST_AUTO_TEST_CASE(check_minimal_node_value_calculation)
     BOOST_CHECK(is_node_available(constraint_graph, {{2, 0}, 0}));
 }
 
+BOOST_AUTO_TEST_CASE(check_removal)
+{
+    PGM_IO pgm_io;
+    std::istringstream left_image_content{R"image(
+    P2
+    3 2
+    10
+    4 5 10
+    0 0 0
+    )image"};
+    std::istringstream right_image_content{R"image(
+    P2
+    3 2
+    10
+    10 7 0
+    0 0 0
+    )image"};
+
+    left_image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image left_image{*pgm_io.get_image()};
+
+    right_image_content >> pgm_io;
+    BOOST_REQUIRE(pgm_io.get_image());
+    struct Image right_image{*pgm_io.get_image()};
+
+    struct DisparityGraph disparity_graph{left_image, right_image, 3, 1, 1};
+    struct LowestPenalties lowest_penalties{disparity_graph};
+    struct ConstraintGraph constraint_graph{disparity_graph, lowest_penalties, 16};
+
+    BOOST_CHECK_CLOSE(constraint_graph.threshold, 16, 1);
+
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 0}), 36, 1);
+    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 0}, 0}));
+
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 1}), 25, 1);
+    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 0}, 1}));
+
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 2}), 0, 1);
+    BOOST_CHECK(is_node_available(constraint_graph, {{0, 0}, 2}));
+
+    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 0}), 4, 1);
+    BOOST_CHECK(is_node_available(constraint_graph, {{1, 0}, 0}));
+
+    BOOST_CHECK(solve_csp(&constraint_graph));
+
+    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 0}, 0}));
+    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 0}, 1}));
+    BOOST_CHECK(is_node_available(constraint_graph, {{0, 0}, 2}));
+
+    BOOST_CHECK(!is_node_available(constraint_graph, {{1, 0}, 0}));
+    BOOST_CHECK(is_node_available(constraint_graph, {{1, 0}, 1}));
+
+    BOOST_CHECK(!is_edge_available(constraint_graph, {{{0, 0}, 0}, {{1, 0}, 0}}));
+    BOOST_CHECK(!is_edge_available(constraint_graph, {{{0, 0}, 1}, {{1, 0}, 0}}));
+    BOOST_CHECK(!is_edge_available(constraint_graph, {{{0, 0}, 2}, {{1, 0}, 0}}));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
