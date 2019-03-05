@@ -369,8 +369,7 @@ BOOL is_node_available(
  * and checks whether two nodes of the Edge are available
  * using ConstraintGraph::is_node_available.
  *
- * The function doesn't check existence of the Edge.
- * You should perform it by yourself
+ * The function checks existence of the Edge
  * using ::edge_exists.
  */
 BOOL is_edge_available(

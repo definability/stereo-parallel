@@ -139,7 +139,8 @@ BOOL is_edge_available(
          - lowest_neighborhood_penalty(graph.lowest_penalties, edge)
          <= graph.threshold)
         && is_node_available(graph, edge.node)
-        && is_node_available(graph, edge.neighbor);
+        && is_node_available(graph, edge.neighbor)
+        && edge_exists(graph.disparity_graph, edge);
 }
 
 BOOL should_remove_node(
@@ -188,7 +189,7 @@ BOOL should_remove_node(
             ++edge.neighbor.disparity
         )
         {
-            if (edge_exists(graph.disparity_graph, edge))
+            if (is_edge_available(graph, edge))
             {
                 edge_found = true;
                 break;
