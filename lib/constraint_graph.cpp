@@ -222,7 +222,7 @@ BOOL check_nodes_left(const struct ConstraintGraph& graph)
     return false;
 }
 
-BOOL solution_iteration(struct ConstraintGraph* graph)
+BOOL csp_solution_iteration(struct ConstraintGraph* graph)
 {
     Node node{{0, 0}, 0};
     BOOL pixel_available = false;
@@ -281,9 +281,9 @@ BOOL solution_iteration(struct ConstraintGraph* graph)
     return changed;
 }
 
-BOOL solve(struct ConstraintGraph* graph)
+BOOL solve_csp(struct ConstraintGraph* graph)
 {
-    while (solution_iteration(graph))
+    while (csp_solution_iteration(graph))
     {
     }
     return check_nodes_left(*graph);

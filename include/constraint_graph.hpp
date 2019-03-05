@@ -393,7 +393,7 @@ BOOL should_remove_node(
     struct Node node
 );
 /**
- * \brief Perform one iteration of ::solve.
+ * \brief Perform one iteration of ::solve_csp.
  *
  * @return
  *  Boolean flag.
@@ -401,7 +401,7 @@ BOOL should_remove_node(
  *  `false` if a solution was found (at least, an empty one)
  *  and nothing was changed during iteration.
  */
-BOOL solution_iteration(struct ConstraintGraph* graph);
+BOOL csp_solution_iteration(struct ConstraintGraph* graph);
 /**
  * \brief Remove all nodes that don't belong to any soluton.
  *
@@ -410,7 +410,7 @@ BOOL solution_iteration(struct ConstraintGraph* graph);
  *  `true` if nonempty solution was found.
  *  `false` if all nodes were removed --- the problem is unsolvable.
  */
-BOOL solve(struct ConstraintGraph* graph);
+BOOL solve_csp(struct ConstraintGraph* graph);
 /**
  * \brief Check whether at least one node is available.
  */
