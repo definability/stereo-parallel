@@ -30,12 +30,14 @@
 #include <lowest_penalties.hpp>
 
 FLOAT_ARRAY fetch_pixel_available_penalties(
+    const DisparityGraph& graph,
     struct Pixel pixel,
-    const struct LowestPenalties& lowest_penalties
+    FLOAT minimal_penalty
 );
 FLOAT_ARRAY fetch_edge_available_penalties(
+    const struct DisparityGraph& graph,
     struct Edge edge,
-    const struct LowestPenalties& lowest_penalties
+    FLOAT minimal_penalty
 );
 FLOAT_ARRAY fetch_available_penalties(
     const struct LowestPenalties& lowest_penalties
