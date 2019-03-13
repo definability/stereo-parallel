@@ -185,3 +185,113 @@ FLOAT_ARRAY fetch_available_penalties(
     }
     return result;
 }
+
+FLOAT calculate_minimal_consistent_threshold(
+    const struct LowestPenalties& lowest_penalties,
+    const struct DisparityGraph& disparity_graph,
+    FLOAT_ARRAY available_penalties
+)
+{
+    ULONG start = 0;
+    ULONG end = available_penalties.size() - 1;
+    ULONG current_index;
+    for (
+        current_index = (start + end) / 2;
+        start < end;
+        current_index = (start + end) / 2
+    )
+    {
+        struct ConstraintGraph constraint_graph{
+            disparity_graph,
+            lowest_penalties,
+            available_penalties[current_index]
+        };
+        if (solve_csp(&constraint_graph))
+        {
+            end = current_index;
+        }
+        else
+        {
+            start = current_index + 1;
+        }
+    }
+    return available_penalties[current_index];
+}
+
+struct ConstraintGraph* choose_best_node(
+    struct ConstraintGraph* graph,
+    struct Pixel pixel
+)
+{
+    Node node{pixel, 0};
+    FLOAT minimal_penalty = -1;
+    for (
+        node.disparity = 0;
+        node.pixel.x + node.disparity < graph->disparity_graph.left.width
+            && node.disparity < graph->disparity_graph.disparity_levels;
+        ++node.disparity
+    )
+    {
+        if (!is_node_available(*graph, node))
+        {
+            continue;
+        }
+        else if (minimal_penalty < 0)
+        {
+            minimal_penalty = node_penalty(graph->disparity_graph, node);
+        }
+        else {
+            minimal_penalty = MIN(
+                node_penalty(graph->disparity_graph, node),
+                minimal_penalty
+            );
+        }
+    }
+
+    bool node_chosen = false;
+    for (
+        node.disparity = 0;
+        node.pixel.x + node.disparity < graph->disparity_graph.left.width
+            && node.disparity < graph->disparity_graph.disparity_levels;
+        ++node.disparity
+    )
+    {
+        if (!is_node_available(*graph, node))
+        {
+            continue;
+        }
+        else if (
+            node_chosen
+            || node_penalty(graph->disparity_graph, node) > minimal_penalty
+        )
+        {
+            make_node_unavailable(graph, node);
+        }
+        else
+        {
+            node_chosen = true;
+        }
+    }
+    return node_chosen? graph : NULL;
+}
+
+struct ConstraintGraph* find_labeling(
+    struct ConstraintGraph* graph
+)
+{
+    for (ULONG x = 0; x < graph->disparity_graph.left.width; ++x)
+    {
+        for (ULONG y = 0; y < graph->disparity_graph.left.height; ++y)
+        {
+            if (!choose_best_node(graph, {x, y}))
+            {
+                return NULL;
+            }
+            if (!solve_csp(graph))
+            {
+                return NULL;
+            }
+        }
+    }
+    return graph;
+}

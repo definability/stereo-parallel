@@ -42,5 +42,17 @@ FLOAT_ARRAY fetch_edge_available_penalties(
 FLOAT_ARRAY fetch_available_penalties(
     const struct LowestPenalties& lowest_penalties
 );
+FLOAT calculate_minimal_consistent_threshold(
+    const struct LowestPenalties& lowest_penalties,
+    const struct DisparityGraph& disparity_graph,
+    FLOAT_ARRAY available_penalties
+);
+struct ConstraintGraph* choose_best_node(
+    struct ConstraintGraph* constraint_graph,
+    struct Pixel pixel
+);
+struct ConstraintGraph* find_labeling(
+    struct ConstraintGraph* constraint_graph
+);
 
 #endif
