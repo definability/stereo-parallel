@@ -24,6 +24,7 @@ add_library(pgm_io pgm_io.cpp)
 add_library(disparity_graph disparity_graph.cpp)
 add_library(lowest_penalties lowest_penalties.cpp)
 add_library(constraint_graph constraint_graph.cpp)
+add_library(labeling_finder labeling_finder.cpp)
 target_include_directories(
     image PUBLIC
     ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
@@ -44,6 +45,10 @@ target_include_directories(
     constraint_graph PUBLIC
     ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
 )
+target_include_directories(
+    labeling_finder PUBLIC
+    ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
+)
 target_link_libraries(
     pgm_io
     image
@@ -58,6 +63,13 @@ target_link_libraries(
     image
 )
 target_link_libraries(
+    constraint_graph
+    lowest_penalties
+    disparity_graph
+    image
+)
+target_link_libraries(
+    labeling_finder
     constraint_graph
     lowest_penalties
     disparity_graph
@@ -77,5 +89,6 @@ target_link_libraries(
     pgm_io
     disparity_graph
     constraint_graph
+    labeling_finder
     ${Boost_PROGRAM_OPTIONS_LIBRARY}
 )
