@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_CASE(check_black_images)
         lowest_penalties,
         threshold
     };
-    BOOST_TEST(solve_csp(&constraint_graph));
+    BOOST_CHECK(solve_csp(&constraint_graph));
     BOOST_CHECK_EQUAL(find_labeling(&constraint_graph), &constraint_graph);
 }
 
@@ -145,7 +145,7 @@ BOOST_AUTO_TEST_CASE(check_equal_images)
         lowest_penalties,
         threshold
     };
-    BOOST_TEST(solve_csp(&constraint_graph));
+    BOOST_CHECK(solve_csp(&constraint_graph));
     BOOST_CHECK_EQUAL(find_labeling(&constraint_graph), &constraint_graph);
 }
 
@@ -219,7 +219,7 @@ BOOST_AUTO_TEST_CASE(basic_check)
         lowest_penalties,
         threshold
     };
-    BOOST_TEST(solve_csp(&constraint_graph));
+    BOOST_CHECK(solve_csp(&constraint_graph));
     BOOST_CHECK_EQUAL(find_labeling(&constraint_graph), &constraint_graph);
 }
 
