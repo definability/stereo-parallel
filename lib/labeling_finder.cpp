@@ -22,14 +22,17 @@
  * SOFTWARE.
  */
 #include <labeling_finder.hpp>
+#include <constraint_graph.hpp>
+#include <disparity_graph.hpp>
+#include <lowest_penalties.hpp>
 
 #include <algorithm>
 #include <iterator>
 
 FLOAT_ARRAY fetch_pixel_available_penalties(
+    const DisparityGraph& graph,
     struct Pixel pixel,
-    FLOAT minimal_penalty,
-    const DisparityGraph& graph
+    FLOAT minimal_penalty
 )
 {
     FLOAT_ARRAY result(
@@ -59,8 +62,8 @@ FLOAT_ARRAY fetch_pixel_available_penalties(
 
 FLOAT_ARRAY fetch_edge_available_penalties(
     const struct DisparityGraph& graph,
-    FLOAT minimal_penalty,
-    struct Edge edge
+    struct Edge edge,
+    FLOAT minimal_penalty
 )
 {
     FLOAT_ARRAY result;
@@ -118,9 +121,9 @@ FLOAT_ARRAY fetch_available_penalties(
             ++pixel.y)
         {
             available_penalties = fetch_pixel_available_penalties(
+                lowest_penalties.graph,
                 pixel,
-                lowest_pixel_penalty(lowest_penalties, pixel),
-                lowest_penalties.graph
+                lowest_pixel_penalty(lowest_penalties, pixel)
             );
             std::merge(
                 result.begin(),
@@ -157,11 +160,11 @@ FLOAT_ARRAY fetch_available_penalties(
                 };
                 available_penalties = fetch_edge_available_penalties(
                     lowest_penalties.graph,
+                    edge,
                     lowest_neighborhood_penalty(
                         lowest_penalties,
                         edge
-                    ),
-                    edge
+                    )
                 );
                 std::merge(
                     result.begin(),
