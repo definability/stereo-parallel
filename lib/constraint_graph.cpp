@@ -175,9 +175,17 @@ BOOL should_remove_node(
         }
 
         edge.neighbor.pixel = neighbor_by_index(node.pixel, neighbor_index);
-        initial_disparity = edge.node.disparity <= 1
-            ? 0
-            : edge.node.disparity - 1;
+        if (
+            edge.node.pixel.x + 1 == edge.neighbor.pixel.x
+            && edge.node.disparity > 1
+        )
+        {
+            initial_disparity = edge.node.disparity - 1;
+        }
+        else
+        {
+            initial_disparity = 0;
+        }
 
         edge_found = false;
         for (
