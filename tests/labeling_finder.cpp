@@ -23,10 +23,10 @@
  */
 #include <boost/test/unit_test.hpp>
 
-#include <labeling_finder.hpp>
 #include <constraint_graph.hpp>
 #include <disparity_graph.hpp>
 #include <image.hpp>
+#include <labeling_finder.hpp>
 #include <lowest_penalties.hpp>
 #include <pgm_io.hpp>
 
