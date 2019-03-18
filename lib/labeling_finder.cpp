@@ -236,7 +236,8 @@ struct ConstraintGraph* choose_best_node(
         {
             continue;
         }
-        else if (minimal_penalty < 0)
+
+        if (minimal_penalty < 0)
         {
             minimal_penalty = node_penalty(graph->disparity_graph, node);
         }
