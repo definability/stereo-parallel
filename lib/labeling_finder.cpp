@@ -273,7 +273,7 @@ struct ConstraintGraph* choose_best_node(
             node_chosen = true;
         }
     }
-    return node_chosen? graph : NULL;
+    return node_chosen? graph : nullptr;
 }
 
 struct ConstraintGraph* find_labeling(
@@ -284,13 +284,13 @@ struct ConstraintGraph* find_labeling(
     {
         for (ULONG y = 0; y < graph->disparity_graph.left.height; ++y)
         {
-            if (!choose_best_node(graph, {x, y}))
+            if (choose_best_node(graph, {x, y}) == nullptr)
             {
-                return NULL;
+                return nullptr;
             }
             if (!solve_csp(graph))
             {
-                return NULL;
+                return nullptr;
             }
         }
     }
