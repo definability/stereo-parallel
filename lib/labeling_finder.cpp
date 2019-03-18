@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <labeling_finder.hpp>
 #include <constraint_graph.hpp>
 #include <disparity_graph.hpp>
+#include <labeling_finder.hpp>
 #include <lowest_penalties.hpp>
 
 #include <algorithm>
