@@ -48,11 +48,9 @@ FLOAT calculate_minimal_consistent_threshold(
     FLOAT_ARRAY available_penalties
 );
 struct ConstraintGraph* choose_best_node(
-    struct ConstraintGraph* constraint_graph,
+    struct ConstraintGraph* graph,
     struct Pixel pixel
 );
-struct ConstraintGraph* find_labeling(
-    struct ConstraintGraph* constraint_graph
-);
+struct ConstraintGraph* find_labeling(struct ConstraintGraph* graph);
 
 #endif
