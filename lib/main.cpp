@@ -6,8 +6,11 @@
 #include <stdexcept>
 #include <string>
 
+#include <constraint_graph.hpp>
 #include <disparity_graph.hpp>
 #include <image.hpp>
+#include <labeling_finder.hpp>
+#include <lowest_penalties.hpp>
 #include <pgm_io.hpp>
 
 struct Image read_image(const std::string& image_path);
@@ -23,6 +26,9 @@ int main(int argc, char* argv[]) try
         ("right-image,r",
          boost::program_options::value<std::string>(),
          "Right image")
+        ("output-image,o",
+         boost::program_options::value<std::string>(),
+         "Output image with disparity map")
         ("disparity-levels,d",
          boost::program_options::value<std::string>(),
          "Number of disparity levels")
@@ -52,7 +58,11 @@ int main(int argc, char* argv[]) try
 
     boost::program_options::notify(vm);
 
-    if (vm.count("left-image") == 1 && vm.count("right-image") == 1)
+    if (
+        vm.count("output-image") == 1
+        && vm.count("left-image") == 1
+        && vm.count("right-image") == 1
+    )
     {
         try
         {
@@ -94,6 +104,28 @@ int main(int argc, char* argv[]) try
                 cleanness,
                 smoothness
             };
+            struct LowestPenalties lowest_penalties{disparity_graph};
+            auto available_penalties = fetch_available_penalties(lowest_penalties);
+            FLOAT threshold = calculate_minimal_consistent_threshold(
+                lowest_penalties,
+                disparity_graph,
+                available_penalties
+            );
+            struct ConstraintGraph constraint_graph{
+                disparity_graph,
+                lowest_penalties,
+                threshold
+            };
+            solve_csp(&constraint_graph);
+            find_labeling(&constraint_graph);
+
+            std::shared_ptr<struct Image> result
+                = std::make_shared<struct Image>(build_disparity_map(
+                constraint_graph
+            ));
+            std::ofstream image_file(vm["output-image"].as<std::string>());
+            PGM_IO pgm_io{result};
+            image_file << pgm_io;
         }
         catch (std::invalid_argument& e)
         {
@@ -104,10 +136,16 @@ int main(int argc, char* argv[]) try
             std::cerr << "Logic error: " << e.what() << std::endl;
         }
     }
-    else if (vm.count("left-image") > 0 || vm.count("right-image") > 0)
+    else if (vm.count("left-image") == 0 || vm.count("right-image") == 0)
     {
         std::cerr
             << "You should specify both left and right image."
+            << std::endl;
+    }
+    else if (vm.count("output-image") == 0)
+    {
+        std::cerr
+            << "You should specify the output image path."
             << std::endl;
     }
     else
