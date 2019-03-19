@@ -137,5 +137,16 @@ struct ConstraintGraph* choose_best_node(
  * will be minimal.
  */
 struct ConstraintGraph* find_labeling(struct ConstraintGraph* graph);
+/**
+ * \brief Build a disparity map by the constraint graph.
+ *
+ * For each pixel of the graph
+ * find the available disparity
+ * and add it as the pixel's intensity
+ * to the output image.
+ */
+struct Image build_disparity_map(
+    const struct ConstraintGraph& constraint_graph
+);
 
 #endif

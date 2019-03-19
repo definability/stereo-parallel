@@ -23,6 +23,7 @@
  */
 #include <constraint_graph.hpp>
 #include <disparity_graph.hpp>
+#include <image.hpp>
 #include <labeling_finder.hpp>
 #include <lowest_penalties.hpp>
 
@@ -296,4 +297,49 @@ struct ConstraintGraph* find_labeling(
         }
     }
     return graph;
+}
+
+struct Image build_disparity_map(
+    const struct ConstraintGraph& constraint_graph
+)
+{
+    struct Image result{
+        constraint_graph.disparity_graph.left.width,
+        constraint_graph.disparity_graph.left.height,
+        constraint_graph.disparity_graph.disparity_levels,
+        ULONG_ARRAY(
+            constraint_graph.disparity_graph.left.height
+            * constraint_graph.disparity_graph.left.width
+        )
+    };
+    Node node{{0, 0}, 0};
+    for (
+        node.pixel.x = 0;
+        node.pixel.x < constraint_graph.disparity_graph.left.width;
+        ++node.pixel.x)
+    {
+        for (
+            node.pixel.y = 0;
+            node.pixel. y < constraint_graph.disparity_graph.left.height;
+            ++node.pixel.y)
+        {
+            for (
+                node.disparity = 0;
+                node.pixel.x + node.disparity
+                    < constraint_graph.disparity_graph.left.width
+                && node.disparity
+                    < constraint_graph.disparity_graph.disparity_levels;
+                ++node.disparity
+            )
+            {
+                if (is_node_available(constraint_graph, node))
+                {
+                    result.data[get_pixel_index(result, node.pixel)]
+                        = node.disparity;
+                    break;
+                }
+            }
+        }
+    }
+    return result;
 }
