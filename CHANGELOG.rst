@@ -147,6 +147,26 @@ Added
   of a neighborhood from ``neighborhoods`` of ``LowestPenalties``
   given coordinates of a pixel and its neighbor.
 
+- Functions to find a consistent labeling
+
+  - ``fetch_pixel_available_penalties``
+    to find the available penalties of all nodes;
+  - ``fetch_edge_available_penalties``
+    to find the available penalties of all edges;
+  - ``fetch_available_penalties``
+    to find and fuse both nodes' and edges' penalties;
+  - ``calculate_minimal_consistent_threshold``
+    to find the minimal threshold of the ``ConstraintGraph``
+    for the problem to still be solvable;
+  - ``choose_best_node``
+    to leave only one node with the lowest penalty at specific pixel;
+    if a pixel has two nodes with the same penalty,
+    the one with the lower disparity will be chosen;
+  - ``find_labeling``
+    to remove all non-best nodes;
+  - ``build_disparity_map``
+    to build a grayscale image with the solution to the problem.
+
 .. Remove these two lines and one indentation level of the next two lines
     when you will release the first version.
     .. _Unreleased:
