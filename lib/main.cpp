@@ -1,17 +1,17 @@
 #include <boost/program_options.hpp>
 
-#include <fstream>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
-#include <string>
-
 #include <constraint_graph.hpp>
 #include <disparity_graph.hpp>
 #include <image.hpp>
 #include <labeling_finder.hpp>
 #include <lowest_penalties.hpp>
 #include <pgm_io.hpp>
+
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
 
 struct Image read_image(const std::string& image_path);
 
