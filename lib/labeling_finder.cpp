@@ -28,6 +28,7 @@
 #include <lowest_penalties.hpp>
 
 #include <algorithm>
+#include <exception>
 #include <iterator>
 
 FLOAT_ARRAY fetch_pixel_available_penalties(
@@ -313,6 +314,7 @@ struct Image build_disparity_map(
         )
     };
     Node node{{0, 0}, 0};
+    BOOL found = false;
     for (
         node.pixel.x = 0;
         node.pixel.x < constraint_graph.disparity_graph.left.width;
@@ -334,11 +336,33 @@ struct Image build_disparity_map(
             {
                 if (is_node_available(constraint_graph, node))
                 {
+                    if (found)
+                    {
+                        throw std::logic_error(
+                            "Two labels found for the pixel <"
+                            + std::to_string(node.pixel.x)
+                            + ", "
+                            + std::to_string(node.pixel.y)
+                            + ">."
+                        );
+                    }
                     result.data[get_pixel_index(result, node.pixel)]
                         = node.disparity;
+                    found = true;
                     break;
                 }
             }
+            if (!found)
+            {
+                throw std::logic_error(
+                    "Cannot find label for the pixel <"
+                    + std::to_string(node.pixel.x)
+                    + ", "
+                    + std::to_string(node.pixel.y)
+                    + ">."
+                );
+            }
+            found = false;
         }
     }
     return result;
