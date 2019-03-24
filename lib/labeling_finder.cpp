@@ -28,8 +28,8 @@
 #include <lowest_penalties.hpp>
 
 #include <algorithm>
-#include <stdexcept>
 #include <iterator>
+#include <stdexcept>
 
 FLOAT_ARRAY fetch_pixel_available_penalties(
     const DisparityGraph& graph,
