@@ -124,7 +124,7 @@ int main(int argc, char* argv[]) try
                     "Refer to the developers."
                 );
             }
-            if (!find_labeling(&constraint_graph))
+            if (find_labeling(&constraint_graph) == nullptr)
             {
                 throw std::logic_error(
                     "Cannot find labeling. "
