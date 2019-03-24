@@ -28,7 +28,7 @@
 #include <lowest_penalties.hpp>
 
 #include <algorithm>
-#include <exception>
+#include <stdexcept>
 #include <iterator>
 
 FLOAT_ARRAY fetch_pixel_available_penalties(
