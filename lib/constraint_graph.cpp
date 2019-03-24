@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 #include <constraint_graph.hpp>
-
 #include <disparity_graph.hpp>
 #include <lowest_penalties.hpp>
 
@@ -241,7 +240,7 @@ BOOL csp_solution_iteration(struct ConstraintGraph* graph)
         node.pixel.x < graph->disparity_graph.right.width;
         ++node.pixel.x
     )
-        {
+    {
         for (
             node.pixel.y = 0;
             node.pixel.y < graph->disparity_graph.right.height;

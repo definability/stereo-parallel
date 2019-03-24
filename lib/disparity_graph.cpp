@@ -339,8 +339,7 @@ FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge)
 
 FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node)
 {
-    Pixel left_pixel = node.pixel;
-    left_pixel.x += node.disparity;
+    Pixel left_pixel{node.pixel.x + node.disparity, node.pixel.y};
     return
         graph.cleanness
         * SQR(TO_FLOAT(get_pixel_value(graph.right, node.pixel))

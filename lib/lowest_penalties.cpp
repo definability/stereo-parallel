@@ -126,24 +126,23 @@ Pixel neighbor_by_index(
     ULONG neighbor_index
 )
 {
-    struct Pixel neighbor{pixel};
     if (neighbor_index == 0)
     {
-        ++neighbor.x;
+        ++pixel.x;
     }
     else if (neighbor_index == 1)
     {
-        --neighbor.x;
+        --pixel.x;
     }
     else if (neighbor_index == 2)
     {
-        ++neighbor.y;
+        ++pixel.y;
     }
     else if (neighbor_index == 3)
     {
-        --neighbor.y;
+        --pixel.y;
     }
-    return neighbor;
+    return pixel;
 }
 
 FLOAT calculate_lowest_pixel_penalty(
