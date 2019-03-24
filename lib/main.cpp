@@ -116,8 +116,22 @@ int main(int argc, char* argv[]) try
                 lowest_penalties,
                 threshold
             };
-            solve_csp(&constraint_graph);
-            find_labeling(&constraint_graph);
+            if (!solve_csp(&constraint_graph))
+            {
+                throw std::logic_error(
+                    "Cannot solve CSP problem. "
+                    "This should not ever happen. "
+                    "Refer to the developers."
+                );
+            }
+            if (!find_labeling(&constraint_graph))
+            {
+                throw std::logic_error(
+                    "Cannot find labeling. "
+                    "This should not ever happen. "
+                    "Refer to the developers."
+                );
+            }
 
             std::shared_ptr<struct Image> result
                 = std::make_shared<struct Image>(build_disparity_map(
