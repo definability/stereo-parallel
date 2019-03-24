@@ -32,6 +32,8 @@
 #include <algorithm>
 #include <vector>
 
+#define MAX(x, y) ((x) >= (y)? (x) : (y))
+
 /**
  * \brief Floating point type alias.
  * to use the same name on CPU and GPU.

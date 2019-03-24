@@ -29,6 +29,7 @@ add_executable(
     disparity_graph.cpp
     constraint_graph.cpp
     lowest_penalties.cpp
+    labeling_finder.cpp
 )
 target_include_directories(test_executable PRIVATE ${BOOST_INCLUDE_DIRS})
 target_link_libraries(
@@ -38,6 +39,7 @@ target_link_libraries(
     disparity_graph
     constraint_graph
     lowest_penalties
+    labeling_finder
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 target_compile_definitions(
