@@ -26,6 +26,16 @@
 
 #include <disparity_graph.hpp>
 
+namespace sp::indexing::checks
+{
+
+using sp::graph::disparity::DisparityGraph;
+using sp::types::Edge;
+using sp::types::FLOAT;
+using sp::types::Node;
+using sp::types::Pixel;
+using sp::types::ULONG;
+
 /**
  * \brief Check wheter provided Pixel instances
  * in given DisparityGraph are neighbors
@@ -91,5 +101,7 @@ bool edge_exists(
     const struct DisparityGraph& graph,
     struct Edge edge
 );
+
+}
 
 #endif

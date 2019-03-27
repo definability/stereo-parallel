@@ -24,7 +24,17 @@
 #include <constraint_graph.hpp>
 #include <indexing.hpp>
 #include <indexing_checks.hpp>
-#include <lowest_penalties.hpp>
+#include <types.hpp>
+
+namespace sp::graph::constraint
+{
+
+using sp::graph::disparity::NEIGHBORS_COUNT;
+using sp::indexing::checks::edge_exists;
+using sp::indexing::checks::neighborhood_exists_fast;
+using sp::indexing::neighbor_by_index;
+using sp::indexing::node_index;
+using sp::types::ULONG;
 
 ConstraintGraph::ConstraintGraph(
     const struct DisparityGraph& disparity_graph,
@@ -289,4 +299,6 @@ BOOL solve_csp(struct ConstraintGraph* graph)
     {
     }
     return check_nodes_left(*graph);
+}
+
 }

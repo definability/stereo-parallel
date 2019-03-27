@@ -21,9 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <indexing.hpp>
 #include <indexing_checks.hpp>
 #include <lowest_penalties.hpp>
+
+namespace sp::graph::lowest_penalties
+{
+
+using sp::graph::disparity::NEIGHBORS_COUNT;
+using sp::indexing::checks::neighborhood_exists_fast;
+using sp::indexing::neighbor_by_index;
+using sp::indexing::neighborhood_index;
+using sp::indexing::neighborhood_index_fast;
+using sp::indexing::neighborhood_index_slow;
+using sp::types::Node;
 
 LowestPenalties::LowestPenalties(const struct DisparityGraph& graph)
     : graph{graph}
@@ -100,18 +110,6 @@ FLOAT calculate_lowest_pixel_penalty(
     return minimal_penalty;
 }
 
-FLOAT calculate_lowest_neighborhood_penalty(
-    const struct DisparityGraph& graph,
-    struct Pixel pixel,
-    struct Pixel neighbor
-)
-{
-    return calculate_lowest_neighborhood_penalty_fast(
-        graph,
-        {{pixel, 0}, {neighbor, 0}}
-    );
-}
-
 FLOAT calculate_lowest_neighborhood_penalty_fast(
     const struct DisparityGraph& graph,
     struct Edge edge
@@ -153,6 +151,18 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
     return minimal_penalty;
 }
 
+FLOAT calculate_lowest_neighborhood_penalty(
+    const struct DisparityGraph& graph,
+    struct Pixel pixel,
+    struct Pixel neighbor
+)
+{
+    return calculate_lowest_neighborhood_penalty_fast(
+        graph,
+        {{pixel, 0}, {neighbor, 0}}
+    );
+}
+
 FLOAT calculate_lowest_neighborhood_penalty_slow(
     const struct DisparityGraph& graph,
     struct Pixel pixel,
@@ -192,4 +202,6 @@ FLOAT lowest_neighborhood_penalty(
     return penalties.neighborhoods[
         neighborhood_index_slow(penalties.graph, edge)
     ];
+}
+
 }

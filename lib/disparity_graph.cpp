@@ -31,6 +31,22 @@
 #define SQR(x) ((x) * (x))
 #define TO_FLOAT(x) (static_cast<FLOAT>(x))
 
+namespace sp::graph::disparity
+{
+
+using sp::indexing::pixel_index;
+using sp::indexing::pixel_value;
+using sp::indexing::reparametrization_index;
+using sp::indexing::reparametrization_index_slow;
+using sp::indexing::reparametrization_value;
+using sp::indexing::reparametrization_value_fast;
+using sp::indexing::reparametrization_value_slow;
+using sp::types::Pixel;
+using std::invalid_argument;
+using std::move;
+using std::numeric_limits;
+using std::to_string;
+
 DisparityGraph::DisparityGraph(
     struct Image left,
     struct Image right,
@@ -170,4 +186,6 @@ FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node)
         + reparametrization_value_fast(graph, node, 1)
         + reparametrization_value_fast(graph, node, 2)
         + reparametrization_value_fast(graph, node, 3);
+}
+
 }

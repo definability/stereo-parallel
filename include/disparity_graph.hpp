@@ -28,10 +28,19 @@
 #define DISPARITY_GRAPH_HPP
 
 #include <image.hpp>
-
-#include <algorithm>
+#include <types.hpp>
 
 #define MAX(x, y) ((x) >= (y)? (x) : (y))
+
+namespace sp::graph::disparity
+{
+
+using sp::image::Image;
+using sp::types::Edge;
+using sp::types::FLOAT;
+using sp::types::FLOAT_ARRAY;
+using sp::types::Node;
+using sp::types::ULONG;
 
 /**
  * \brief Maximal number of neighbors of each vertex of disparity graph.
@@ -421,5 +430,7 @@ FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge);
  * between disparities of Node instances that the Edge connects.
  */
 FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node);
+
+}
 
 #endif

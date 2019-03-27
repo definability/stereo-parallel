@@ -24,7 +24,20 @@
 #ifndef INDEXING_HPP
 #define INDEXING_HPP
 
+#include <disparity_graph.hpp>
 #include <image.hpp>
+#include <types.hpp>
+
+namespace sp::indexing
+{
+
+using sp::graph::disparity::DisparityGraph;
+using sp::image::Image;
+using sp::types::Edge;
+using sp::types::FLOAT;
+using sp::types::Node;
+using sp::types::Pixel;
+using sp::types::ULONG;
 
 /**
  * \brief Get position of the pixel in data array of the image.
@@ -204,5 +217,7 @@ Pixel neighbor_by_index(
     struct Pixel pixel,
     ULONG neighbor_index
 );
+
+}
 
 #endif

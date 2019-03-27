@@ -27,7 +27,23 @@
 #ifndef LABELING_FINDER_HPP
 #define LABELING_FINDER_HPP
 
+#include <constraint_graph.hpp>
+#include <disparity_graph.hpp>
+#include <image.hpp>
 #include <lowest_penalties.hpp>
+#include <types.hpp>
+
+namespace sp::labeling::finder
+{
+
+using sp::graph::constraint::ConstraintGraph;
+using sp::graph::disparity::DisparityGraph;
+using sp::graph::lowest_penalties::LowestPenalties;
+using sp::image::Image;
+using sp::types::Edge;
+using sp::types::FLOAT;
+using sp::types::FLOAT_ARRAY;
+using sp::types::Pixel;
 
 /**
  * \brief Construct an array of available differences
@@ -148,5 +164,7 @@ struct ConstraintGraph* find_labeling(struct ConstraintGraph* graph);
 struct Image build_disparity_map(
     const struct ConstraintGraph& constraint_graph
 );
+
+}
 
 #endif

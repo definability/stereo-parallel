@@ -29,6 +29,9 @@
 
 #include <vector>
 
+namespace sp::types
+{
+
 /**
  * \brief Unsigned long type alias
  * to use the same name on CPU and GPU.
@@ -113,5 +116,7 @@ struct Edge
      */
     struct Node neighbor;
 };
+
+}
 
 #endif

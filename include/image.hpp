@@ -29,6 +29,12 @@
 
 #include <types.hpp>
 
+namespace sp::image
+{
+
+using sp::types::ULONG;
+using sp::types::ULONG_ARRAY;
+
 /**
  * \brief Structure to represent image on both CPU and GPU.
  */
@@ -80,5 +86,7 @@ struct Image
  * and neither intensity should exceed specified maximal value.
  */
 bool image_valid(const struct Image& image);
+
+}
 
 #endif

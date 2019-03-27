@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <constraint_graph.hpp>
 #include <indexing.hpp>
 #include <indexing_checks.hpp>
 #include <labeling_finder.hpp>
@@ -29,6 +28,25 @@
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
+
+namespace sp::labeling::finder
+{
+
+using sp::graph::disparity::NEIGHBORS_COUNT;
+using sp::indexing::checks::neighborhood_exists_fast;
+using sp::indexing::neighbor_by_index;
+using sp::indexing::pixel_index;
+using sp::types::BOOL;
+using sp::types::Node;
+using sp::types::ULONG;
+using sp::types::ULONG_ARRAY;
+using std::back_inserter;
+using std::logic_error;
+using std::merge;
+using std::sort;
+using std::swap;
+using std::to_string;
+using std::unique;
 
 FLOAT_ARRAY fetch_pixel_available_penalties(
     const DisparityGraph& graph,
@@ -365,4 +383,6 @@ struct Image build_disparity_map(
         }
     }
     return result;
+}
+
 }

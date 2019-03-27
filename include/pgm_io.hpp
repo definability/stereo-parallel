@@ -29,6 +29,14 @@
 
 #include <image.hpp>
 
+namespace sp::image
+{
+
+using sp::image::Image;
+using std::istream;
+using std::ostream;
+using std::shared_ptr;
+
 /**
  * \brief Input and output operations for PGM image format.
  *
@@ -168,5 +176,7 @@ public:
      */
     friend std::ostream& operator<<(std::ostream& out, const PGM_IO& ppm_io);
 };
+
+}
 
 #endif

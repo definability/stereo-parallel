@@ -29,6 +29,19 @@
 
 #include <disparity_graph.hpp>
 #include <image.hpp>
+#include <lowest_penalties.hpp>
+#include <types.hpp>
+
+namespace sp::graph::constraint
+{
+
+using sp::graph::disparity::DisparityGraph;
+using sp::graph::lowest_penalties::LowestPenalties;
+using sp::types::BOOL;
+using sp::types::BOOL_ARRAY;
+using sp::types::Edge;
+using sp::types::FLOAT;
+using sp::types::Node;
 
 /**
  * \brief Structure to represent a graph with constraints
@@ -393,5 +406,7 @@ BOOL solve_csp(struct ConstraintGraph* graph);
  * \brief Check whether at least one node is available.
  */
 BOOL check_nodes_left(const struct ConstraintGraph& graph);
+
+}
 
 #endif

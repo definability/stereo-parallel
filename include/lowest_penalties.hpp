@@ -33,7 +33,19 @@
 #define MIN(x, y) (((x) <= (y)) ? (x) : (y))
 
 #include <disparity_graph.hpp>
-#include <image.hpp>
+#include <indexing.hpp>
+#include <types.hpp>
+
+namespace sp::graph::lowest_penalties
+{
+
+using sp::graph::disparity::DisparityGraph;
+using sp::indexing::pixel_index;
+using sp::types::Edge;
+using sp::types::FLOAT;
+using sp::types::FLOAT_ARRAY;
+using sp::types::Pixel;
+using sp::types::ULONG;
 
 /**
  * \brief Graph containing lowest penalties for
@@ -175,5 +187,7 @@ FLOAT lowest_neighborhood_penalty(
     const struct LowestPenalties& penalties,
     struct Edge edge
 );
+
+}
 
 #endif
