@@ -21,8 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <indexing_checks.hpp>
 #include <indexing.hpp>
+#include <indexing_checks.hpp>
 
 bool neighborhood_exists(
     const struct DisparityGraph& graph,
