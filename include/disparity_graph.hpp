@@ -30,20 +30,9 @@
 #include <image.hpp>
 
 #include <algorithm>
-#include <vector>
 
 #define MAX(x, y) ((x) >= (y)? (x) : (y))
 
-/**
- * \brief Floating point type alias.
- * to use the same name on CPU and GPU.
- */
-using FLOAT = double;
-/**
- * \brief Floating point array type alias
- * to use the same name on CPU and GPU.
- */
-using FLOAT_ARRAY = std::vector<FLOAT>;
 /**
  * \brief Maximal number of neighbors of each vertex of disparity graph.
  *
@@ -408,40 +397,6 @@ struct DisparityGraph
     );
 };
 
-/**
- * \brief Node of DisparityGraph is a pair
- * consisting of Pixel and disparity assigned to it.
- */
-struct Node
-{
-    /**
-     * \brief Pixel to which the Node instance belongs.
-     */
-    struct Pixel pixel;
-    /**
-     * \brief Disparity assigned to the Node::pixel in the Node instance.
-     *
-     * Disparity specifies the difference between columns
-     * of current pixel on the right image
-     * and corresponding one on the left image.
-     */
-    ULONG disparity;
-};
-
-/**
- * \brief Edge is an ordered pair of two Node instances.
- */
-struct Edge
-{
-    /**
-     * \brief Start Node of the directed Edge.
-     */
-    struct Node node;
-    /**
-     * \brief Start Node of the directed Edge.
-     */
-    struct Node neighbor;
-};
 
 /**
  * \brief Get index of a neighbor for fast access in different data arrays.

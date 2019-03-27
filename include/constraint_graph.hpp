@@ -30,19 +30,6 @@
 #include <disparity_graph.hpp>
 #include <image.hpp>
 
-#include <vector>
-
-/**
- * \brief Boolean type alias.
- * to use the same name on CPU and GPU.
- */
-using BOOL = bool;
-/**
- * \brief Boolean array type alias
- * to use the same name on CPU and GPU.
- */
-using BOOL_ARRAY = std::vector<BOOL>;
-
 /**
  * \brief Structure to represent a graph with constraints
  * on choice of disparities for pixels (constraint satisfaction problem, CSP).

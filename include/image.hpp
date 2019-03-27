@@ -27,18 +27,7 @@
 #ifndef IMAGE_HPP
 #define IMAGE_HPP
 
-#include <vector>
-
-/**
- * \brief Unsigned long type alias
- * to use the same name on CPU and GPU.
- */
-using ULONG = unsigned long;
-/**
- * \brief Unsigned long array type alias
- * to use the same name on CPU and GPU.
- */
-using ULONG_ARRAY = std::vector<ULONG>;
+#include <types.hpp>
 
 /**
  * \brief Structure to represent image on both CPU and GPU.
@@ -81,21 +70,6 @@ struct Image
      * \f]
      */
     ULONG_ARRAY data;
-};
-
-/**
- * Structure that contains position of a pixel.
- */
-struct Pixel
-{
-    /**
-     * \brief Column (horizontal offset) of the pixel.
-     */
-    ULONG x;
-    /**
-     * \brief Row (vertical offset) of the pixel.
-     */
-    ULONG y;
 };
 
 /**
