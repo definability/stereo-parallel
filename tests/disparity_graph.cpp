@@ -24,8 +24,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include <disparity_graph.hpp>
-#include <image.hpp>
 #include <indexing_checks.hpp>
+#include <image.hpp>
 #include <indexing.hpp>
 #include <pgm_io.hpp>
 

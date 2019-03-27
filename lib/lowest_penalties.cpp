@@ -21,8 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <indexing_checks.hpp>
 #include <indexing.hpp>
+#include <indexing_checks.hpp>
 #include <lowest_penalties.hpp>
 
 LowestPenalties::LowestPenalties(const struct DisparityGraph& graph)

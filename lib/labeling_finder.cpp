@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 #include <constraint_graph.hpp>
-#include <indexing_checks.hpp>
 #include <indexing.hpp>
+#include <indexing_checks.hpp>
 #include <labeling_finder.hpp>
 
 #include <algorithm>

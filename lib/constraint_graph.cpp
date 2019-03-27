@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 #include <constraint_graph.hpp>
-#include <indexing_checks.hpp>
 #include <indexing.hpp>
+#include <indexing_checks.hpp>
 #include <lowest_penalties.hpp>
 
 ConstraintGraph::ConstraintGraph(
