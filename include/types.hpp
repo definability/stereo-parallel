@@ -42,6 +42,18 @@ using ULONG = unsigned long;
 using ULONG_ARRAY = std::vector<ULONG>;
 
 /**
+ * \brief Floating point type alias.
+ * to use the same name on CPU and GPU.
+ */
+using FLOAT = double;
+
+/**
+ * \brief Floating point array type alias
+ * to use the same name on CPU and GPU.
+ */
+using FLOAT_ARRAY = std::vector<FLOAT>;
+
+/**
  * Structure that contains position of a pixel.
  */
 struct Pixel
