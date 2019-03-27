@@ -54,6 +54,17 @@ using FLOAT = double;
 using FLOAT_ARRAY = std::vector<FLOAT>;
 
 /**
+ * \brief Boolean type alias.
+ * to use the same name on CPU and GPU.
+ */
+using BOOL = bool;
+/**
+ * \brief Boolean array type alias
+ * to use the same name on CPU and GPU.
+ */
+using BOOL_ARRAY = std::vector<BOOL>;
+
+/**
  * Structure that contains position of a pixel.
  */
 struct Pixel
