@@ -32,6 +32,15 @@
 
 BOOST_AUTO_TEST_SUITE(LowestPenaltiesTest)
 
+using sp::graph::disparity::DisparityGraph;
+using sp::graph::lowest_penalties::LowestPenalties;
+using sp::image::Image;
+using sp::image::PGM_IO;
+using sp::indexing::checks::neighborhood_exists_fast;
+using sp::indexing::neighborhood_index;
+using sp::indexing::neighborhood_index_fast;
+using sp::indexing::reparametrization_index;
+
 BOOST_AUTO_TEST_CASE(check_neighborhoods_indexing)
 {
     PGM_IO pgm_io;
