@@ -25,8 +25,8 @@
 
 #include <disparity_graph.hpp>
 #include <image.hpp>
-#include <indexing_checks.hpp>
 #include <indexing.hpp>
+#include <indexing_checks.hpp>
 #include <pgm_io.hpp>
 
 BOOST_AUTO_TEST_SUITE(DisparityGraphTest)
