@@ -24,14 +24,14 @@
 #include <disparity_graph.hpp>
 #include <indexing.hpp>
 
-ULONG get_pixel_index(const struct Image& image, struct Pixel pixel)
+ULONG pixel_index(const struct Image& image, struct Pixel pixel)
 {
     return image.width * pixel.y + pixel.x;
 }
 
-ULONG get_pixel_value(const struct Image& image, struct Pixel pixel)
+ULONG pixel_value(const struct Image& image, struct Pixel pixel)
 {
-    return image.data[get_pixel_index(image, pixel)];
+    return image.data[pixel_index(image, pixel)];
 }
 
 ULONG neighbor_index(
@@ -138,14 +138,6 @@ ULONG node_index(const struct DisparityGraph& graph, struct Node node)
 {
     return node.disparity + graph.disparity_levels
         * (node.pixel.y + graph.right.height * node.pixel.x);
-}
-
-ULONG pixel_index(
-    const struct DisparityGraph& graph,
-    struct Pixel pixel
-)
-{
-    return pixel.y + graph.right.height * pixel.x;
 }
 
 ULONG neighborhood_index_fast(

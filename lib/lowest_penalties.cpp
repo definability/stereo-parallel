@@ -45,7 +45,7 @@ LowestPenalties::LowestPenalties(const struct DisparityGraph& graph)
             ++pixel.y)
         {
             this->pixels[
-                pixel_index(this->graph, pixel)
+                pixel_index(this->graph.right, pixel)
             ] = calculate_lowest_pixel_penalty(
                 this->graph,
                 pixel
@@ -170,7 +170,7 @@ FLOAT lowest_pixel_penalty(
     struct Pixel pixel
 )
 {
-    return penalties.pixels[pixel_index(penalties.graph, pixel)];
+    return penalties.pixels[pixel_index(penalties.graph.right, pixel)];
 }
 
 FLOAT lowest_neighborhood_penalty_fast(

@@ -33,9 +33,9 @@ Added
   - ``y`` (vertical offset, row) of a pixel,
 
 - ``image_valid`` function to check validity of ``Image``.
-- ``get_pixel_index`` to calculate index of given pixel
+- ``pixel_index`` to calculate index of given pixel
   in 1D intensities array.
-- ``get_pixel_value`` to fetch intensity of given pixel
+- ``pixel_value`` to fetch intensity of given pixel
   from 1D intensities array.
 - ``DisparityGraph`` to represent the problem using graphical model.
   Contains
@@ -120,8 +120,6 @@ Added
   - ``neighborhoods`` array with minimal penalties of neighborhoods
     calculated from correspondent edges.
 
-- ``pixel_index`` to get index of a pixel
-  from ``pixels`` of ``LowestPenalties``.
 - ``neighborhood_index_fast`` to get index of a neighborhood
   from ``neighborhoods`` of ``LowestPenalties``
   using pixel coordinates and its neighbor index.

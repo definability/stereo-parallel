@@ -345,7 +345,7 @@ struct Image build_disparity_map(
                             + ">."
                         );
                     }
-                    result.data[get_pixel_index(result, node.pixel)]
+                    result.data[pixel_index(result, node.pixel)]
                         = node.disparity;
                     found = true;
                     break;

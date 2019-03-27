@@ -164,8 +164,8 @@ FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node)
     Pixel left_pixel{node.pixel.x + node.disparity, node.pixel.y};
     return
         graph.cleanness
-        * SQR(TO_FLOAT(get_pixel_value(graph.right, node.pixel))
-            - TO_FLOAT(get_pixel_value(graph.left, left_pixel)))
+        * SQR(TO_FLOAT(pixel_value(graph.right, node.pixel))
+            - TO_FLOAT(pixel_value(graph.left, left_pixel)))
         + reparametrization_value_fast(graph, node, 0)
         + reparametrization_value_fast(graph, node, 1)
         + reparametrization_value_fast(graph, node, 2)

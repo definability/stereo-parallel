@@ -36,15 +36,15 @@
  * Result of accessing non-existent value
  * depends on ::ULONG_ARRAY.
  */
-ULONG get_pixel_index(const struct Image& image, struct Pixel pixel);
+ULONG pixel_index(const struct Image& image, struct Pixel pixel);
 
 /**
  * \brief Get intensity of the pixel in the image.
  *
- * Simply call ::get_pixel_index and take a value with returned index
+ * Simply call ::pixel_index and take a value with returned index
  * from Image::data.
  */
-ULONG get_pixel_value(const struct Image& image, struct Pixel pixel);
+ULONG pixel_value(const struct Image& image, struct Pixel pixel);
 
 /**
  * \brief Get an index of DisparityGraph::reparametrization element
@@ -158,15 +158,6 @@ ULONG neighbor_index(
  * using ::node_exists.
  */
 ULONG node_index(const struct DisparityGraph& graph, struct Node node);
-
-/**
- * \brief Get index of a pixel
- * to access needed value of LowestPenalties::pixels fast.
- */
-ULONG pixel_index(
-    const struct DisparityGraph& graph,
-    struct Pixel pixel
-);
 
 /**
  * \brief Get index of a neighborhood in LowestPenalties::neighborhoods.
