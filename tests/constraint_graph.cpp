@@ -26,6 +26,7 @@
 #include <constraint_graph.hpp>
 #include <disparity_graph.hpp>
 #include <image.hpp>
+#include <indexing.hpp>
 #include <lowest_penalties.hpp>
 #include <pgm_io.hpp>
 

@@ -22,7 +22,9 @@
  * SOFTWARE.
  */
 #include <boost/test/unit_test.hpp>
+
 #include <image.hpp>
+#include <indexing.hpp>
 
 BOOST_AUTO_TEST_SUITE(ImageTest)
 
