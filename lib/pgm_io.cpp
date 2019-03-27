@@ -21,7 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include "pgm_io.hpp"
+#include <indexing.hpp>
+#include <pgm_io.hpp>
 
 #include <cctype>
 #include <ios>

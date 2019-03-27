@@ -22,7 +22,8 @@
  * SOFTWARE.
  */
 #include <constraint_graph.hpp>
-#include <disparity_graph.hpp>
+#include <indexing_checks.hpp>
+#include <indexing.hpp>
 #include <lowest_penalties.hpp>
 
 ConstraintGraph::ConstraintGraph(
@@ -77,12 +78,6 @@ ConstraintGraph::ConstraintGraph(
             }
         }
     }
-}
-
-ULONG node_index(const struct DisparityGraph& graph, struct Node node)
-{
-    return node.disparity + graph.disparity_levels
-        * (node.pixel.y + graph.right.height * node.pixel.x);
 }
 
 void make_node_available(

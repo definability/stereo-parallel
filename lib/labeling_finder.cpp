@@ -22,10 +22,9 @@
  * SOFTWARE.
  */
 #include <constraint_graph.hpp>
-#include <disparity_graph.hpp>
-#include <image.hpp>
+#include <indexing_checks.hpp>
+#include <indexing.hpp>
 #include <labeling_finder.hpp>
-#include <lowest_penalties.hpp>
 
 #include <algorithm>
 #include <iterator>
