@@ -25,35 +25,12 @@
 
 #include <disparity_graph.hpp>
 #include <image.hpp>
+#include <indexing.hpp>
+#include <indexing_checks.hpp>
 #include <lowest_penalties.hpp>
 #include <pgm_io.hpp>
 
 BOOST_AUTO_TEST_SUITE(LowestPenaltiesTest)
-
-BOOST_AUTO_TEST_CASE(check_pixels_indexing)
-{
-    PGM_IO pgm_io;
-    std::istringstream image_content{R"image(
-    P2
-    3 2
-    2
-    0 0 0
-    0 0 0
-    )image"};
-
-    image_content >> pgm_io;
-    BOOST_REQUIRE(pgm_io.get_image());
-    struct Image image{*pgm_io.get_image()};
-
-    struct DisparityGraph disparity_graph{image, image, 3, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity_graph};
-    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.graph, {0, 0}), 0);
-    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.graph, {0, 1}), 1);
-    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.graph, {1, 0}), 2);
-    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.graph, {1, 1}), 3);
-    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.graph, {2, 0}), 4);
-    BOOST_CHECK_EQUAL(pixel_index(lowest_penalties.graph, {2, 1}), 5);
-}
 
 BOOST_AUTO_TEST_CASE(check_neighborhoods_indexing)
 {

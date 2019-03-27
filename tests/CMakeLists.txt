@@ -34,6 +34,8 @@ add_executable(
 target_include_directories(test_executable PRIVATE ${BOOST_INCLUDE_DIRS})
 target_link_libraries(
     test_executable
+    indexing
+    indexing_checks
     image
     pgm_io
     disparity_graph

@@ -22,10 +22,9 @@
  * SOFTWARE.
  */
 #include <constraint_graph.hpp>
-#include <disparity_graph.hpp>
-#include <image.hpp>
+#include <indexing.hpp>
+#include <indexing_checks.hpp>
 #include <labeling_finder.hpp>
-#include <lowest_penalties.hpp>
 
 #include <algorithm>
 #include <iterator>
@@ -346,7 +345,7 @@ struct Image build_disparity_map(
                             + ">."
                         );
                     }
-                    result.data[get_pixel_index(result, node.pixel)]
+                    result.data[pixel_index(result, node.pixel)]
                         = node.disparity;
                     found = true;
                     break;

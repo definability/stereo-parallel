@@ -21,10 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#include <indexing.hpp>
+#include <indexing_checks.hpp>
 #include <lowest_penalties.hpp>
-
-#include <disparity_graph.hpp>
-#include <image.hpp>
 
 LowestPenalties::LowestPenalties(const struct DisparityGraph& graph)
     : graph{graph}
@@ -46,7 +45,7 @@ LowestPenalties::LowestPenalties(const struct DisparityGraph& graph)
             ++pixel.y)
         {
             this->pixels[
-                pixel_index(this->graph, pixel)
+                pixel_index(this->graph.right, pixel)
             ] = calculate_lowest_pixel_penalty(
                 this->graph,
                 pixel
@@ -77,72 +76,6 @@ LowestPenalties::LowestPenalties(const struct DisparityGraph& graph)
             }
         }
     }
-}
-ULONG pixel_index(
-    const struct DisparityGraph& graph,
-    struct Pixel pixel
-)
-{
-    return pixel.y + graph.right.height * pixel.x;
-}
-
-ULONG neighborhood_index_fast(
-    const struct DisparityGraph& graph,
-    struct Pixel pixel,
-    ULONG neighbor_index
-)
-{
-    return neighbor_index
-        + NEIGHBORS_COUNT * (pixel.y + graph.right.height * pixel.x);
-}
-
-ULONG neighborhood_index(
-    const struct DisparityGraph& graph,
-    struct Pixel pixel,
-    struct Pixel neighbor
-)
-{
-    return neighborhood_index_fast(
-        graph,
-        pixel,
-        neighbor_index(pixel, neighbor)
-    );
-}
-
-ULONG neighborhood_index_slow(
-    const struct DisparityGraph& graph,
-    struct Edge edge
-)
-{
-    return neighborhood_index_fast(
-        graph,
-        edge.node.pixel,
-        neighbor_index(edge.node.pixel, edge.neighbor.pixel)
-    );
-}
-
-Pixel neighbor_by_index(
-    struct Pixel pixel,
-    ULONG neighbor_index
-)
-{
-    if (neighbor_index == 0)
-    {
-        ++pixel.x;
-    }
-    else if (neighbor_index == 1)
-    {
-        --pixel.x;
-    }
-    else if (neighbor_index == 2)
-    {
-        ++pixel.y;
-    }
-    else if (neighbor_index == 3)
-    {
-        --pixel.y;
-    }
-    return pixel;
 }
 
 FLOAT calculate_lowest_pixel_penalty(
@@ -237,7 +170,7 @@ FLOAT lowest_pixel_penalty(
     struct Pixel pixel
 )
 {
-    return penalties.pixels[pixel_index(penalties.graph, pixel)];
+    return penalties.pixels[pixel_index(penalties.graph.right, pixel)];
 }
 
 FLOAT lowest_neighborhood_penalty_fast(

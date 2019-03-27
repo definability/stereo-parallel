@@ -103,56 +103,6 @@ struct LowestPenalties
     explicit LowestPenalties(const struct DisparityGraph& graph);
 };
 /**
- * \brief Get index of a pixel
- * to access needed value of LowestPenalties::pixels fast.
- */
-ULONG pixel_index(
-    const struct DisparityGraph& graph,
-    struct Pixel pixel
-);
-/**
- * \brief Get index of a neighborhood in LowestPenalties::neighborhoods.
- *
- * Note that the function doesn't check existence of provided neighborhood.
- * Use ::neighborhood_exists_fast to make sure that you use it right.
- */
-ULONG neighborhood_index_fast(
-    const struct DisparityGraph& graph,
-    struct Pixel pixel,
-    ULONG neighbor_index
-);
-/**
- * \brief Get index of a neighborhood given two neighboring pixels.
- *
- * Note that the function doesn't check existence of provided neighborhood.
- * Use ::neighborhood_exists to make sure that you use it right.
- */
-ULONG neighborhood_index(
-    const struct DisparityGraph& graph,
-    struct Pixel pixel,
-    struct Pixel neighbor
-);
-/**
- * \brief Get index of a neighborhood by arbitrary edge from the neighborhood.
- *
- * Note that the function doesn't check existence of provided neighborhood.
- * Use ::edge_exists to make sure that you use it right.
- */
-ULONG neighborhood_index_slow(
-    const struct DisparityGraph& graph,
-    struct Edge edge
-);
-/**
- * \brief Get neighbor pixel to current one using neighbor index.
- *
- * Note that the function doesn't check existence of provided neighborhood.
- * Use ::neighborhood_exists to make sure that you use it right.
- */
-Pixel neighbor_by_index(
-    struct Pixel pixel,
-    ULONG neighbor_index
-);
-/**
  * \brief Calculate minimal penalty among nodes of a pixel.
  */
 FLOAT calculate_lowest_pixel_penalty(

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include "image.hpp"
+#include <image.hpp>
 
 bool image_valid(const struct Image& image)
 {
@@ -37,14 +37,4 @@ bool image_valid(const struct Image& image)
         }
     }
     return true;
-}
-
-ULONG get_pixel_index(const struct Image& image, struct Pixel pixel)
-{
-    return image.width * pixel.y + pixel.x;
-}
-
-ULONG get_pixel_value(const struct Image& image, struct Pixel pixel)
-{
-    return image.data[get_pixel_index(image, pixel)];
 }

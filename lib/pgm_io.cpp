@@ -21,7 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include "pgm_io.hpp"
+#include <indexing.hpp>
+#include <pgm_io.hpp>
 
 #include <cctype>
 #include <ios>
@@ -104,7 +105,7 @@ std::ostream& operator<<(std::ostream& out, const PGM_IO& ppm_io)
     {
         for (ULONG x = 0; x < image->width; ++x)
         {
-            out << image->data[get_pixel_index(*image, {x, y})];
+            out << image->data[pixel_index(*image, {x, y})];
             if (x == 0 || (x + 1) % PGM_IO::MAX_NUMBERS_PER_ROW != 0)
             {
                 if (x + 1 < image->width)
@@ -162,7 +163,7 @@ std::istream& operator>>(std::istream& in, PGM_IO& ppm_io)
         {
             try
             {
-                image->data[get_pixel_index(*image, {x, y})] =
+                image->data[pixel_index(*image, {x, y})] =
                     std::stoul(PGM_IO::read_pgm_instruction(in));
             }
             catch (std::invalid_argument&)
