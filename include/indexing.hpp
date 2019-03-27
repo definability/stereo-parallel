@@ -21,20 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#ifndef INDEXING_HPP
+#define INDEXING_HPP
+
 #include <image.hpp>
 
-bool image_valid(const struct Image& image)
-{
-    if (image.max_value == 0 || image.width == 0 || image.height == 0)
-    {
-        return false;
-    }
-    for (unsigned i = 0; i < image.width * image.height; ++i)
-    {
-        if (image.data[i] > image.max_value)
-        {
-            return false;
-        }
-    }
-    return true;
-}
+/**
+ * \brief Get position of the pixel in data array of the image.
+ *
+ * Despite instensities of pixels are stored in 1D array Image::data,
+ * it's convenient to access them using their coordinates.
+ * That's why the function for coordinates' conversion is needed.
+ *
+ * Result of accessing non-existent value
+ * depends on ::ULONG_ARRAY.
+ */
+ULONG get_pixel_index(const struct Image& image, struct Pixel pixel);
+
+/**
+ * \brief Get intensity of the pixel in the image.
+ *
+ * Simply call ::get_pixel_index and take a value with returned index
+ * from Image::data.
+ */
+ULONG get_pixel_value(const struct Image& image, struct Pixel pixel);
+
+#endif

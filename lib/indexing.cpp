@@ -21,20 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <image.hpp>
 
-bool image_valid(const struct Image& image)
+#include <indexing.hpp>
+
+ULONG get_pixel_index(const struct Image& image, struct Pixel pixel)
 {
-    if (image.max_value == 0 || image.width == 0 || image.height == 0)
-    {
-        return false;
-    }
-    for (unsigned i = 0; i < image.width * image.height; ++i)
-    {
-        if (image.data[i] > image.max_value)
-        {
-            return false;
-        }
-    }
-    return true;
+    return image.width * pixel.y + pixel.x;
+}
+
+ULONG get_pixel_value(const struct Image& image, struct Pixel pixel)
+{
+    return image.data[get_pixel_index(image, pixel)];
 }

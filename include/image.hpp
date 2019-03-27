@@ -80,23 +80,5 @@ struct Image
  * and neither intensity should exceed specified maximal value.
  */
 bool image_valid(const struct Image& image);
-/**
- * \brief Get position of the pixel in data array of the image.
- *
- * Despite instensities of pixels are stored in 1D array Image::data,
- * it's convenient to access them using their coordinates.
- * That's why the function for coordinates' conversion is needed.
- *
- * Result of accessing non-existent value
- * depends on ::ULONG_ARRAY.
- */
-ULONG get_pixel_index(const struct Image& image, struct Pixel pixel);
-/**
- * \brief Get intensity of the pixel in the image.
- *
- * Simply call ::get_pixel_index and take a value with returned index
- * from Image::data.
- */
-ULONG get_pixel_value(const struct Image& image, struct Pixel pixel);
 
 #endif
