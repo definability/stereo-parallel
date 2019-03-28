@@ -2,6 +2,7 @@
     "Checks": "\
         *,\
         -fuchsia*,\
+        -llvm-namespace-comment,\
     ",
     "WarningsAsErrors": "\
         *,\
