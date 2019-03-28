@@ -312,7 +312,7 @@ struct ConstraintGraph
      * less than by `threshold`, is marked as available one.
      *
      * To not recalculate lowest penalties,
-     * it's good to have precalculated sp::graph::lowest_penalties::LowestPenaltiesPenalties instance.
+     * it's good to have precalculated sp::graph::lowest_penalties::LowestPenalties instance.
      */
     ConstraintGraph(
         const struct DisparityGraph& disparity_graph,

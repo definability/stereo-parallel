@@ -178,7 +178,7 @@ ULONG node_index(const struct DisparityGraph& graph, struct Node node);
 
 /**
  * \brief Get index of a neighborhood in
- * sp::graph::lowest_penalties::LowestPenaltiesPenalties::neighborhoods.
+ * sp::graph::lowest_penalties::LowestPenalties::neighborhoods.
  *
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::neighborhood_exists_fast to make sure that you use it right.
