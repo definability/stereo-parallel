@@ -21,9 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/**
- * @file
- */
 #ifndef CONSTRAINT_GRAPH_HPP
 #define CONSTRAINT_GRAPH_HPP
 
@@ -32,6 +29,9 @@
 #include <lowest_penalties.hpp>
 #include <types.hpp>
 
+/**
+ * \brief Ulitilities to solve CSP.
+ */
 namespace sp::graph::constraint
 {
 

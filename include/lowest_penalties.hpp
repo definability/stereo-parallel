@@ -21,9 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/**
- * @file
- */
 #ifndef LOWEST_PENALTIES_HPP
 #define LOWEST_PENALTIES_HPP
 
@@ -36,6 +33,9 @@
 #include <indexing.hpp>
 #include <types.hpp>
 
+/**
+ * \brief Utilities to find locally best nodes and edges.
+ */
 namespace sp::graph::lowest_penalties
 {
 

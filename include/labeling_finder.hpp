@@ -21,9 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/**
- * @file
- */
 #ifndef LABELING_FINDER_HPP
 #define LABELING_FINDER_HPP
 
@@ -33,6 +30,9 @@
 #include <lowest_penalties.hpp>
 #include <types.hpp>
 
+/**
+ * \brief Functions to find a consistent labeling.
+ */
 namespace sp::labeling::finder
 {
 

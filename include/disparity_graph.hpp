@@ -21,9 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/**
- * @file
- */
 #ifndef DISPARITY_GRAPH_HPP
 #define DISPARITY_GRAPH_HPP
 
@@ -32,6 +29,9 @@
 
 #define MAX(x, y) ((x) >= (y)? (x) : (y))
 
+/**
+ * \brief Graph representation of disparity map support.
+ */
 namespace sp::graph::disparity
 {
 

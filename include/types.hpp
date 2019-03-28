@@ -21,14 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/**
- * @file
- */
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
 #include <vector>
 
+/**
+ * \brief Basic types.
+ */
 namespace sp::types
 {
 

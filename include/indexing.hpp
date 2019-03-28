@@ -28,6 +28,10 @@
 #include <image.hpp>
 #include <types.hpp>
 
+/**
+ * \brief Functions for getting access to arrays
+ * by abstract indices like sp::types::Pixels, sp::types::Nodes, etc.
+ */
 namespace sp::indexing
 {
 
