@@ -44,7 +44,7 @@ using sp::types::ULONG;
  * in given DisparityGraph are neighbors
  * and exist at all.
  *
- * As it's explained in ::NEIGHBORS_COUNT,
+ * As it's explained in sp::graph::disparity::NEIGHBORS_COUNT,
  * there are four possible neighbors.
  *
  * Logic says that
@@ -70,7 +70,7 @@ bool neighborhood_exists(
  * This function differs from sp::indexing::checks::neighborhood_exists
  * just by the second parameter:
  * it takes a neighbor index
- * calculated by ::neighbor_index function.
+ * calculated by sp::indexing::neighbor_index function.
  */
 bool neighborhood_exists_fast(
     const struct DisparityGraph& graph,

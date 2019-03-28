@@ -56,19 +56,19 @@ using sp::types::ULONG;
  *
  * Corresponding element of LowestPenalties::pixels array
  * contains minimal value of nodes of observed pixel.
- * It can be fetched by ::lowest_pixel_penalty and contains
+ * It can be fetched by sp::graph::lowest_penalties::lowest_pixel_penalty and contains
  * \f$\min\limits_{\delta \in D}{q_i\left( \delta; \varphi \right)}\f$,
- * where \f$i\f$ is an index of the pixel and can be got from ::pixel_index.
+ * where \f$i\f$ is an index of the pixel and can be got from sp::indexing::pixel_index.
  *
  * Corresponding element of LowestPenalties::neighborhoods array
  * contains minimal value of edges of observed neighborhood
  * (pair of neighboring pixels).
- * It can be fetched by ::lowest_neighborhood_penalty or
- * ::lowest_neighborhood_penalty_fast (depending on what you can provide)
+ * It can be fetched by sp::graph::lowest_penalties::lowest_neighborhood_penalty or
+ * sp::graph::lowest_penalties::lowest_neighborhood_penalty_fast (depending on what you can provide)
  * and contains
  * \f$\min\limits_{\left\langle \delta, \delta' \right\rangle \in D^2}
  *                {g_{ij}\left( \delta, \delta'; \varphi \right)}\f$,
- * where \f$i\f$ is an index of needed pixel and can be got from ::pixel_index,
+ * where \f$i\f$ is an index of needed pixel and can be got from sp::indexing::pixel_index,
  * and \f$j \in \mathcal{N}_i\f$ is an index of the neighbor.
  */
 struct LowestPenalties
@@ -96,14 +96,14 @@ struct LowestPenalties
      * \f]
      *
      * where \f$i\f$ is an index of the neighbor,
-     * and \f$\max\limits_j{\left| \mathcal{N}_j \right|}\f$ is ::NEIGHBORS_COUNT.
+     * and \f$\max\limits_j{\left| \mathcal{N}_j \right|}\f$ is sp::graph::disparity::NEIGHBORS_COUNT.
      */
     FLOAT_ARRAY neighborhoods;
     /**
      * \brief Calculate lowest penalties from DisparityGraph.
      *
-     * Uses ::calculate_lowest_pixel_penalty
-     * and ::calculate_lowest_neighborhood_penalty_slow
+     * Uses sp::graph::lowest_penalties::calculate_lowest_pixel_penalty
+     * and sp::graph::lowest_penalties::calculate_lowest_neighborhood_penalty_slow
      * to fetch minimal penalties from provided DisparityGraph
      * and save them to LowestPenalties::pixels
      * and LowestPenalties::neighborhoods.
@@ -146,7 +146,7 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
  * \brief Calculate minimal penalty among edges of a neighborhood.
  *
  * Note that the function doesn't check existence of provided neighborhood.
- * Use ::edge_exists to make sure that you use it right.
+ * Use sp::indexing::checks::edge_exists to make sure that you use it right.
  */
 FLOAT calculate_lowest_neighborhood_penalty_slow(
     const struct DisparityGraph& graph,
@@ -181,7 +181,7 @@ FLOAT lowest_neighborhood_penalty_fast(
  * from LowestPenalties::neighborhoods by edge of the neighborhood.
  *
  * Note that the function doesn't check existence of provided neighborhood.
- * Use ::edge_exists to make sure that you use it right.
+ * Use sp::indexing::checks::edge_exists to make sure that you use it right.
  */
 FLOAT lowest_neighborhood_penalty(
     const struct LowestPenalties& penalties,

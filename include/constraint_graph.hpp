@@ -257,7 +257,7 @@ using sp::types::Node;
  * will cost almost only computation of its penalty.
  *
  * It's needed to store a pointer to a DisparityGraph in ConstraintGraph
- * to use ::edge_penalty.
+ * to use sp::graph::disparity::edge_penalty.
  */
 struct ConstraintGraph
 {
@@ -319,7 +319,7 @@ struct ConstraintGraph
  *
  * The function doesn't check existence of the Node.
  * You should perform it by yourself
- * using ::node_exists.
+ * using sp::indexing::checks::node_exists.
  */
 void make_node_available(
     struct ConstraintGraph* graph,
@@ -330,7 +330,7 @@ void make_node_available(
  *
  * The function doesn't check existence of the Node.
  * You should perform it by yourself
- * using ::node_exists.
+ * using sp::indexing::checks::node_exists.
  */
 void make_node_unavailable(
     struct ConstraintGraph* graph,
@@ -347,7 +347,7 @@ void make_all_nodes_unavailable(struct ConstraintGraph* graph);
  *
  * The function doesn't check existence of the Node.
  * You should perform it by yourself
- * using ::node_exists.
+ * using sp::indexing::checks::node_exists.
  */
 BOOL is_node_available(
     const struct ConstraintGraph& graph,
@@ -361,7 +361,7 @@ BOOL is_node_available(
  * using ConstraintGraph::is_node_available.
  *
  * The function checks existence of the Edge
- * using ::edge_exists.
+ * using sp::indexing::checks::edge_exists.
  */
 BOOL is_edge_available(
     const struct ConstraintGraph& graph,
@@ -377,14 +377,14 @@ BOOL is_edge_available(
  *
  * The function doesn't check existence of the Node.
  * You should perform it by yourself
- * using ::node_exists.
+ * using sp::indexing::checks::node_exists.
  */
 BOOL should_remove_node(
     const struct ConstraintGraph& graph,
     struct Node node
 );
 /**
- * \brief Perform one iteration of ::solve_csp.
+ * \brief Perform one iteration of sp::graph::constraint::solve_csp.
  *
  * @return
  *  Boolean flag.

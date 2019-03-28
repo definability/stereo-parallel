@@ -69,8 +69,8 @@ FLOAT_ARRAY fetch_edge_available_penalties(
 );
 /**
  * \brief Construct an array of available differences
- * gathered from all pixels via ::fetch_pixel_available_penalties
- * and from all neighbors via ::fetch_edge_available_penalties.
+ * gathered from all pixels via sp::labeling::finder::fetch_pixel_available_penalties
+ * and from all neighbors via sp::labeling::finder::fetch_edge_available_penalties.
  * The output is sorted in ascending order.
  */
 FLOAT_ARRAY fetch_available_penalties(
@@ -91,7 +91,7 @@ FLOAT_ARRAY fetch_available_penalties(
  * we need to solve CSP,
  * removing all elements,
  * that have a big deviation from the corresponding minimal values.
- * The ::solve_csp does this.
+ * The sp::graph::constraint::solve_csp does this.
  *
  * If we want to find the minimal available threshold,
  * which still allows the problem to be solvable,
@@ -102,7 +102,7 @@ FLOAT_ARRAY fetch_available_penalties(
  *   and differences between penalties of edges
  *   and corresponding best edges.
  *   - We can use a binary search to find the best threshold,
- *   using ::solve_csp as the \f$ \ge \f$ comparison
+ *   using sp::graph::constraint::solve_csp as the \f$ \ge \f$ comparison
  *   between the following solution and the best one.
  *
  * The algorithm:
@@ -118,7 +118,7 @@ FLOAT_ARRAY fetch_available_penalties(
  *   -# Otherwise, move the start just after the center \f$ f \gets i + 1 \f$.
  *   -# Go to step `2`.
  *
- * This allows us to execute ::solve_csp
+ * This allows us to execute sp::graph::constraint::solve_csp
  * not more than \f$ \left[ \log_2 \ell + 1 \right] \f$ times.
  */
 FLOAT calculate_minimal_consistent_threshold(
@@ -129,7 +129,7 @@ FLOAT calculate_minimal_consistent_threshold(
 /**
  * \brief Leave only the best available node in the pixel.
  * Remove all other nodes
- * (mark them as unavailable with ::make_node_unavailable).
+ * (mark them as unavailable with sp::graph::constraint::make_node_unavailable).
  */
 struct ConstraintGraph* choose_best_node(
     struct ConstraintGraph* graph,
@@ -138,12 +138,12 @@ struct ConstraintGraph* choose_best_node(
 /**
  * \brief Find a labeling, consistent with the minimal available threshold.
  *
- * Use ::calculate_minimal_consistent_threshold
+ * Use sp::labeling::finder::calculate_minimal_consistent_threshold
  * to find the threshold.
  * For each pixel
  *
- *   - execute ::choose_best_node to use the best node;
- *   - run ::solve_csp for the graph
+ *   - execute sp::labeling::finder::choose_best_node to use the best node;
+ *   - run sp::graph::constraint::solve_csp for the graph
  *   to remove inconsistent nodes and edges.
  *
  * As the result,

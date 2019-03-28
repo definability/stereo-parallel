@@ -409,7 +409,7 @@ struct DisparityGraph
 /**
  * \brief Calculate penalty of Edge without neighborhood check.
  *
- * You should use ::edge_exists function
+ * You should use sp::indexing::checks::edge_exists function
  * to check that the Edge actually exists.
  * If it doesn't, the penalty is assumed to be \f$\infty\f$
  * (but this function doesn't check existence).
@@ -421,7 +421,7 @@ FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge);
 /**
  * \brief Calculate penalty of Node.
  *
- * You should use ::node_exists function
+ * You should use sp::indexing::checks::node_exists function
  * to check that the Node actually exists.
  * If it doesn't, the penalty is assumed to be \f$\infty\f$
  * (but this function doesn't check existence).
