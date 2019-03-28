@@ -157,7 +157,7 @@ using sp::types::Node;
  *
  * This means, that for 1Mpx image \f$2^{10} \times 2^{10}\f$
  * with maximal disparity equal to \f$128 = 2^7\f$
- * and four neighbors (::NEIGHBORS_COUNT)
+ * and four neighbors (sp::graph::disparity::NEIGHBORS_COUNT)
  * number of edges is
  *
  * \f[
@@ -264,9 +264,14 @@ struct ConstraintGraph
 {
     /**
      * \brief sp::graph::disparity::DisparityGraph instance
-     * for which the sp::graph::constraint::ConstraintGraph instance was created.
+     * for which the sp::graph::constraint::ConstraintGraph instance
+     * was created.
      */
     const struct DisparityGraph& disparity_graph;
+    /**
+     * \brief sp::graph::lowest_penalties::LowestPenalties instance
+     * to check availability of nodes and edges faster.
+     */
     const struct LowestPenalties& lowest_penalties;
     /**
      * \brief Array that contains markers for availability of nodes.

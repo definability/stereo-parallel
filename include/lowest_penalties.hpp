@@ -73,6 +73,10 @@ using sp::types::ULONG;
  */
 struct LowestPenalties
 {
+    /**
+     * \brief The sp::graph::disparity::DisparityGraph
+     * for which the lowest penalties should be calculated.
+     */
     const struct DisparityGraph& graph;
     /**
      * \brief Minimal penalties of nodes per pixels.
