@@ -125,7 +125,7 @@ FLOAT calculate_lowest_pixel_penalty(
  * \brief Calculate minimal penalty among edges of a neighborhood.
  *
  * Note that the function doesn't check existence of provided neighborhood.
- * Use ::neighborhood_exists to make sure that you use it right.
+ * Use sp::indexing::checks::neighborhood_exists to make sure that you use it right.
  */
 FLOAT calculate_lowest_neighborhood_penalty(
     const struct DisparityGraph& graph,
@@ -136,7 +136,7 @@ FLOAT calculate_lowest_neighborhood_penalty(
  * \brief Calculate minimal penalty among edges of a neighborhood.
  *
  * Note that the function doesn't check existence of provided neighborhood.
- * Use ::neighborhood_exists_fast to make sure that you use it right.
+ * Use sp::indexing::checks::neighborhood_exists_fast to make sure that you use it right.
  */
 FLOAT calculate_lowest_neighborhood_penalty_fast(
     const struct DisparityGraph& graph,
@@ -158,7 +158,7 @@ FLOAT calculate_lowest_neighborhood_penalty_slow(
  * from LowestPenalties::pixels.
  *
  * Note that the function doesn't check existence of provided neighborhood.
- * Use ::neighborhood_exists to make sure that you use it right.
+ * Use sp::indexing::checks::neighborhood_exists to make sure that you use it right.
  */
 FLOAT lowest_pixel_penalty(
     const struct LowestPenalties& penalties,
@@ -169,7 +169,7 @@ FLOAT lowest_pixel_penalty(
  * from LowestPenalties::neighborhoods by neighboring pixel and its neighbor.
  *
  * Note that the function doesn't check existence of provided neighborhood.
- * Use ::neighborhood_exists_fast to make sure that you use it right.
+ * Use sp::indexing::checks::neighborhood_exists_fast to make sure that you use it right.
  */
 FLOAT lowest_neighborhood_penalty_fast(
     const struct LowestPenalties& penalties,

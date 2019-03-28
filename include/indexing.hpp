@@ -65,7 +65,7 @@ ULONG pixel_value(const struct Image& image, struct Pixel pixel);
  *
  * The function doesn't check existence of neighbor.
  * You should perform it by yourself
- * using ::neighborhood_exists.
+ * using sp::indexing::checks::neighborhood_exists.
  */
 ULONG reparametrization_index_fast(
     const struct DisparityGraph& graph,
@@ -79,7 +79,7 @@ ULONG reparametrization_index_fast(
  *
  * The function doesn't check existence of neighbor.
  * You should perform it by yourself
- * using ::neighborhood_exists.
+ * using sp::indexing::checks::neighborhood_exists.
  */
 ULONG reparametrization_index(
     const struct DisparityGraph& graph,
@@ -93,7 +93,7 @@ ULONG reparametrization_index(
  *
  * The function doesn't check existence of neighbor.
  * You should perform it by yourself
- * using ::neighborhood_exists.
+ * using sp::indexing::checks::neighborhood_exists.
  */
 ULONG reparametrization_index_slow(
     const struct DisparityGraph& graph,
@@ -106,7 +106,7 @@ ULONG reparametrization_index_slow(
  *
  * The function doesn't check existence of neighbor.
  * You should perform it by yourself
- * using ::neighborhood_exists.
+ * using sp::indexing::checks::neighborhood_exists.
  */
 FLOAT reparametrization_value_fast(
     const struct DisparityGraph& graph,
@@ -120,7 +120,7 @@ FLOAT reparametrization_value_fast(
  *
  * The function doesn't check existence of neighbor.
  * You should perform it by yourself
- * using ::neighborhood_exists.
+ * using sp::indexing::checks::neighborhood_exists.
  */
 FLOAT reparametrization_value(
     const struct DisparityGraph& graph,
@@ -134,7 +134,7 @@ FLOAT reparametrization_value(
  *
  * The function doesn't check existence of neighbor.
  * You should perform it by yourself
- * using ::neighborhood_exists.
+ * using sp::indexing::checks::neighborhood_exists.
  */
 FLOAT reparametrization_value_slow(
     const struct DisparityGraph& graph,
@@ -176,7 +176,7 @@ ULONG node_index(const struct DisparityGraph& graph, struct Node node);
  * \brief Get index of a neighborhood in LowestPenalties::neighborhoods.
  *
  * Note that the function doesn't check existence of provided neighborhood.
- * Use ::neighborhood_exists_fast to make sure that you use it right.
+ * Use sp::indexing::checks::neighborhood_exists_fast to make sure that you use it right.
  */
 ULONG neighborhood_index_fast(
     const struct DisparityGraph& graph,
@@ -188,7 +188,7 @@ ULONG neighborhood_index_fast(
  * \brief Get index of a neighborhood given two neighboring pixels.
  *
  * Note that the function doesn't check existence of provided neighborhood.
- * Use ::neighborhood_exists to make sure that you use it right.
+ * Use sp::indexing::checks::neighborhood_exists to make sure that you use it right.
  */
 ULONG neighborhood_index(
     const struct DisparityGraph& graph,
@@ -211,7 +211,7 @@ ULONG neighborhood_index_slow(
  * \brief Get neighbor pixel to current one using neighbor index.
  *
  * Note that the function doesn't check existence of provided neighborhood.
- * Use ::neighborhood_exists to make sure that you use it right.
+ * Use sp::indexing::checks::neighborhood_exists to make sure that you use it right.
  */
 Pixel neighbor_by_index(
     struct Pixel pixel,

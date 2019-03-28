@@ -62,9 +62,9 @@ bool neighborhood_exists(
 /**
  * \brief Check existence of provided Pixel instances in given DisparityGraph.
  *
- * See ::neighborhood_exists for more information.
+ * See sp::indexing::checks::neighborhood_exists for more information.
  *
- * This function differs from ::neighborhood_exists
+ * This function differs from sp::indexing::checks::neighborhood_exists
  * just by the second parameter:
  * it takes a neighbor index
  * calculated by ::neighbor_index function.
@@ -93,7 +93,7 @@ bool node_exists(
 /**
  * \brief Check existence of provided Edge in given DisparityGraph.
  *
- * Similar to ::neighborhood_exists,
+ * Similar to sp::indexing::checks::neighborhood_exists,
  * but also checks constraints imposed on disparities
  * of the neighboring pixels.
  */
