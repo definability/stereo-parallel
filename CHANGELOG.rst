@@ -18,7 +18,7 @@ Added
 
 - Project build with CMake_.
 - Project testing with ctest_.
-- Namespace ``sp`` (stereo parallel), containing all other namespaces
+- Namespace ``sp`` (stereo parallel), containing all other namespaces.
 
 - ``types`` with the basic types.
 
