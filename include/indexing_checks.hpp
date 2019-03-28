@@ -41,7 +41,7 @@ using sp::types::ULONG;
 
 /**
  * \brief Check wheter provided Pixel instances
- * in given DisparityGraph are neighbors
+ * in given sp::graph::disparity::DisparityGraph are neighbors
  * and exist at all.
  *
  * As it's explained in sp::graph::disparity::NEIGHBORS_COUNT,
@@ -54,7 +54,7 @@ using sp::types::ULONG;
  * and left pixels don't have left pixels.
  *
  * Also, pixels that are not the nearest straight neighbors,
- * are not a neighbors in the DisparityGraph.
+ * are not a neighbors in the sp::graph::disparity::DisparityGraph.
  */
 bool neighborhood_exists(
     const struct DisparityGraph& graph,
@@ -63,7 +63,7 @@ bool neighborhood_exists(
 );
 
 /**
- * \brief Check existence of provided Pixel instances in given DisparityGraph.
+ * \brief Check existence of provided Pixel instances in given sp::graph::disparity::DisparityGraph.
  *
  * See sp::indexing::checks::neighborhood_exists for more information.
  *
@@ -82,9 +82,9 @@ bool neighborhood_exists_fast(
  * \brief Check existence of provided Node.
  *
  * Node exists if position of its pixel doesn't overflow
- * DisparityGraph::right image,
+ * sp::graph::disparity::DisparityGraph::right image,
  * corresponding pixel (calculated by the disparity)
- * doesn't overflow the DisparityGraph::left image,
+ * doesn't overflow the sp::graph::disparity::DisparityGraph::left image,
  * and its disparity doesn't overflow
  * the maximal allowed.
  */
@@ -94,7 +94,7 @@ bool node_exists(
 );
 
 /**
- * \brief Check existence of provided Edge in given DisparityGraph.
+ * \brief Check existence of provided Edge in given sp::graph::disparity::DisparityGraph.
  *
  * Similar to sp::indexing::checks::neighborhood_exists,
  * but also checks constraints imposed on disparities

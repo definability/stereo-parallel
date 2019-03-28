@@ -64,7 +64,7 @@ ULONG pixel_index(const struct Image& image, struct Pixel pixel);
 ULONG pixel_value(const struct Image& image, struct Pixel pixel);
 
 /**
- * \brief Get an index of DisparityGraph::reparametrization element
+ * \brief Get an index of sp::graph::disparity::DisparityGraph::reparametrization element
  * using a Node and an index of its neighbor.
  *
  * The function doesn't check existence of neighbor.
@@ -78,7 +78,7 @@ ULONG reparametrization_index_fast(
 );
 
 /**
- * \brief Get an index of DisparityGraph::reparametrization element
+ * \brief Get an index of sp::graph::disparity::DisparityGraph::reparametrization element
  * using a Node and a Pixel.
  *
  * The function doesn't check existence of neighbor.
@@ -92,7 +92,7 @@ ULONG reparametrization_index(
 );
 
 /**
- * \brief Get an index of DisparityGraph::reparametrization element
+ * \brief Get an index of sp::graph::disparity::DisparityGraph::reparametrization element
  * using an Edge.
  *
  * The function doesn't check existence of neighbor.
@@ -105,7 +105,7 @@ ULONG reparametrization_index_slow(
 );
 
 /**
- * \brief Get a value of DisparityGraph::reparametrization element
+ * \brief Get a value of sp::graph::disparity::DisparityGraph::reparametrization element
  * using a Node and an index of its neighbor.
  *
  * The function doesn't check existence of neighbor.
@@ -119,7 +119,7 @@ FLOAT reparametrization_value_fast(
 );
 
 /**
- * \brief Get a value of DisparityGraph::reparametrization element
+ * \brief Get a value of sp::graph::disparity::DisparityGraph::reparametrization element
  * using a Node and a Pixel.
  *
  * The function doesn't check existence of neighbor.
@@ -133,7 +133,7 @@ FLOAT reparametrization_value(
 );
 
 /**
- * \brief Get a value of DisparityGraph::reparametrization element
+ * \brief Get a value of sp::graph::disparity::DisparityGraph::reparametrization element
  * using an Edge.
  *
  * The function doesn't check existence of neighbor.
@@ -167,7 +167,7 @@ ULONG neighbor_index(
 );
 
 /**
- * \brief Get an index of ConstraintGraph::nodes_availability element
+ * \brief Get an index of sp::graph::constraint::ConstraintGraph::nodes_availability element
  * using a Node.
  *
  * The function doesn't check existence of the Node.
@@ -177,7 +177,8 @@ ULONG neighbor_index(
 ULONG node_index(const struct DisparityGraph& graph, struct Node node);
 
 /**
- * \brief Get index of a neighborhood in LowestPenalties::neighborhoods.
+ * \brief Get index of a neighborhood in
+ * sp::graph::lowest_penalties::LowestPenaltiesPenalties::neighborhoods.
  *
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::neighborhood_exists_fast to make sure that you use it right.

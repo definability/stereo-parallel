@@ -78,7 +78,7 @@ FLOAT_ARRAY fetch_available_penalties(
 );
 /**
  * \brief Calculate the minimal threshold
- * for ConstraintGraph to have a solution.
+ * for sp::graph::constraint::ConstraintGraph to have a solution.
  *
  * Nodes and edges with low penalty
  * may be consistent with graphs,

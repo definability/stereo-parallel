@@ -83,7 +83,7 @@ struct Pixel
 };
 
 /**
- * \brief Node of DisparityGraph is a pair
+ * \brief Node of sp::graph::disparity::DisparityGraph is a pair
  * consisting of Pixel and disparity assigned to it.
  */
 struct Node

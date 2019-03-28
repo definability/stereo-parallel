@@ -49,7 +49,7 @@ using sp::types::Node;
  *
  * \section csp-problem-statement Statement of the problem
  *
- * After optimization performed on DisparityGraph,
+ * After optimization performed on sp::graph::disparity::DisparityGraph,
  * it's needed to choose one labeling of many others
  * that satisfy constraints of the problem.
  *
@@ -182,14 +182,14 @@ using sp::types::Node;
  * \f]
  *
  * If we use 4-byte floating point numbers
- * for DisparityGraph::reparametrization,
- * the DisparityGraph will cost \f$\approx\f$ 2GB.
+ * for sp::graph::disparity::DisparityGraph::reparametrization,
+ * the sp::graph::disparity::DisparityGraph will cost \f$\approx\f$ 2GB.
  * If we store information about availability of each edge in a single bit,
- * memory consumption of the ConstraintGraph will be \f$\approx\f$ 8GB.
+ * memory consumption of the sp::graph::constraint::ConstraintGraph will be \f$\approx\f$ 8GB.
  *
  * It's problematic to store the last one,
  * not speaking about parallel solution of different CSPs,
- * because each instance should have its own copy of ConstraintGraph.
+ * because each instance should have its own copy of sp::graph::constraint::ConstraintGraph.
  *
  *
  * \subsection memory-issue-solution Solution
@@ -256,14 +256,15 @@ using sp::types::Node;
  * computation of initial availability for an edge
  * will cost almost only computation of its penalty.
  *
- * It's needed to store a pointer to a DisparityGraph in ConstraintGraph
+ * It's needed to store a pointer to a sp::graph::disparity::DisparityGraph
+ * in sp::graph::constraint::ConstraintGraph
  * to use sp::graph::disparity::edge_penalty.
  */
 struct ConstraintGraph
 {
     /**
-     * \brief DisparityGraph instance
-     * for which the ConstraintGraph instance was created.
+     * \brief sp::graph::disparity::DisparityGraph instance
+     * for which the sp::graph::constraint::ConstraintGraph instance was created.
      */
     const struct DisparityGraph& disparity_graph;
     const struct LowestPenalties& lowest_penalties;
@@ -274,7 +275,7 @@ struct ConstraintGraph
      * `true` means that the node can be chosen under applied constraints.
      *
      * Index of availability
-     * of specific Node from ConstraintGraph::nodes_availability
+     * of specific Node from sp::graph::constraint::ConstraintGraph::nodes_availability
      * can be calculated by formula
      *
      * \f[
@@ -296,17 +297,17 @@ struct ConstraintGraph
      */
     FLOAT threshold;
     /**
-     * \brief Build a CSP problem for given DisparityGraph.
+     * \brief Build a CSP problem for given sp::graph::disparity::DisparityGraph.
      *
-     * Corresponding ConstraintGraph should have
-     * the same amount of nodes as corresponding DisparityGraph.
+     * Corresponding sp::graph::constraint::ConstraintGraph should have
+     * the same amount of nodes as corresponding sp::graph::disparity::DisparityGraph.
      *
      * First, all nodes and edges assumed to be unavailable.
      * Then, each Node that has a penalty that differs from the minimal
      * less than by `threshold`, is marked as available one.
      *
      * To not recalculate lowest penalties,
-     * it's good to have precalculated LowestPenalties instance.
+     * it's good to have precalculated sp::graph::lowest_penalties::LowestPenaltiesPenalties instance.
      */
     ConstraintGraph(
         const struct DisparityGraph& disparity_graph,
@@ -343,7 +344,7 @@ void make_all_nodes_unavailable(struct ConstraintGraph* graph);
 /**
  * \brief Check whether the Node is still available.
  *
- * Takes value from ConstraintGraph::nodes_availability array.
+ * Takes value from sp::graph::constraint::ConstraintGraph::nodes_availability array.
  *
  * The function doesn't check existence of the Node.
  * You should perform it by yourself
@@ -356,9 +357,9 @@ BOOL is_node_available(
 /**
  * \brief Check whether the Edge is still available.
  *
- * Compares penalty of the Edge with given ConstraintGraph::threshold
+ * Compares penalty of the Edge with given sp::graph::constraint::ConstraintGraph::threshold
  * and checks whether two nodes of the Edge are available
- * using ConstraintGraph::is_node_available.
+ * using sp::graph::constraint::ConstraintGraph::is_node_available.
  *
  * The function checks existence of the Edge
  * using sp::indexing::checks::edge_exists.

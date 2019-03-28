@@ -51,16 +51,16 @@ using sp::types::ULONG;
  * \brief Graph containing lowest penalties for
  * pixels and neighborhoods.
  *
- * ConstraintGraph uses minimal penalties
+ * sp::graph::constraint::ConstraintGraph uses minimal penalties
  * to check availability of nodes and edges.
  *
- * Corresponding element of LowestPenalties::pixels array
+ * Corresponding element of sp::graph::lowest_penalties::LowestPenaltiesPenalties::pixels array
  * contains minimal value of nodes of observed pixel.
  * It can be fetched by sp::graph::lowest_penalties::lowest_pixel_penalty and contains
  * \f$\min\limits_{\delta \in D}{q_i\left( \delta; \varphi \right)}\f$,
  * where \f$i\f$ is an index of the pixel and can be got from sp::indexing::pixel_index.
  *
- * Corresponding element of LowestPenalties::neighborhoods array
+ * Corresponding element of sp::graph::lowest_penalties::LowestPenaltiesPenalties::neighborhoods array
  * contains minimal value of edges of observed neighborhood
  * (pair of neighboring pixels).
  * It can be fetched by sp::graph::lowest_penalties::lowest_neighborhood_penalty or
@@ -100,17 +100,17 @@ struct LowestPenalties
      */
     FLOAT_ARRAY neighborhoods;
     /**
-     * \brief Calculate lowest penalties from DisparityGraph.
+     * \brief Calculate lowest penalties from sp::graph::disparity::DisparityGraph.
      *
      * Uses sp::graph::lowest_penalties::calculate_lowest_pixel_penalty
      * and sp::graph::lowest_penalties::calculate_lowest_neighborhood_penalty_slow
-     * to fetch minimal penalties from provided DisparityGraph
-     * and save them to LowestPenalties::pixels
-     * and LowestPenalties::neighborhoods.
+     * to fetch minimal penalties from provided sp::graph::disparity::DisparityGraph
+     * and save them to sp::graph::lowest_penalties::LowestPenaltiesPenalties::pixels
+     * and sp::graph::lowest_penalties::LowestPenaltiesPenalties::neighborhoods.
      *
-     * Note that if you will change provided DisparityGraph instance
-     * after LowestPenalties construction,
-     * the LowestPenalties instance will not be changed.
+     * Note that if you will change provided sp::graph::disparity::DisparityGraph instance
+     * after sp::graph::lowest_penalties::LowestPenaltiesPenalties construction,
+     * the sp::graph::lowest_penalties::LowestPenaltiesPenalties instance will not be changed.
      */
     explicit LowestPenalties(const struct DisparityGraph& graph);
 };
@@ -155,7 +155,7 @@ FLOAT calculate_lowest_neighborhood_penalty_slow(
 );
 /**
  * \brief Get precalculated minimal penalty among edges of a neighborhood
- * from LowestPenalties::pixels.
+ * from sp::graph::lowest_penalties::LowestPenaltiesPenalties::pixels.
  *
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::neighborhood_exists to make sure that you use it right.
@@ -166,7 +166,8 @@ FLOAT lowest_pixel_penalty(
 );
 /**
  * \brief Get precalculated minimal penalty among edges of a neighborhood
- * from LowestPenalties::neighborhoods by neighboring pixel and its neighbor.
+ * from sp::graph::lowest_penalties::LowestPenaltiesPenalties::neighborhoods
+ * by neighboring pixel and its neighbor.
  *
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::neighborhood_exists_fast to make sure that you use it right.
@@ -178,7 +179,8 @@ FLOAT lowest_neighborhood_penalty_fast(
 );
 /**
  * \brief Get precalculated minimal penalty among edges of a neighborhood
- * from LowestPenalties::neighborhoods by edge of the neighborhood.
+ * from sp::graph::lowest_penalties::LowestPenaltiesPenalties::neighborhoods
+ * by edge of the neighborhood.
  *
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::edge_exists to make sure that you use it right.
