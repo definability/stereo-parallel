@@ -34,10 +34,7 @@
 namespace sp::graph::disparity
 {
 
-using sp::indexing::pixel_index;
 using sp::indexing::pixel_value;
-using sp::indexing::reparametrization_index;
-using sp::indexing::reparametrization_index_slow;
 using sp::indexing::reparametrization_value;
 using sp::indexing::reparametrization_value_fast;
 using sp::indexing::reparametrization_value_slow;
