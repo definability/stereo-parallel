@@ -31,6 +31,16 @@
 
 BOOST_AUTO_TEST_SUITE(DisparityGraphTest)
 
+using sp::graph::disparity::DisparityGraph;
+using sp::image::Image;
+using sp::image::PGM_IO;
+using sp::indexing::checks::edge_exists;
+using sp::indexing::checks::neighborhood_exists;
+using sp::indexing::checks::node_exists;
+using sp::indexing::reparametrization_index;
+using sp::indexing::reparametrization_index_fast;
+using sp::types::ULONG;
+
 BOOST_AUTO_TEST_CASE(check_nodes_existence)
 {
     PGM_IO pgm_io;

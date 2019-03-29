@@ -18,150 +18,178 @@ Added
 
 - Project build with CMake_.
 - Project testing with ctest_.
-- ``Image`` structure to store information about images.
-  Contains
+- Namespace ``sp`` (stereo parallel), containing all other namespaces.
 
-  - ``width`` of an image,
-  - ``height`` of an image,
-  - ``max_value`` limit for intensity,
-  - ``data`` array of intensities of pixels in row-major order.
+- ``types`` with the basic types.
 
-- ``Pixel`` structure to represent position of a pixel.
-  Contains
+  - ``Pixel`` structure to represent position of a pixel.
+    Contains
 
-  - ``x`` (horizontal offset, column) of a pixel.
-  - ``y`` (vertical offset, row) of a pixel,
+    - ``x`` (horizontal offset, column) of a pixel.
+    - ``y`` (vertical offset, row) of a pixel,
 
-- ``image_valid`` function to check validity of ``Image``.
-- ``pixel_index`` to calculate index of given pixel
-  in 1D intensities array.
-- ``pixel_value`` to fetch intensity of given pixel
-  from 1D intensities array.
-- ``DisparityGraph`` to represent the problem using graphical model.
-  Contains
+  - ``Node`` of the ``DisparityGraph`` stores
 
-  - ``left`` image,
-  - ``right`` image
-    (made on a camera located to the right of the ``left`` image),
-  - ``disparity_levels`` is the number of different disparity levels
-  - ``cleanness`` weight of ``Node`` penalty.
-  - ``smoothness`` weight of ``Edge`` penalty.
-    (the more it is, the more memory the graph consumes),
-  - ``reparametrization`` that allows to solve the dual problem.
+    - ``pixel`` it belongs to,
+    - ``disparity`` assigned to the ``pixel`` in the node.
 
-- ``Node`` of the ``DisparityGraph`` stores
+  - ``Edge`` of the ``DisparityGraph`` is a tuple of two ``Node`` instances
 
-  - ``pixel`` it belongs to,
-  - ``disparity`` assigned to the ``pixel`` in the node.
+    - ``node`` is the start,
+    - ``neighbor`` is the end of the edge.
 
-- ``Edge`` of the ``DisparityGraph`` is a tuple of two ``Node`` instances
+- ``image`` namespace with image processing utilities.
 
-  - ``node`` is the start,
-  - ``neighbor`` is the end of the edge.
+  - ``Image`` structure to store information about images.
+    Contains
 
-- ``neighbor_index`` allows to get index of neighboring pixel for fast access.
-- ``neighbor_by_index`` allows to get a neighboring pixel
-  of the ``Node`` by index of the neighbor.
-- ``neighborhood_exists`` checks whether two pixels are really neighbors.
-- ``neighborhood_exists_fast`` checks whether a pixel has a neighbor
-  with specified index.
-- ``node_exists`` checks existence of a node.
-- ``edge_exists`` checks existence of an edge.
-- ``edge_penalty`` calculates penalty of an edge.
-- ``node_penalty`` calculates penalty of a node.
-- ``reparametrization_index_fast`` to get an index of reparametrization element
-  for given a node and its neighbor index.
-- ``reparametrization_index`` to get an index of reparametrization element
-  using a node and a pixel.
-- ``reparametrization_index_slow`` to get an index of reparametrization element
-  by an edge.
-- ``reparametrization_value_fast`` to get a value of reparametrization element
-  for given a node and its neighbor value.
-- ``reparametrization_value`` to get a value of reparametrization element
-  using a node and a pixel.
-- ``reparametrization_value_slow`` to get a value of reparametrization element
-  by an edge.
+    - ``width`` of an image,
+    - ``height`` of an image,
+    - ``max_value`` limit for intensity,
+    - ``data`` array of intensities of pixels in row-major order.
 
-- ``ConstraintGraph`` to build final disparity map
-  after optimization of ``DisparityGraph``.
-  Contains
+  - ``PGM_IO`` class to read and write the ``Image`` to and from
+    the plain grayscale PGM files.
+    Contains
 
-  - Constructor to build a ``ConstraintGraph`` given ``DisparityGraph``.
-  - ``nodes_availability`` array that contains information about ability
-    of each ``Node`` to be chosen,
-  - ``disparity_graph`` constant pointer to ``DisparityGraph`` instance
-    from which the ``ConstraintGraph`` was built.
-  - ``threshold`` parameter to calculate `epsilon`-consistent nodes.
+    - ``get_image`` getter for the read ``Image``,
+    - ``set_image`` setter for the ``Image`` to write,
+    - ``operator>>`` to read an ``Image`` from a file,
+    - ``operator<<`` to write an ``Image`` to a file,
 
-- ``node_exists`` function to check whether specified ``Node``
-  is marked as available in ``ConstraintGraph``.
-- ``make_node_available`` to mark specified ``Node``
-  as available in ``ConstraintGraph``.
-- ``make_node_unavailable`` to mark specified ``Node``
-  as unavailable in ``ConstraintGraph``.
-- ``make_all_nodes_unavailable`` to mark all ``Node`` instances
-  as unavailable in ``ConstraintGraph``.
-- ``solve_csp`` to solve a CSP problem given ``ConstraintGraph``.
-- ``csp_solution_iteration`` to make a step in ``solve_csp``.
-- ``should_remove_node`` to check whether we need to remove the node.
-- ``is_edge_available`` to check edge existence.
-- ``is_node_available`` to check node existence.
-- ``node_index`` to get index of the node in ``nodes_availability`` array.
-- ``check_nodes_left`` to check whether there are nodes left
-  in ``ConstraintGraph``.
+  - ``image_valid`` function to check validity of ``Image``.
 
-- ``LowestPenalties`` to store minimal penalties of pixels and neighborhoods.
-  Contains
+- ``indexing`` contains functions for getting access to arrays
+  by abstract indices like ``Pixels``, ``Nodes``, etc.
 
-  - ``graph`` constant reference to ``DisparityGraph`` instance
-    from which the ``LowestPenalties`` was built.
-  - ``pixels`` array with minimal penalties of pixels
-    calculated from correspondent nodes.
-  - ``neighborhoods`` array with minimal penalties of neighborhoods
-    calculated from correspondent edges.
+  - ``pixel_index`` to calculate index of given pixel
+    in 1D intensities array.
+  - ``pixel_value`` to fetch intensity of given pixel
+    from 1D intensities array.
+  - ``node_index`` to get index of the node in ``nodes_availability`` array.
+  - ``neighbor_index`` allows to get index of neighboring pixel for fast access.
+  - ``neighbor_by_index`` allows to get a neighboring pixel
+    of the ``Node`` by index of the neighbor.
+  - ``reparametrization_index_fast`` to get an index of
+    reparametrization element for given a node and its neighbor index.
+  - ``reparametrization_index`` to get an index of reparametrization element
+    using a node and a pixel.
+  - ``reparametrization_index_slow`` to get an index of
+    reparametrization element by an edge.
+  - ``reparametrization_value_fast`` to get a value of reparametrization element
+    for given a node and its neighbor value.
+  - ``reparametrization_value`` to get a value of reparametrization element
+    using a node and a pixel.
+  - ``reparametrization_value_slow`` to get a value of reparametrization element
+    by an edge.
+  - ``neighborhood_index_fast`` to get index of a neighborhood
+    from ``neighborhoods`` of ``LowestPenalties``
+    using pixel coordinates and its neighbor index.
+  - ``neighborhood_index`` to get index of a neighborhood
+    from ``neighborhoods`` of ``LowestPenalties``
+    using coordinates of pixel and its neighbor.
+  - ``neighborhood_index_slow`` to get index of a neighborhood
+    from ``neighborhoods`` of ``LowestPenalties``
+    using ``Edge`` instance.
 
-- ``neighborhood_index_fast`` to get index of a neighborhood
-  from ``neighborhoods`` of ``LowestPenalties``
-  using pixel coordinates and its neighbor index.
-- ``neighborhood_index`` to get index of a neighborhood
-  from ``neighborhoods`` of ``LowestPenalties``
-  using coordinates of pixel and its neighbor.
-- ``neighborhood_index_slow`` to get index of a neighborhood
-  from ``neighborhoods`` of ``LowestPenalties``
-  using ``Edge`` instance.
-- ``calculate_lowest_pixel_penalty`` to calculate minimal penalty of a pixel.
-- ``calculate_lowest_neighborhood_penalty`` to calculate minimal penalty
-  of a neighborhood given coordinates of a pixel and its neighbor.
-- ``calculate_lowest_neighborhood_penalty_fast`` to calculate minimal penalty
-  of a neighborhood using corresponding ``Edge`` instance.
-- ``calculate_lowest_neighborhood_penalty_slow`` to calculate minimal penalty
-  of a neighborhood given pixel coordinates and index of its neighbor.
-- ``lowest_pixel_penalty`` to get minimal penalty of a pixel
-  from ``pixels`` of ``LowestPenalties``.
-- ``lowest_neighborhood_penalty`` to get minimal penalty
-  of a neighborhood from ``neighborhoods`` of ``LowestPenalties``
-  using corresponding ``Edge`` instance.
-- ``lowest_neighborhood_penalty_fast`` to get minimal penalty
-  of a neighborhood from ``neighborhoods`` of ``LowestPenalties``
-  given coordinates of a pixel and its neighbor.
+- ``indexing::check`` with utilities to check availability of provided indices.
 
-- Functions to find a consistent labeling
+  - ``neighborhood_exists`` checks whether two pixels are really neighbors.
+  - ``neighborhood_exists_fast`` checks whether a pixel has a neighbor
+    with specified index.
+  - ``node_exists`` checks existence of a node.
+  - ``edge_exists`` checks existence of an edge.
+
+- ``graph::disparity`` to support graph representation of disparity map.
+
+  - ``DisparityGraph`` to represent the problem using graphical model.
+    Contains
+
+    - ``left`` image,
+    - ``right`` image
+      (made on a camera located to the right of the ``left`` image),
+    - ``disparity_levels`` is the number of different disparity levels
+    - ``cleanness`` weight of ``Node`` penalty.
+    - ``smoothness`` weight of ``Edge`` penalty.
+      (the more it is, the more memory the graph consumes),
+    - ``reparametrization`` that allows to solve the dual problem.
+
+  - ``edge_penalty`` calculates penalty of an edge.
+  - ``node_penalty`` calculates penalty of a node.
+
+- ``graph::constraint`` with utilities to solve CSP.
+
+  - ``ConstraintGraph`` to build final disparity map
+    after optimization of ``DisparityGraph``.
+    Contains
+
+    - Constructor to build a ``ConstraintGraph`` given ``DisparityGraph``.
+    - ``nodes_availability`` array that contains information about ability
+      of each ``Node`` to be chosen,
+    - ``disparity_graph`` constant pointer to ``DisparityGraph`` instance
+      from which the ``ConstraintGraph`` was built.
+    - ``threshold`` parameter to calculate `epsilon`-consistent nodes.
+
+  - ``make_node_available`` to mark specified ``Node``
+    as available in ``ConstraintGraph``.
+  - ``make_node_unavailable`` to mark specified ``Node``
+    as unavailable in ``ConstraintGraph``.
+  - ``make_all_nodes_unavailable`` to mark all ``Node`` instances
+    as unavailable in ``ConstraintGraph``.
+  - ``solve_csp`` to solve a CSP problem given ``ConstraintGraph``.
+  - ``csp_solution_iteration`` to make a step in ``solve_csp``.
+  - ``should_remove_node`` to check whether we need to remove the node.
+  - ``is_edge_available`` to check edge existence.
+  - ``is_node_available`` to check node existence.
+  - ``check_nodes_left`` to check whether there are nodes left
+    in ``ConstraintGraph``.
+
+- ``graph::lowest_penalties`` with utilities
+  to find locally best nodes and edges.
+
+  - ``LowestPenalties`` to store minimal penalties of pixels and neighborhoods.
+    Contains
+
+    - ``graph`` constant reference to ``DisparityGraph`` instance
+      from which the ``LowestPenalties`` was built.
+    - ``pixels`` array with minimal penalties of pixels
+      calculated from correspondent nodes.
+    - ``neighborhoods`` array with minimal penalties of neighborhoods
+      calculated from correspondent edges.
+
+  - ``calculate_lowest_pixel_penalty`` to calculate minimal penalty of a pixel.
+  - ``calculate_lowest_neighborhood_penalty`` to calculate minimal penalty
+    of a neighborhood given coordinates of a pixel and its neighbor.
+  - ``calculate_lowest_neighborhood_penalty_fast`` to calculate minimal penalty
+    of a neighborhood using corresponding ``Edge`` instance.
+  - ``calculate_lowest_neighborhood_penalty_slow`` to calculate minimal penalty
+    of a neighborhood given pixel coordinates and index of its neighbor.
+  - ``lowest_pixel_penalty`` to get minimal penalty of a pixel
+    from ``pixels`` of ``LowestPenalties``.
+  - ``lowest_neighborhood_penalty`` to get minimal penalty
+    of a neighborhood from ``neighborhoods`` of ``LowestPenalties``
+    using corresponding ``Edge`` instance.
+  - ``lowest_neighborhood_penalty_fast`` to get minimal penalty
+    of a neighborhood from ``neighborhoods`` of ``LowestPenalties``
+    given coordinates of a pixel and its neighbor.
+
+- ``labeling::finder`` with functions to find a consistent labeling.
 
   - ``fetch_pixel_available_penalties``
-    to find the available penalties of all nodes;
+    to find the available penalties of all nodes.
   - ``fetch_edge_available_penalties``
-    to find the available penalties of all edges;
+    to find the available penalties of all edges.
   - ``fetch_available_penalties``
-    to find and fuse both nodes' and edges' penalties;
+    to find and fuse both nodes' and edges' penalties.
   - ``calculate_minimal_consistent_threshold``
     to find the minimal threshold of the ``ConstraintGraph``
-    for the problem to still be solvable;
+    for the problem to still be solvable.
   - ``choose_best_node``
-    to leave only one node with the lowest penalty at specific pixel;
+    to leave only one node with the lowest penalty at specific pixel.
     if a pixel has two nodes with the same penalty,
-    the one with the lower disparity will be chosen;
+    the one with the lower disparity will be chosen.
   - ``find_labeling``
-    to remove all non-best nodes;
+    to remove all non-best nodes.
   - ``build_disparity_map``
     to build a grayscale image with the solution to the problem.
 

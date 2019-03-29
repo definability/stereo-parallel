@@ -28,6 +28,11 @@
 
 BOOST_AUTO_TEST_SUITE(ImageTest)
 
+using sp::image::Image;
+using sp::indexing::pixel_index;
+using sp::indexing::pixel_value;
+using sp::types::ULONG;
+
 BOOST_AUTO_TEST_CASE(create_image)
 {
     struct Image image{2, 1, 1, {0, 1}};

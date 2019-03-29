@@ -34,6 +34,10 @@
 
 BOOST_AUTO_TEST_SUITE(PGM_IO_test)
 
+using sp::image::Image;
+using sp::image::PGM_IO;
+using sp::indexing::pixel_value;
+
 BOOST_AUTO_TEST_CASE(read_image)
 {
     PGM_IO pgm_io;

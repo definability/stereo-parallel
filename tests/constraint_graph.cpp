@@ -32,6 +32,14 @@
 
 BOOST_AUTO_TEST_SUITE(ConstraintGraphTest)
 
+using sp::graph::constraint::ConstraintGraph;
+using sp::graph::disparity::DisparityGraph;
+using sp::graph::lowest_penalties::LowestPenalties;
+using sp::image::Image;
+using sp::image::PGM_IO;
+using sp::indexing::node_index;
+using sp::types::Node;
+
 BOOST_AUTO_TEST_CASE(check_nodes_indexing)
 {
     PGM_IO pgm_io;

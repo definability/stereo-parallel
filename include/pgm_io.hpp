@@ -29,10 +29,18 @@
 
 #include <image.hpp>
 
+namespace sp::image
+{
+
+using sp::image::Image;
+using std::istream;
+using std::ostream;
+using std::shared_ptr;
+
 /**
  * \brief Input and output operations for PGM image format.
  *
- * The class allows to read and write ::Image
+ * The class allows to read and write sp::image::Image
  * from stream that contains image in
  * <a href="http://netpbm.sourceforge.net/doc/pgm.html">"plain" PGM</a>
  * and write it to stream in this format.
@@ -57,7 +65,7 @@ class PGM_IO
 {
 private:
     /**
-     * \brief Pointer to an ::Image the ::PGM_IO had read or needs to write.
+     * \brief Pointer to an sp::image::Image the sp::image::PGM_IO had read or needs to write.
      */
     std::shared_ptr<struct Image> image;
     /**
@@ -138,8 +146,8 @@ public:
      * \brief Constructor with specific image.
      *
      * If we want to write a file,
-     * we may want to create a ::PGM_IO instance
-     * with ::Image specified immediately.
+     * we may want to create a sp::image::PGM_IO instance
+     * with sp::image::Image specified immediately.
      */
     explicit PGM_IO(std::shared_ptr<struct Image> image);
     /**
@@ -168,5 +176,7 @@ public:
      */
     friend std::ostream& operator<<(std::ostream& out, const PGM_IO& ppm_io);
 };
+
+}
 
 #endif

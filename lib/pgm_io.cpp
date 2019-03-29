@@ -31,31 +31,48 @@
 #include <memory>
 #include <string>
 
-PGM_IO::PGM_IO(std::shared_ptr<struct Image> image) : image{std::move(image)}
+namespace sp::image
+{
+
+using sp::indexing::pixel_index;
+using sp::types::ULONG;
+using std::endl;
+using std::invalid_argument;
+using std::ios;
+using std::ios_base;
+using std::isspace;
+using std::make_shared;
+using std::move;
+using std::numeric_limits;
+using std::stoul;
+using std::streamsize;
+using std::string;
+
+PGM_IO::PGM_IO(shared_ptr<struct Image> image) : image{move(image)}
 {
 }
 
-void PGM_IO::set_image(const std::shared_ptr<struct Image>& image)
+void PGM_IO::set_image(const shared_ptr<struct Image>& image)
 {
     this->image = image;
 }
 
-std::shared_ptr<struct Image> PGM_IO::get_image() const
+shared_ptr<struct Image> PGM_IO::get_image() const
 {
     return this->image;
 }
 
-std::string PGM_IO::read_pgm_instruction(std::istream& in)
+string PGM_IO::read_pgm_instruction(istream& in)
 {
     if (in.fail())
     {
         return "";
     }
-    std::string current_input;
+    string current_input;
     in >> current_input;
     while (in.good() && current_input[0] == '#')
     {
-        in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        in.ignore(numeric_limits<streamsize>::max(), '\n');
         if (in.fail())
         {
             return "";
@@ -69,7 +86,7 @@ std::string PGM_IO::read_pgm_instruction(std::istream& in)
     return current_input;
 }
 
-bool PGM_IO::check_file_end(std::istream& in)
+bool PGM_IO::check_file_end(istream& in)
 {
     char current_input;
     while (in.good() && !in.eof())
@@ -77,30 +94,30 @@ bool PGM_IO::check_file_end(std::istream& in)
         in.get(current_input);
         if (current_input == '#')
         {
-            in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            in.ignore(numeric_limits<streamsize>::max(), '\n');
         }
-        else if (std::isspace(current_input) == 0)
+        else if (isspace(current_input) == 0)
         {
-            in.setstate(std::ios_base::failbit);
+            in.setstate(ios_base::failbit);
         };
     }
     if (in.eof())
     {
-        in.clear(std::ios::goodbit | std::ios::eofbit);
+        in.clear(ios::goodbit | ios::eofbit);
     }
     return in.good();
 }
 
-std::ostream& operator<<(std::ostream& out, const PGM_IO& ppm_io)
+ostream& operator<<(ostream& out, const PGM_IO& ppm_io)
 {
     if (!ppm_io.get_image() || !image_valid(*ppm_io.get_image()))
     {
         return out;
     }
-    std::shared_ptr<struct Image> image = ppm_io.get_image();
-    out << PGM_IO::FORMAT_CODE << std::endl;
-    out << image->width << " " << image->height << std::endl;
-    out << image->max_value << std::endl;
+    shared_ptr<struct Image> image = ppm_io.get_image();
+    out << PGM_IO::FORMAT_CODE << endl;
+    out << image->width << " " << image->height << endl;
+    out << image->max_value << endl;
     for (ULONG y = 0; y < image->height; ++y)
     {
         for (ULONG x = 0; x < image->width; ++x)
@@ -117,42 +134,42 @@ std::ostream& operator<<(std::ostream& out, const PGM_IO& ppm_io)
             {
                 if (x + 1 < image->width)
                 {
-                    out << std::endl;
+                    out << endl;
                 }
             }
         }
-        out << std::endl;
+        out << endl;
     }
     return out;
 }
 
-std::istream& operator>>(std::istream& in, PGM_IO& ppm_io)
+istream& operator>>(istream& in, PGM_IO& ppm_io)
 {
-    std::string format_code = PGM_IO::read_pgm_instruction(in);
+    string format_code = PGM_IO::read_pgm_instruction(in);
     if (format_code != PGM_IO::FORMAT_CODE)
     {
-        in.setstate(std::ios_base::failbit);
+        in.setstate(ios_base::failbit);
         return in;
     }
 
-    std::shared_ptr<struct Image> image =
-        std::make_shared<struct Image>(Image{0, 0, 0, {}});
+    shared_ptr<struct Image> image =
+        make_shared<struct Image>(Image{0, 0, 0, {}});
 
     try
     {
-        image->width = std::stoul(PGM_IO::read_pgm_instruction(in));
-        image->height = std::stoul(PGM_IO::read_pgm_instruction(in));
-        image->max_value = std::stoul(PGM_IO::read_pgm_instruction(in));
+        image->width = stoul(PGM_IO::read_pgm_instruction(in));
+        image->height = stoul(PGM_IO::read_pgm_instruction(in));
+        image->max_value = stoul(PGM_IO::read_pgm_instruction(in));
     }
-    catch (std::invalid_argument&)
+    catch (invalid_argument&)
     {
-        in.setstate(std::ios_base::failbit);
+        in.setstate(ios_base::failbit);
         return in;
     }
 
     if (image->max_value > PGM_IO::MAX_VALUE_LIMIT)
     {
-        in.setstate(std::ios_base::failbit);
+        in.setstate(ios_base::failbit);
         return in;
     }
     image->data.resize(image->width * image->height);
@@ -164,11 +181,11 @@ std::istream& operator>>(std::istream& in, PGM_IO& ppm_io)
             try
             {
                 image->data[pixel_index(*image, {x, y})] =
-                    std::stoul(PGM_IO::read_pgm_instruction(in));
+                    stoul(PGM_IO::read_pgm_instruction(in));
             }
-            catch (std::invalid_argument&)
+            catch (invalid_argument&)
             {
-                in.setstate(std::ios_base::failbit);
+                in.setstate(ios_base::failbit);
                 return in;
             }
         }
@@ -179,4 +196,6 @@ std::istream& operator>>(std::istream& in, PGM_IO& ppm_io)
     ppm_io.set_image(image);
 
     return in;
+}
+
 }

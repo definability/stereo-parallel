@@ -21,13 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/**
- * @file
- */
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
 #include <vector>
+
+/**
+ * \brief Basic types.
+ */
+namespace sp::types
+{
 
 /**
  * \brief Unsigned long type alias
@@ -80,7 +83,7 @@ struct Pixel
 };
 
 /**
- * \brief Node of DisparityGraph is a pair
+ * \brief Node of sp::graph::disparity::DisparityGraph is a pair
  * consisting of Pixel and disparity assigned to it.
  */
 struct Node
@@ -113,5 +116,7 @@ struct Edge
      */
     struct Node neighbor;
 };
+
+}
 
 #endif

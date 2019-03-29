@@ -2,6 +2,8 @@
     "Checks": "\
         *,\
         -fuchsia*,\
+        -llvm-namespace-comment,\
+        -google-readability-namespace-comments,\
     ",
     "WarningsAsErrors": "\
         *,\

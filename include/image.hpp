@@ -21,13 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/**
- * @file
- */
 #ifndef IMAGE_HPP
 #define IMAGE_HPP
 
 #include <types.hpp>
+
+/**
+ * \brief Image processing utilities.
+ */
+namespace sp::image
+{
+
+using sp::types::ULONG;
+using sp::types::ULONG_ARRAY;
 
 /**
  * \brief Structure to represent image on both CPU and GPU.
@@ -80,5 +86,7 @@ struct Image
  * and neither intensity should exceed specified maximal value.
  */
 bool image_valid(const struct Image& image);
+
+}
 
 #endif

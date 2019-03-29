@@ -32,6 +32,18 @@
 
 BOOST_AUTO_TEST_SUITE(LabelingFinder)
 
+using sp::graph::constraint::ConstraintGraph;
+using sp::graph::disparity::DisparityGraph;
+using sp::graph::lowest_penalties::LowestPenalties;
+using sp::image::Image;
+using sp::image::PGM_IO;
+using sp::labeling::finder::calculate_minimal_consistent_threshold;
+using sp::labeling::finder::fetch_available_penalties;
+using sp::labeling::finder::fetch_edge_available_penalties;
+using sp::labeling::finder::fetch_pixel_available_penalties;
+using sp::labeling::finder::find_labeling;
+using sp::types::FLOAT;
+
 BOOST_AUTO_TEST_CASE(check_black_images)
 {
     PGM_IO pgm_io;

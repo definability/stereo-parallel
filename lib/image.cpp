@@ -23,6 +23,9 @@
  */
 #include <image.hpp>
 
+namespace sp::image
+{
+
 bool image_valid(const struct Image& image)
 {
     if (image.max_value == 0 || image.width == 0 || image.height == 0)
@@ -37,4 +40,6 @@ bool image_valid(const struct Image& image)
         }
     }
     return true;
+}
+
 }

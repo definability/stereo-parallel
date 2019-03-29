@@ -24,6 +24,11 @@
 #include <indexing.hpp>
 #include <indexing_checks.hpp>
 
+namespace sp::indexing::checks
+{
+
+using sp::types::FLOAT;
+
 bool neighborhood_exists(
     const struct DisparityGraph& graph,
     struct Pixel pixel,
@@ -101,4 +106,6 @@ bool edge_exists(
     }
 
     return true;
+}
+
 }

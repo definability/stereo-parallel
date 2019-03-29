@@ -13,7 +13,7 @@
 #include <stdexcept>
 #include <string>
 
-struct Image read_image(const std::string& image_path);
+struct sp::image::Image read_image(const std::string& image_path);
 
 int main(int argc, char* argv[]) try
 {
@@ -66,13 +66,13 @@ int main(int argc, char* argv[]) try
     {
         try
         {
-            struct Image left_image{
+            struct sp::image::Image left_image{
                 read_image(vm["left-image"].as<std::string>())
             };
-            struct Image right_image{
+            struct sp::image::Image right_image{
                 read_image(vm["right-image"].as<std::string>())
             };
-            ULONG disparity_levels = 0;
+            sp::types::ULONG disparity_levels = 0;
             if (vm.count("disparity-levels") == 0)
             {
                 disparity_levels = left_image.width;
@@ -83,35 +83,40 @@ int main(int argc, char* argv[]) try
                     vm["disparity-levels"].as<std::string>()
                 );
             }
-            FLOAT cleanness = 1;
+            sp::types::FLOAT cleanness = 1;
             if (vm.count("cleanness") == 1)
             {
                 cleanness = std::stoul(
                     vm["cleanness"].as<std::string>()
                 );
             }
-            FLOAT smoothness = 1;
+            sp::types::FLOAT smoothness = 1;
             if (vm.count("smoothness") == 1)
             {
                 smoothness = std::stoul(
                     vm["smoothness"].as<std::string>()
                 );
             }
-            struct DisparityGraph disparity_graph{
+            struct sp::graph::disparity::DisparityGraph disparity_graph{
                 left_image,
                 right_image,
                 disparity_levels,
                 cleanness,
                 smoothness
             };
-            struct LowestPenalties lowest_penalties{disparity_graph};
-            auto available_penalties = fetch_available_penalties(lowest_penalties);
-            FLOAT threshold = calculate_minimal_consistent_threshold(
-                lowest_penalties,
-                disparity_graph,
-                available_penalties
-            );
-            struct ConstraintGraph constraint_graph{
+            struct sp::graph::lowest_penalties::LowestPenalties
+                lowest_penalties{disparity_graph};
+            auto available_penalties
+                = sp::labeling::finder::fetch_available_penalties(
+                    lowest_penalties
+                );
+            sp::types::FLOAT threshold
+                = sp::labeling::finder::calculate_minimal_consistent_threshold(
+                    lowest_penalties,
+                    disparity_graph,
+                    available_penalties
+                );
+            struct sp::graph::constraint::ConstraintGraph constraint_graph{
                 disparity_graph,
                 lowest_penalties,
                 threshold
@@ -124,7 +129,10 @@ int main(int argc, char* argv[]) try
                     "Refer to the developers."
                 );
             }
-            if (find_labeling(&constraint_graph) == nullptr)
+            if (
+                sp::labeling::finder::find_labeling(&constraint_graph)
+                == nullptr
+            )
             {
                 throw std::logic_error(
                     "Cannot find labeling. "
@@ -133,12 +141,13 @@ int main(int argc, char* argv[]) try
                 );
             }
 
-            std::shared_ptr<struct Image> result
-                = std::make_shared<struct Image>(build_disparity_map(
-                constraint_graph
-            ));
+            std::shared_ptr<struct sp::image::Image> result
+                = std::make_shared<struct sp::image::Image>(
+                    sp::labeling::finder::build_disparity_map(
+                        constraint_graph
+                    ));
             std::ofstream image_file(vm["output-image"].as<std::string>());
-            PGM_IO pgm_io{result};
+            sp::image::PGM_IO pgm_io{result};
             image_file << pgm_io;
         }
         catch (std::invalid_argument& e)
@@ -178,7 +187,7 @@ catch(...) {
     return 1;
 }
 
-struct Image read_image(const std::string& image_path)
+struct sp::image::Image read_image(const std::string& image_path)
 {
     std::ifstream image_file(image_path);
     if (!image_file)
@@ -188,7 +197,7 @@ struct Image read_image(const std::string& image_path)
         );
     }
 
-    PGM_IO pgm_io;
+    sp::image::PGM_IO pgm_io;
     image_file >> pgm_io;
     if (!image_file)
     {

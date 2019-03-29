@@ -21,17 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/**
- * @file
- */
 #ifndef DISPARITY_GRAPH_HPP
 #define DISPARITY_GRAPH_HPP
 
 #include <image.hpp>
-
-#include <algorithm>
+#include <types.hpp>
 
 #define MAX(x, y) ((x) >= (y)? (x) : (y))
+
+/**
+ * \brief Graph representation of disparity map support.
+ */
+namespace sp::graph::disparity
+{
+
+using sp::image::Image;
+using sp::types::Edge;
+using sp::types::FLOAT;
+using sp::types::FLOAT_ARRAY;
+using sp::types::Node;
+using sp::types::ULONG;
 
 /**
  * \brief Maximal number of neighbors of each vertex of disparity graph.
@@ -73,7 +82,8 @@ const ULONG NEIGHBORS_COUNT = 4;
  * Disparity is a difference
  * between number of a column of a pixel of the left image
  * and number of a column of corresponding pixel of the right image.
- * Given number of disparities (DisparityGraph::disparity_levels)
+ * Given number of disparities
+ * (sp::graph::disparity::DisparityGraph::disparity_levels)
  * \f$\left| D \right|\f$ and denoting
  * \f$D = \left\{ 0, \dots, \max{D} \right\}\f$,
  * correspondence function is called labeling and its signature is
@@ -93,13 +103,14 @@ const ULONG NEIGHBORS_COUNT = 4;
  *
  * Color scales may be different,
  * as well as noise level of images.
- * Weight \f$\alpha\f$ (DisparityGraph::cleanness)
+ * Weight \f$\alpha\f$ (sp::graph::disparity::DisparityGraph::cleanness)
  * allows to control these factors.
  *
  * Observed scene may be smooth or sharp.
  * Also, it may be inconvenient to use \f$\alpha\f$ parameter
  * because it needs to be too small or too high.
- * \f$\beta\f$ weight (DisparityGraph::smoothness) serves in this case.
+ * \f$\beta\f$ weight (sp::graph::disparity::DisparityGraph::smoothness)
+ * serves in this case.
  *
  * Set of all neighbors of a pixel will be noted \f$\mathcal{N}_i\f$.
  * Set with right and buttom neighbors
@@ -173,7 +184,7 @@ const ULONG NEIGHBORS_COUNT = 4;
  * which lead to the same \f$E\left( k \right)\f$
  * for specific labeling \f$k\f$.
  * The following function we call a reparametrization
- * (DisparityGraph::reparametrization)
+ * (sp::graph::disparity::DisparityGraph::reparametrization)
  *
  * \f[
  *  \varphi: I^2 \times K \rightarrow \mathbb{R}.
@@ -309,12 +320,12 @@ struct DisparityGraph
      * In this situation,
      * we can set the disparity map we've got
      * as the middle of disparity scale of a pixel,
-     * and find finer disparity map
-     * using DisparityGraph::disparity_levels disparity values.
+     * and find finer disparity map using
+     * sp::graph::disparity::DisparityGraph::disparity_levels disparity values.
      *
      * For now,
      * we assume the minimal disparity for each pixel to be equal `0`,
-     * so the DisparityGraph::disparity_levels is used simply as
+     * so the sp::graph::disparity::DisparityGraph::disparity_levels is used as
      * \f$\max{D} - 1\f$ in set of available disparities
      * \f$D = \left\{ 0, 1, \dots, \max{D} - 1 \right\}\f$.
      */
@@ -333,7 +344,8 @@ struct DisparityGraph
      * It's infeasible to use a tree for such purpose.
      * Also, it may be slow to use an k-D array.
      *
-     * The DisparityGraph::reparametrization is a 1D array,
+     * The sp::graph::disparity::DisparityGraph::reparametrization
+     * is a 1D array,
      * with specific indexing rules:
      * it uses a generalization of row/column-major order.
      *
@@ -344,7 +356,8 @@ struct DisparityGraph
      * - Index of current neighbor of Node instance,
      * - Pixel::x of Node::pixel
      *
-     * Index of an element of the DisparityGraph::reparametrization
+     * Index of an element
+     * of the sp::graph::disparity::DisparityGraph::reparametrization
      * for specific Node and neighbor index
      * can be calculated by formula
      *
@@ -372,7 +385,8 @@ struct DisparityGraph
      * and you trust its color information
      * in a sense that one vertex of displayed object
      * has the same color from both images.
-     * The weight is opposite to DisparityGraph::smoothness.
+     * The weight is opposite to
+     * sp::graph::disparity::DisparityGraph::smoothness.
      */
     FLOAT cleanness;
     /**
@@ -381,12 +395,14 @@ struct DisparityGraph
      *
      * Heigher value means that the surface you observe
      * tends to be smooth rather than sharp.
-     * The weight is opposite to DisparityGraph::cleanness.
+     * The weight is opposite to
+     * sp::graph::disparity::DisparityGraph::cleanness.
      */
     FLOAT smoothness;
     /**
-     * \brief Create DisparityGraph entity
-     * and initialize its DisparityGraph::reparametrization.
+     * \brief Create sp::graph::disparity::DisparityGraph entity
+     * and initialize its
+     * sp::graph::disparity::DisparityGraph::reparametrization.
      */
     DisparityGraph(
         struct Image left,
@@ -400,7 +416,7 @@ struct DisparityGraph
 /**
  * \brief Calculate penalty of Edge without neighborhood check.
  *
- * You should use ::edge_exists function
+ * You should use sp::indexing::checks::edge_exists function
  * to check that the Edge actually exists.
  * If it doesn't, the penalty is assumed to be \f$\infty\f$
  * (but this function doesn't check existence).
@@ -412,7 +428,7 @@ FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge);
 /**
  * \brief Calculate penalty of Node.
  *
- * You should use ::node_exists function
+ * You should use sp::indexing::checks::node_exists function
  * to check that the Node actually exists.
  * If it doesn't, the penalty is assumed to be \f$\infty\f$
  * (but this function doesn't check existence).
@@ -421,5 +437,7 @@ FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge);
  * between disparities of Node instances that the Edge connects.
  */
 FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node);
+
+}
 
 #endif
