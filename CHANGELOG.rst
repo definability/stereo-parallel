@@ -117,7 +117,7 @@ Added
   - ``edge_penalty`` calculates penalty of an edge.
   - ``node_penalty`` calculates penalty of a node.
 
-- ``graph::constraint`` with ulitilities to solve CSP.
+- ``graph::constraint`` with utilities to solve CSP.
 
   - ``ConstraintGraph`` to build final disparity map
     after optimization of ``DisparityGraph``.

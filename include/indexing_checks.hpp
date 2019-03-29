@@ -27,7 +27,7 @@
 #include <disparity_graph.hpp>
 
 /**
- * \brief Checks for availability of indices.
+ * \brief Checks for the availability of indices.
  */
 namespace sp::indexing::checks
 {

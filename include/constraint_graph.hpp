@@ -30,7 +30,7 @@
 #include <types.hpp>
 
 /**
- * \brief Ulitilities to solve CSP.
+ * \brief Utilities to solve CSP.
  */
 namespace sp::graph::constraint
 {
