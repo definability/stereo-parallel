@@ -13,6 +13,9 @@ and this project adheres to `Semantic Versioning`_.
 Unreleased_
 ===========
 
+0.0.1 - 2019-03-29
+==================
+
 Added
 -----
 
@@ -193,16 +196,15 @@ Added
   - ``build_disparity_map``
     to build a grayscale image with the solution to the problem.
 
-.. Remove these two lines and one indentation level of the next two lines
-    when you will release the first version.
-    .. _Unreleased:
-        https://github.com/char-lie/stereo-parallel/compare/v0.0.1...HEAD
+.. _Unreleased:
+    https://github.com/char-lie/stereo-parallel/compare/v0.0.1...HEAD
+
+.. _Keep a Changelog:
+    http://keepachangelog.com/en/1.0.0
+.. _Semantic Versioning:
+    http://semver.org/spec/v2.0.0
 
 .. _CMake:
     https://cmake.org
 .. _ctest:
     https://cmake.org/cmake/help/v3.0/manual/ctest.1.html
-.. _Keep a Changelog:
-    http://keepachangelog.com/en/1.0.0
-.. _Semantic Versioning:
-    http://semver.org/spec/v2.0.0
