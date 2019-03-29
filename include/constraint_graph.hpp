@@ -185,11 +185,13 @@ using sp::types::Node;
  * for sp::graph::disparity::DisparityGraph::reparametrization,
  * the sp::graph::disparity::DisparityGraph will cost \f$\approx\f$ 2GB.
  * If we store information about availability of each edge in a single bit,
- * memory consumption of the sp::graph::constraint::ConstraintGraph will be \f$\approx\f$ 8GB.
+ * memory consumption of the sp::graph::constraint::ConstraintGraph
+ * will be \f$\approx\f$ 8GB.
  *
  * It's problematic to store the last one,
  * not speaking about parallel solution of different CSPs,
- * because each instance should have its own copy of sp::graph::constraint::ConstraintGraph.
+ * because each instance should have its own copy of
+ * sp::graph::constraint::ConstraintGraph.
  *
  *
  * \subsection memory-issue-solution Solution
@@ -280,7 +282,8 @@ struct ConstraintGraph
      * `true` means that the node can be chosen under applied constraints.
      *
      * Index of availability
-     * of specific Node from sp::graph::constraint::ConstraintGraph::nodes_availability
+     * of specific Node from
+     * sp::graph::constraint::ConstraintGraph::nodes_availability
      * can be calculated by formula
      *
      * \f[
@@ -312,7 +315,8 @@ struct ConstraintGraph
      * less than by `threshold`, is marked as available one.
      *
      * To not recalculate lowest penalties,
-     * it's good to have precalculated sp::graph::lowest_penalties::LowestPenalties instance.
+     * it's good to have precalculated
+     * sp::graph::lowest_penalties::LowestPenalties instance.
      */
     ConstraintGraph(
         const struct DisparityGraph& disparity_graph,
@@ -362,7 +366,8 @@ BOOL is_node_available(
 /**
  * \brief Check whether the Edge is still available.
  *
- * Compares penalty of the Edge with given sp::graph::constraint::ConstraintGraph::threshold
+ * Compares penalty of the Edge with given
+ * sp::graph::constraint::ConstraintGraph::threshold
  * and checks whether two nodes of the Edge are available
  * using sp::graph::constraint::ConstraintGraph::is_node_available.
  *

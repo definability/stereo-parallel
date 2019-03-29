@@ -110,6 +110,18 @@ FLOAT calculate_lowest_pixel_penalty(
     return minimal_penalty;
 }
 
+FLOAT calculate_lowest_neighborhood_penalty(
+    const struct DisparityGraph& graph,
+    struct Pixel pixel,
+    struct Pixel neighbor
+)
+{
+    return calculate_lowest_neighborhood_penalty_fast(
+        graph,
+        {{pixel, 0}, {neighbor, 0}}
+    );
+}
+
 FLOAT calculate_lowest_neighborhood_penalty_fast(
     const struct DisparityGraph& graph,
     struct Edge edge
@@ -149,18 +161,6 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
         }
     }
     return minimal_penalty;
-}
-
-FLOAT calculate_lowest_neighborhood_penalty(
-    const struct DisparityGraph& graph,
-    struct Pixel pixel,
-    struct Pixel neighbor
-)
-{
-    return calculate_lowest_neighborhood_penalty_fast(
-        graph,
-        {{pixel, 0}, {neighbor, 0}}
-    );
 }
 
 FLOAT calculate_lowest_neighborhood_penalty_slow(
