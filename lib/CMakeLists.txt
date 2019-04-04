@@ -19,6 +19,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+find_package(OpenMP)
+
 add_library(image image.cpp)
 add_library(pgm_io pgm_io.cpp)
 add_library(disparity_graph disparity_graph.cpp)
@@ -27,6 +29,7 @@ add_library(constraint_graph constraint_graph.cpp)
 add_library(labeling_finder labeling_finder.cpp)
 add_library(indexing indexing.cpp)
 add_library(indexing_checks indexing_checks.cpp)
+
 target_include_directories(
     indexing PUBLIC
     ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
@@ -59,6 +62,7 @@ target_include_directories(
     labeling_finder PUBLIC
     ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
 )
+
 target_link_libraries(
     pgm_io
     image
@@ -81,6 +85,7 @@ target_link_libraries(
     image
     indexing_checks
     indexing
+    OpenMP::OpenMP_CXX
 )
 target_link_libraries(
     labeling_finder
