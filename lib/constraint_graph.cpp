@@ -26,6 +26,14 @@
 #include <indexing_checks.hpp>
 #include <types.hpp>
 
+#include <omp.h>
+
+#ifdef _OPENMP
+#define THREADS_NUMBER (omp_get_num_threads())
+#else
+#define THREADS_NUMBER (1)
+#endif
+
 namespace sp::graph::constraint
 {
 
@@ -304,8 +312,16 @@ BOOL csp_solution_iteration(
 
 BOOL solve_csp(struct ConstraintGraph* graph)
 {
-    while (csp_solution_iteration(graph, 1, 0))
+    BOOL changed = true;
+    #pragma omp parallel num_threads(1)
+    while (changed)
     {
+        changed = false;
+        #pragma omp parallel for reduction(|:changed)
+        for (ULONG i = 0; i < THREADS_NUMBER; ++i)
+        {
+            changed |= csp_solution_iteration(graph, THREADS_NUMBER, i);
+        }
     }
     return check_nodes_left(*graph);
 }
