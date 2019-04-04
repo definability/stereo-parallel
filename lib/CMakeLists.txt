@@ -19,6 +19,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+find_package(Boost 1.54 REQUIRED COMPONENTS program_options)
 find_package(OpenMP)
 
 add_library(image image.cpp)
@@ -95,7 +96,6 @@ target_link_libraries(
     image
 )
 
-find_package(Boost 1.54 REQUIRED COMPONENTS program_options)
 add_executable(stereo_parallel main.cpp)
 target_include_directories(
     stereo_parallel
