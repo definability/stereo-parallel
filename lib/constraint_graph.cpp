@@ -234,16 +234,25 @@ BOOL check_nodes_left(const struct ConstraintGraph& graph)
     return false;
 }
 
-BOOL csp_solution_iteration(struct ConstraintGraph* graph)
+BOOL csp_solution_iteration(
+    struct ConstraintGraph* graph,
+    ULONG jobs,
+    ULONG job_number
+)
 {
+    if (job_number >= graph->disparity_graph.right.height)
+    {
+        return false;
+    }
+
     Node node{{0, 0}, 0};
     BOOL pixel_available = false;
     BOOL changed = false;
 
     for (
-        node.pixel.x = 0;
+        node.pixel.x = job_number;
         node.pixel.x < graph->disparity_graph.right.width;
-        ++node.pixel.x
+        node.pixel.x += jobs
     )
     {
         for (
@@ -295,7 +304,7 @@ BOOL csp_solution_iteration(struct ConstraintGraph* graph)
 
 BOOL solve_csp(struct ConstraintGraph* graph)
 {
-    while (csp_solution_iteration(graph))
+    while (csp_solution_iteration(graph, 1, 0))
     {
     }
     return check_nodes_left(*graph);

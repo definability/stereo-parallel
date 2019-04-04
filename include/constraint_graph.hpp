@@ -42,6 +42,7 @@ using sp::types::BOOL_ARRAY;
 using sp::types::Edge;
 using sp::types::FLOAT;
 using sp::types::Node;
+using sp::types::ULONG;
 
 /**
  * \brief Structure to represent a graph with constraints
@@ -403,7 +404,11 @@ BOOL should_remove_node(
  *  `false` if a solution was found (at least, an empty one)
  *  and nothing was changed during iteration.
  */
-BOOL csp_solution_iteration(struct ConstraintGraph* graph);
+BOOL csp_solution_iteration(
+    struct ConstraintGraph* graph,
+    ULONG jobs,
+    ULONG job_number
+);
 /**
  * \brief Remove all nodes that don't belong to any soluton.
  *
