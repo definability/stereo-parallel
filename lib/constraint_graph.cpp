@@ -315,11 +315,15 @@ BOOL csp_solution_iteration(
 BOOL solve_csp(struct ConstraintGraph* graph)
 {
     BOOL changed = true;
+    #ifdef _OPENMP
     #pragma omp parallel num_threads(1)
+    #endif
     while (changed)
     {
         changed = false;
+        #ifdef _OPENMP
         #pragma omp parallel for reduction(|:changed)
+        #endif
         for (ULONG i = 0; i < THREADS_NUMBER; ++i)
         {
             changed |= csp_solution_iteration(graph, THREADS_NUMBER, i);
