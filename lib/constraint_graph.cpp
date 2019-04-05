@@ -26,7 +26,9 @@
 #include <indexing_checks.hpp>
 #include <types.hpp>
 
+#ifdef _OPENMP
 #include <omp.h>
+#endif
 
 #ifdef _OPENMP
 #define THREADS_NUMBER (omp_get_num_threads())
