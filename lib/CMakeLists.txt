@@ -19,8 +19,12 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+option(WITH_OPENMP "Use OpenMP for parallel computations on CPU" OFF)
+
 find_package(Boost 1.54 REQUIRED COMPONENTS program_options)
-find_package(OpenMP)
+if (WITH_OPENMP)
+    find_package(OpenMP REQUIRED)
+endif(WITH_OPENMP)
 
 add_library(image image.cpp)
 add_library(pgm_io pgm_io.cpp)
@@ -86,8 +90,13 @@ target_link_libraries(
     image
     indexing_checks
     indexing
-    OpenMP::OpenMP_CXX
 )
+if (OpenMP_CXX_FOUND)
+    target_link_libraries(
+        constraint_graph
+        OpenMP::OpenMP_CXX
+    )
+endif(OpenMP_CXX_FOUND)
 target_link_libraries(
     labeling_finder
     constraint_graph
