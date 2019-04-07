@@ -398,6 +398,17 @@ BOOL should_remove_node(
 /**
  * \brief Perform one iteration of sp::graph::constraint::solve_csp.
  *
+ * Can be used for the parallel processing
+ * of the sp::graph::constraint::ConstraintGraph.
+ * Each node can be processed independently:
+ * if different threads decided
+ * that an existent node needs to be removed,
+ * and will remove it simultaneously,
+ * there's almost nothing bad in this case.
+ * The only bad thing is
+ * that these threads will do the same work,
+ * and this will eat processor time to no purpose.
+ *
  * @return
  *  Boolean flag.
  *  `true` if availability of one node was changed.
