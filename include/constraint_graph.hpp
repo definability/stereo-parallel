@@ -42,6 +42,7 @@ using sp::types::BOOL_ARRAY;
 using sp::types::Edge;
 using sp::types::FLOAT;
 using sp::types::Node;
+using sp::types::ULONG;
 
 /**
  * \brief Structure to represent a graph with constraints
@@ -397,13 +398,28 @@ BOOL should_remove_node(
 /**
  * \brief Perform one iteration of sp::graph::constraint::solve_csp.
  *
+ * Can be used for the parallel processing
+ * of the sp::graph::constraint::ConstraintGraph.
+ * Each node can be processed independently:
+ * if different threads decided
+ * that an existent node needs to be removed,
+ * and will remove it simultaneously,
+ * there's almost nothing bad in this case.
+ * The only bad thing is
+ * that these threads will do the same work,
+ * and this will eat processor time to no purpose.
+ *
  * @return
  *  Boolean flag.
  *  `true` if availability of one node was changed.
  *  `false` if a solution was found (at least, an empty one)
  *  and nothing was changed during iteration.
  */
-BOOL csp_solution_iteration(struct ConstraintGraph* graph);
+BOOL csp_solution_iteration(
+    struct ConstraintGraph* graph,
+    ULONG jobs,
+    ULONG job_number
+);
 /**
  * \brief Remove all nodes that don't belong to any soluton.
  *

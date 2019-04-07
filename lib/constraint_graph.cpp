@@ -26,6 +26,16 @@
 #include <indexing_checks.hpp>
 #include <types.hpp>
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
+#ifdef _OPENMP
+#define THREADS_NUMBER (omp_get_num_threads())
+#else
+#define THREADS_NUMBER (1)
+#endif
+
 namespace sp::graph::constraint
 {
 
@@ -234,16 +244,25 @@ BOOL check_nodes_left(const struct ConstraintGraph& graph)
     return false;
 }
 
-BOOL csp_solution_iteration(struct ConstraintGraph* graph)
+BOOL csp_solution_iteration(
+    struct ConstraintGraph* graph,
+    ULONG jobs,
+    ULONG job_number
+)
 {
+    if (job_number >= graph->disparity_graph.right.height)
+    {
+        return false;
+    }
+
     Node node{{0, 0}, 0};
     BOOL pixel_available = false;
     BOOL changed = false;
 
     for (
-        node.pixel.x = 0;
+        node.pixel.x = job_number;
         node.pixel.x < graph->disparity_graph.right.width;
-        ++node.pixel.x
+        node.pixel.x += jobs
     )
     {
         for (
@@ -295,8 +314,20 @@ BOOL csp_solution_iteration(struct ConstraintGraph* graph)
 
 BOOL solve_csp(struct ConstraintGraph* graph)
 {
-    while (csp_solution_iteration(graph))
+    BOOL changed = true;
+    #ifdef _OPENMP
+    #pragma omp parallel num_threads(1)
+    #endif
+    while (changed)
     {
+        changed = false;
+        #ifdef _OPENMP
+        #pragma omp parallel for reduction(|:changed)
+        #endif
+        for (ULONG i = 0; i < THREADS_NUMBER; ++i)
+        {
+            changed |= csp_solution_iteration(graph, THREADS_NUMBER, i);
+        }
     }
     return check_nodes_left(*graph);
 }
