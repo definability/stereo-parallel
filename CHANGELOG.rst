@@ -13,7 +13,16 @@ and this project adheres to `Semantic Versioning`_.
 Unreleased_
 ===========
 
-0.0.1 - 2019-03-29
+0.1.1 - 2019-04-07
+==================
+
+Added
+-----
+
+- Support of OpenMP_ for CSP solution,
+  namely for ``sp::graph::constraint::solve_csp``.
+
+0.1.0 - 2019-03-29
 ==================
 
 Added
@@ -197,7 +206,9 @@ Added
     to build a grayscale image with the solution to the problem.
 
 .. _Unreleased:
-    https://github.com/char-lie/stereo-parallel/compare/v0.0.1...HEAD
+    https://github.com/char-lie/stereo-parallel/compare/v0.1.1...HEAD
+.. _0.1.1:
+    https://github.com/char-lie/stereo-parallel/compare/v0.1.0...v0.1.1
 
 .. _Keep a Changelog:
     http://keepachangelog.com/en/1.0.0
@@ -208,3 +219,5 @@ Added
     https://cmake.org
 .. _ctest:
     https://cmake.org/cmake/help/v3.0/manual/ctest.1.html
+.. _OpenMP:
+    https://www.openmp.org
