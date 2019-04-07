@@ -41,6 +41,18 @@ To build the project in Linux,
     cmake ..
     cmake --build .
 
+If you want to use OpenMP_,
+you should install it first,
+and build the project with ``-DWITH_OPENMP=ON`` flag
+
+.. code-block:: bash
+
+    git clone https://github.com/char-lie/stereo-parallel.git
+    mkdir stereo-parallel/build
+    cd build
+    cmake -DWITH_OPENMP=ON ..
+    cmake --build .
+
 After build, it's recommended to run tests
 in order to make sure that all works fine.
 This can be done by executing ctest_ in build directory.
@@ -118,3 +130,5 @@ It's explained in answer to
     https://github.com/char-lie/stereo-parallel/blob/master/LICENSE
 .. _online documentation:
     https://codedocs.xyz/char-lie/stereo-parallel
+.. _OpenMP:
+    https://www.openmp.org
