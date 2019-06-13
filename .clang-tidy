@@ -12,5 +12,6 @@
         -clang-diagnostic-unused-command-line-argument,\
         -cppcoreguidelines-pro-type-vararg,\
         -google-runtime-int,\
+        -cppcoreguidelines-pro-type-member-init,\
     ",
 }
