@@ -302,7 +302,6 @@ struct ConstraintGraph* find_labeling(
     struct ConstraintGraph* graph
 )
 {
-    struct gpu::Problem problem;
     build_csp_program(&problem);
     prepare_problem(graph, &problem);
     for (ULONG x = 0; x < graph->disparity_graph->left.width; ++x)
