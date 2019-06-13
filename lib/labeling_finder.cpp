@@ -305,11 +305,8 @@ struct ConstraintGraph* find_labeling(
     struct gpu::Problem problem;
     build_csp_program(&problem);
     prepare_problem(graph, &problem);
-    gpu::csp_solution_iteration_gpu(graph, &problem);
-    /*
     for (ULONG x = 0; x < graph->disparity_graph->left.width; ++x)
     {
-        std::cout << "Process column " << x;
         for (ULONG y = 0; y < graph->disparity_graph->left.height; ++y)
         {
             if (choose_best_node(graph, {x, y}) == nullptr)
