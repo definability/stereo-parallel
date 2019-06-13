@@ -13,5 +13,6 @@
         -cppcoreguidelines-pro-type-vararg,\
         -google-runtime-int,\
         -cppcoreguidelines-pro-type-member-init,\
+        -modernize-use-nullptr,\
     ",
 }
