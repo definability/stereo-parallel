@@ -57,11 +57,11 @@ DisparityGraph::DisparityGraph(
     , cleanness{cleanness}
     , smoothness{smoothness}
 {
-    if (!image_valid(this->left))
+    if (!image_valid(&(this->left)))
     {
         throw std::invalid_argument("Left image is invalid.");
     }
-    if (!image_valid(this->right))
+    if (!image_valid(&(this->right)))
     {
         throw std::invalid_argument("Right image is invalid.");
     }
@@ -163,22 +163,24 @@ DisparityGraph::DisparityGraph(
     );
 }
 
-FLOAT edge_penalty(const struct DisparityGraph& graph, struct Edge edge)
+FLOAT edge_penalty(const struct DisparityGraph* graph, struct Edge edge)
 {
     return
-        graph.smoothness
+        graph->smoothness
         * SQR(TO_FLOAT(edge.node.disparity) - TO_FLOAT(edge.neighbor.disparity))
         - reparametrization_value_slow(graph, edge)
         - reparametrization_value(graph, edge.neighbor, edge.node.pixel);
 }
 
-FLOAT node_penalty(const struct DisparityGraph& graph, struct Node node)
+FLOAT node_penalty(const struct DisparityGraph* graph, struct Node node)
 {
-    Pixel left_pixel{node.pixel.x + node.disparity, node.pixel.y};
+    struct Pixel left_pixel;
+    left_pixel.x = node.pixel.x + node.disparity;
+    left_pixel.y = node.pixel.y;
     return
-        graph.cleanness
-        * SQR(TO_FLOAT(pixel_value(graph.right, node.pixel))
-            - TO_FLOAT(pixel_value(graph.left, left_pixel)))
+        graph->cleanness
+        * SQR(TO_FLOAT(pixel_value(&(graph->right), node.pixel))
+            - TO_FLOAT(pixel_value(&(graph->left), left_pixel)))
         + reparametrization_value_fast(graph, node, 0)
         + reparametrization_value_fast(graph, node, 1)
         + reparametrization_value_fast(graph, node, 2)

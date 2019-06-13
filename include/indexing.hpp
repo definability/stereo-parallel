@@ -53,7 +53,7 @@ using sp::types::ULONG;
  * Result of accessing non-existent value
  * depends on sp::types::ULONG_ARRAY.
  */
-ULONG pixel_index(const struct Image& image, struct Pixel pixel);
+ULONG pixel_index(const struct Image* image, struct Pixel pixel);
 
 /**
  * \brief Get intensity of the pixel in the image.
@@ -61,7 +61,7 @@ ULONG pixel_index(const struct Image& image, struct Pixel pixel);
  * Simply call sp::indexing::pixel_index and take a value with returned index
  * from Image::data.
  */
-ULONG pixel_value(const struct Image& image, struct Pixel pixel);
+ULONG pixel_value(const struct Image* image, struct Pixel pixel);
 
 /**
  * \brief Get an index of sp::graph::disparity::DisparityGraph::reparametrization element
@@ -72,7 +72,7 @@ ULONG pixel_value(const struct Image& image, struct Pixel pixel);
  * using sp::indexing::checks::neighborhood_exists.
  */
 ULONG reparametrization_index_fast(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Node node,
     ULONG neighbor_index
 );
@@ -86,7 +86,7 @@ ULONG reparametrization_index_fast(
  * using sp::indexing::checks::neighborhood_exists.
  */
 ULONG reparametrization_index(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Node node,
     struct Pixel neighbor
 );
@@ -100,7 +100,7 @@ ULONG reparametrization_index(
  * using sp::indexing::checks::neighborhood_exists.
  */
 ULONG reparametrization_index_slow(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Edge edge
 );
 
@@ -113,7 +113,7 @@ ULONG reparametrization_index_slow(
  * using sp::indexing::checks::neighborhood_exists.
  */
 FLOAT reparametrization_value_fast(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Node node,
     ULONG neighbor_index
 );
@@ -127,7 +127,7 @@ FLOAT reparametrization_value_fast(
  * using sp::indexing::checks::neighborhood_exists.
  */
 FLOAT reparametrization_value(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Node node,
     struct Pixel neighbor
 );
@@ -141,7 +141,7 @@ FLOAT reparametrization_value(
  * using sp::indexing::checks::neighborhood_exists.
  */
 FLOAT reparametrization_value_slow(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Edge edge
 );
 
@@ -174,7 +174,7 @@ ULONG neighbor_index(
  * You should perform it by yourself
  * using sp::indexing::checks::node_exists.
  */
-ULONG node_index(const struct DisparityGraph& graph, struct Node node);
+ULONG node_index(const struct DisparityGraph* graph, struct Node node);
 
 /**
  * \brief Get index of a neighborhood in
@@ -184,7 +184,7 @@ ULONG node_index(const struct DisparityGraph& graph, struct Node node);
  * Use sp::indexing::checks::neighborhood_exists_fast to make sure that you use it right.
  */
 ULONG neighborhood_index_fast(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel,
     ULONG neighbor_index
 );
@@ -196,7 +196,7 @@ ULONG neighborhood_index_fast(
  * Use sp::indexing::checks::neighborhood_exists to make sure that you use it right.
  */
 ULONG neighborhood_index(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel,
     struct Pixel neighbor
 );
@@ -208,7 +208,7 @@ ULONG neighborhood_index(
  * Use sp::indexing::checks::edge_exists to make sure that you use it right.
  */
 ULONG neighborhood_index_slow(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Edge edge
 );
 
@@ -218,7 +218,7 @@ ULONG neighborhood_index_slow(
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::neighborhood_exists to make sure that you use it right.
  */
-Pixel neighbor_by_index(
+struct Pixel neighbor_by_index(
     struct Pixel pixel,
     ULONG neighbor_index
 );

@@ -67,6 +67,9 @@ using BOOL = bool;
  */
 using BOOL_ARRAY = std::vector<BOOL>;
 
+const BOOL TRUE = true;
+const BOOL FALSE = false;
+
 /**
  * Structure that contains position of a pixel.
  */

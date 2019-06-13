@@ -30,7 +30,7 @@ namespace sp::indexing::checks
 using sp::types::FLOAT;
 
 bool neighborhood_exists(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel,
     struct Pixel neighbor
 )
@@ -43,36 +43,36 @@ bool neighborhood_exists(
 }
 
 bool neighborhood_exists_fast(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel,
     ULONG neighbor_index
 )
 {
     return !(neighbor_index > 3
-        || pixel.y >= graph.right.height
-        || pixel.x >= graph.right.width
-        || (pixel.x + 1 == graph.left.width && neighbor_index == 0)
+        || pixel.y >= graph->right.height
+        || pixel.x >= graph->right.width
+        || (pixel.x + 1 == graph->left.width && neighbor_index == 0)
         || (pixel.x == 0 && neighbor_index == 1)
-        || (pixel.y + 1 == graph.left.height && neighbor_index == 2)
+        || (pixel.y + 1 == graph->left.height && neighbor_index == 2)
         || (pixel.y == 0 && neighbor_index == 3)
     );
 }
 
 bool node_exists(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Node node
 )
 {
     return !(
-        node.disparity >= graph.disparity_levels
-        || node.pixel.y >= graph.right.height
-        || node.pixel.x >= graph.right.width
-        || node.pixel.x + node.disparity >= graph.left.width
+        node.disparity >= graph->disparity_levels
+        || node.pixel.y >= graph->right.height
+        || node.pixel.x >= graph->right.width
+        || node.pixel.x + node.disparity >= graph->left.width
     );
 }
 
 bool edge_exists(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Edge edge
 )
 {

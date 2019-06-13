@@ -77,7 +77,7 @@ struct LowestPenalties
      * \brief The sp::graph::disparity::DisparityGraph
      * for which the lowest penalties should be calculated.
      */
-    const struct DisparityGraph& graph;
+    const struct DisparityGraph* graph;
     /**
      * \brief Minimal penalties of nodes per pixels.
      *
@@ -116,13 +116,13 @@ struct LowestPenalties
      * after sp::graph::lowest_penalties::LowestPenalties construction,
      * the sp::graph::lowest_penalties::LowestPenalties instance will not be changed.
      */
-    explicit LowestPenalties(const struct DisparityGraph& graph);
+    explicit LowestPenalties(const struct DisparityGraph* graph);
 };
 /**
  * \brief Calculate minimal penalty among nodes of a pixel.
  */
 FLOAT calculate_lowest_pixel_penalty(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel
 );
 /**
@@ -132,7 +132,7 @@ FLOAT calculate_lowest_pixel_penalty(
  * Use sp::indexing::checks::neighborhood_exists to make sure that you use it right.
  */
 FLOAT calculate_lowest_neighborhood_penalty(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel,
     struct Pixel neighbor
 );
@@ -143,7 +143,7 @@ FLOAT calculate_lowest_neighborhood_penalty(
  * Use sp::indexing::checks::neighborhood_exists_fast to make sure that you use it right.
  */
 FLOAT calculate_lowest_neighborhood_penalty_fast(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Edge edge
 );
 /**
@@ -153,7 +153,7 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
  * Use sp::indexing::checks::edge_exists to make sure that you use it right.
  */
 FLOAT calculate_lowest_neighborhood_penalty_slow(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel,
     ULONG neighbor_index
 );
@@ -165,7 +165,7 @@ FLOAT calculate_lowest_neighborhood_penalty_slow(
  * Use sp::indexing::checks::neighborhood_exists to make sure that you use it right.
  */
 FLOAT lowest_pixel_penalty(
-    const struct LowestPenalties& penalties,
+    const struct LowestPenalties* penalties,
     struct Pixel pixel
 );
 /**
@@ -177,7 +177,7 @@ FLOAT lowest_pixel_penalty(
  * Use sp::indexing::checks::neighborhood_exists_fast to make sure that you use it right.
  */
 FLOAT lowest_neighborhood_penalty_fast(
-    const struct LowestPenalties& penalties,
+    const struct LowestPenalties* penalties,
     struct Pixel pixel,
     struct Pixel neighbor
 );
@@ -190,7 +190,7 @@ FLOAT lowest_neighborhood_penalty_fast(
  * Use sp::indexing::checks::edge_exists to make sure that you use it right.
  */
 FLOAT lowest_neighborhood_penalty(
-    const struct LowestPenalties& penalties,
+    const struct LowestPenalties* penalties,
     struct Edge edge
 );
 

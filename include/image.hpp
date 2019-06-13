@@ -32,6 +32,7 @@
 namespace sp::image
 {
 
+using sp::types::BOOL;
 using sp::types::ULONG;
 using sp::types::ULONG_ARRAY;
 
@@ -85,7 +86,7 @@ struct Image
  * maximal intensity should be greater than zero,
  * and neither intensity should exceed specified maximal value.
  */
-bool image_valid(const struct Image& image);
+BOOL image_valid(const struct Image* image);
 
 }
 

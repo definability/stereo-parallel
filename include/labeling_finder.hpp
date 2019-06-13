@@ -52,7 +52,7 @@ using sp::types::Pixel;
  * The output is sorted in ascending order.
  */
 FLOAT_ARRAY fetch_pixel_available_penalties(
-    const DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel,
     FLOAT minimal_penalty
 );
@@ -63,7 +63,7 @@ FLOAT_ARRAY fetch_pixel_available_penalties(
  * The output is sorted in ascending order.
  */
 FLOAT_ARRAY fetch_edge_available_penalties(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Edge edge,
     FLOAT minimal_penalty
 );
@@ -74,7 +74,7 @@ FLOAT_ARRAY fetch_edge_available_penalties(
  * The output is sorted in ascending order.
  */
 FLOAT_ARRAY fetch_available_penalties(
-    const struct LowestPenalties& lowest_penalties
+    const struct LowestPenalties* lowest_penalties
 );
 /**
  * \brief Calculate the minimal threshold
@@ -122,8 +122,8 @@ FLOAT_ARRAY fetch_available_penalties(
  * not more than \f$ \left[ \log_2 \ell + 1 \right] \f$ times.
  */
 FLOAT calculate_minimal_consistent_threshold(
-    const struct LowestPenalties& lowest_penalties,
-    const struct DisparityGraph& disparity_graph,
+    const struct LowestPenalties* lowest_penalties,
+    const struct DisparityGraph* disparity_graph,
     FLOAT_ARRAY available_penalties
 );
 /**
@@ -162,7 +162,7 @@ struct ConstraintGraph* find_labeling(struct ConstraintGraph* graph);
  * to the output image.
  */
 struct Image build_disparity_map(
-    const struct ConstraintGraph& constraint_graph
+    const struct ConstraintGraph* constraint_graph
 );
 
 }

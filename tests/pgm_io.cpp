@@ -61,12 +61,12 @@ BOOST_AUTO_TEST_CASE(read_image)
     BOOST_CHECK_EQUAL(pgm_io.get_image()->max_value, 10);
 
     struct Image image{*pgm_io.get_image()};
-    BOOST_CHECK_EQUAL(pixel_value(image, {0, 0}), 0);
-    BOOST_CHECK_EQUAL(pixel_value(image, {1, 0}), 1);
-    BOOST_CHECK_EQUAL(pixel_value(image, {2, 0}), 2);
-    BOOST_CHECK_EQUAL(pixel_value(image, {0, 1}), 3);
-    BOOST_CHECK_EQUAL(pixel_value(image, {1, 1}), 4);
-    BOOST_CHECK_EQUAL(pixel_value(image, {2, 1}), 5);
+    BOOST_CHECK_EQUAL(pixel_value(&image, {0, 0}), 0);
+    BOOST_CHECK_EQUAL(pixel_value(&image, {1, 0}), 1);
+    BOOST_CHECK_EQUAL(pixel_value(&image, {2, 0}), 2);
+    BOOST_CHECK_EQUAL(pixel_value(&image, {0, 1}), 3);
+    BOOST_CHECK_EQUAL(pixel_value(&image, {1, 1}), 4);
+    BOOST_CHECK_EQUAL(pixel_value(&image, {2, 1}), 5);
 }
 
 BOOST_AUTO_TEST_CASE(read_blank_file)

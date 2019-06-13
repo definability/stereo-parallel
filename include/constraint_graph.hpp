@@ -270,12 +270,12 @@ struct ConstraintGraph
      * for which the sp::graph::constraint::ConstraintGraph instance
      * was created.
      */
-    const struct DisparityGraph& disparity_graph;
+    const struct DisparityGraph* disparity_graph;
     /**
      * \brief sp::graph::lowest_penalties::LowestPenalties instance
      * to check availability of nodes and edges faster.
      */
-    const struct LowestPenalties& lowest_penalties;
+    const struct LowestPenalties* lowest_penalties;
     /**
      * \brief Array that contains markers for availability of nodes.
      *
@@ -320,8 +320,8 @@ struct ConstraintGraph
      * sp::graph::lowest_penalties::LowestPenalties instance.
      */
     ConstraintGraph(
-        const struct DisparityGraph& disparity_graph,
-        const struct LowestPenalties& lowest_penalties,
+        const struct DisparityGraph* disparity_graph,
+        const struct LowestPenalties* lowest_penalties,
         FLOAT threshold
     );
 };
@@ -361,7 +361,7 @@ void make_all_nodes_unavailable(struct ConstraintGraph* graph);
  * using sp::indexing::checks::node_exists.
  */
 BOOL is_node_available(
-    const struct ConstraintGraph& graph,
+    const struct ConstraintGraph* graph,
     struct Node node
 );
 /**
@@ -376,7 +376,7 @@ BOOL is_node_available(
  * using sp::indexing::checks::edge_exists.
  */
 BOOL is_edge_available(
-    const struct ConstraintGraph& graph,
+    const struct ConstraintGraph* graph,
     struct Edge edge
 );
 /**
@@ -392,7 +392,7 @@ BOOL is_edge_available(
  * using sp::indexing::checks::node_exists.
  */
 BOOL should_remove_node(
-    const struct ConstraintGraph& graph,
+    const struct ConstraintGraph* graph,
     struct Node node
 );
 /**
@@ -432,7 +432,7 @@ BOOL solve_csp(struct ConstraintGraph* graph);
 /**
  * \brief Check whether at least one node is available.
  */
-BOOL check_nodes_left(const struct ConstraintGraph& graph);
+BOOL check_nodes_left(const struct ConstraintGraph* graph);
 
 }
 

@@ -44,11 +44,13 @@ using sp::indexing::checks::edge_exists;
 using sp::indexing::checks::neighborhood_exists_fast;
 using sp::indexing::neighbor_by_index;
 using sp::indexing::node_index;
+using sp::types::FALSE;
+using sp::types::TRUE;
 using sp::types::ULONG;
 
 ConstraintGraph::ConstraintGraph(
-    const struct DisparityGraph& disparity_graph,
-    const struct LowestPenalties& lowest_penalties,
+    const struct DisparityGraph* disparity_graph,
+    const struct LowestPenalties* lowest_penalties,
     FLOAT threshold
 )
     : disparity_graph{disparity_graph}
@@ -56,34 +58,34 @@ ConstraintGraph::ConstraintGraph(
     , threshold{threshold}
 {
     this->nodes_availability = BOOL_ARRAY(
-        disparity_graph.right.width
-        * disparity_graph.right.height
-        * disparity_graph.disparity_levels
+        disparity_graph->right.width
+        * disparity_graph->right.height
+        * disparity_graph->disparity_levels
     );
     fill(
         this->nodes_availability.begin(),
         this->nodes_availability.end(),
-        false
+        FALSE
     );
 
-    Node node{{0, 0}, 0};
+    struct Node node{{0, 0}, 0};
     for (
         node.pixel.x = 0;
-        node.pixel.x < this->disparity_graph.right.width;
+        node.pixel.x < this->disparity_graph->right.width;
         ++node.pixel.x
     )
     {
         for (
             node.pixel.y = 0;
-            node.pixel.y < this->disparity_graph.right.height;
+            node.pixel.y < this->disparity_graph->right.height;
             ++node.pixel.y
         )
         {
             for (
                 node.disparity = 0;
                 node.pixel.x + node.disparity
-                    < this->disparity_graph.left.width
-                && node.disparity < this->disparity_graph.disparity_levels;
+                    < this->disparity_graph->left.width
+                && node.disparity < this->disparity_graph->disparity_levels;
                 ++node.disparity
             )
             {
@@ -106,7 +108,7 @@ void make_node_available(
 )
 {
     graph->nodes_availability[node_index(graph->disparity_graph, node)]
-        = true;
+        = TRUE;
 }
 
 void make_node_unavailable(
@@ -115,7 +117,7 @@ void make_node_unavailable(
 )
 {
     graph->nodes_availability[node_index(graph->disparity_graph, node)]
-        = false;
+        = FALSE;
 }
 
 void make_all_nodes_unavailable(struct ConstraintGraph* graph)
@@ -123,53 +125,55 @@ void make_all_nodes_unavailable(struct ConstraintGraph* graph)
     for (
         ULONG index = 0;
         index <
-            graph->disparity_graph.right.width
-            * graph->disparity_graph.right.height
-            * graph->disparity_graph.disparity_levels;
+            graph->disparity_graph->right.width
+            * graph->disparity_graph->right.height
+            * graph->disparity_graph->disparity_levels;
         ++index
     )
     {
-        graph->nodes_availability[index] = false;
+        graph->nodes_availability[index] = FALSE;
     }
 }
 
 BOOL is_node_available(
-    const struct ConstraintGraph& graph,
+    const struct ConstraintGraph* graph,
     struct Node node
 )
 {
-    return graph.nodes_availability[
-        node_index(graph.disparity_graph, node)
+    return graph->nodes_availability[
+        node_index(graph->disparity_graph, node)
     ];
 }
 
 BOOL is_edge_available(
-    const struct ConstraintGraph& graph,
+    const struct ConstraintGraph* graph,
     struct Edge edge
 )
 {
     return
-        (edge_penalty(graph.disparity_graph, edge)
-         - lowest_neighborhood_penalty(graph.lowest_penalties, edge)
-         <= graph.threshold)
+        (edge_penalty(graph->disparity_graph, edge)
+         - lowest_neighborhood_penalty(graph->lowest_penalties, edge)
+         <= graph->threshold)
         && is_node_available(graph, edge.node)
         && is_node_available(graph, edge.neighbor)
-        && edge_exists(graph.disparity_graph, edge);
+        && edge_exists(graph->disparity_graph, edge);
 }
 
 BOOL should_remove_node(
-    const struct ConstraintGraph& graph,
+    const struct ConstraintGraph* graph,
     struct Node node
 )
 {
     if (!is_node_available(graph, node))
     {
-        return false;
+        return FALSE;
     }
 
-    Edge edge{node, node};
+    struct Edge edge;
+    edge.node = node;
+    edge.neighbor = node;
     ULONG initial_disparity = 0;
-    BOOL edge_found = false;
+    BOOL edge_found = FALSE;
 
     for (
         ULONG neighbor_index = 0;
@@ -179,7 +183,7 @@ BOOL should_remove_node(
     {
         if (
             !neighborhood_exists_fast(
-                graph.disparity_graph,
+                graph->disparity_graph,
                 node.pixel,
                 neighbor_index
             )
@@ -201,47 +205,47 @@ BOOL should_remove_node(
             initial_disparity = 0;
         }
 
-        edge_found = false;
+        edge_found = FALSE;
         for (
             edge.neighbor.disparity = initial_disparity;
             edge.neighbor.pixel.x + edge.neighbor.disparity
-                < graph.disparity_graph.left.width
+                < graph->disparity_graph->left.width
             && edge.neighbor.disparity
-                < graph.disparity_graph.disparity_levels;
+                < graph->disparity_graph->disparity_levels;
             ++edge.neighbor.disparity
         )
         {
             if (is_edge_available(graph, edge))
             {
-                edge_found = true;
+                edge_found = TRUE;
                 break;
             }
         }
         if (!edge_found)
         {
-            return true;
+            return TRUE;
         }
     }
-    return false;
+    return FALSE;
 }
 
-BOOL check_nodes_left(const struct ConstraintGraph& graph)
+BOOL check_nodes_left(const struct ConstraintGraph* graph)
 {
     for (
         ULONG index = 0;
         index <
-            graph.disparity_graph.right.width
-            * graph.disparity_graph.right.height
-            * graph.disparity_graph.disparity_levels;
+            graph->disparity_graph->right.width
+            * graph->disparity_graph->right.height
+            * graph->disparity_graph->disparity_levels;
         ++index
     )
     {
-        if (graph.nodes_availability[index])
+        if (graph->nodes_availability[index])
         {
-            return true;
+            return TRUE;
         }
     }
-    return false;
+    return FALSE;
 }
 
 BOOL csp_solution_iteration(
@@ -250,44 +254,48 @@ BOOL csp_solution_iteration(
     ULONG job_number
 )
 {
-    if (job_number >= graph->disparity_graph.right.height)
+    if (job_number >= graph->disparity_graph->right.height)
     {
-        return false;
+        return FALSE;
     }
 
-    Node node{{0, 0}, 0};
-    BOOL pixel_available = false;
-    BOOL changed = false;
+    struct Node node;
+    node.pixel.x = 0;
+    node.pixel.y = 0;
+    node.disparity = 0;
+
+    BOOL pixel_available = FALSE;
+    BOOL changed = FALSE;
 
     for (
-        node.pixel.x = job_number;
-        node.pixel.x < graph->disparity_graph.right.width;
-        node.pixel.x += jobs
+        node.pixel.y = job_number;
+        node.pixel.y < graph->disparity_graph->right.height;
+        node.pixel.y += jobs
     )
     {
         for (
-            node.pixel.y = 0;
-            node.pixel.y < graph->disparity_graph.right.height;
-            ++node.pixel.y
+            node.pixel.x = 0;
+            node.pixel.x < graph->disparity_graph->right.width;
+            ++node.pixel.x
         )
         {
-            pixel_available = false;
+            pixel_available = FALSE;
             for (
                 node.disparity = 0;
                 node.pixel.x + node.disparity
-                    < graph->disparity_graph.right.width
-                && node.disparity < graph->disparity_graph.disparity_levels;
+                    < graph->disparity_graph->right.width
+                && node.disparity < graph->disparity_graph->disparity_levels;
                 ++node.disparity
             )
             {
-                if (should_remove_node(*graph, node))
+                if (should_remove_node(graph, node))
                 {
                     make_node_unavailable(graph, node);
-                    changed = true;
+                    changed = TRUE;
                 }
-                else if (is_node_available(*graph, node))
+                else if (is_node_available(graph, node))
                 {
-                    pixel_available = true;
+                    pixel_available = TRUE;
                 }
             }
             if (!pixel_available)
@@ -302,25 +310,25 @@ BOOL csp_solution_iteration(
     }
     if (!pixel_available)
     {
-        if (!check_nodes_left(*graph))
+        if (!check_nodes_left(graph))
         {
-            return false;
+            return FALSE;
         }
         make_all_nodes_unavailable(graph);
-        return true;
+        return TRUE;
     }
     return changed;
 }
 
 BOOL solve_csp(struct ConstraintGraph* graph)
 {
-    BOOL changed = true;
+    BOOL changed = TRUE;
     #ifdef _OPENMP
     #pragma omp parallel num_threads(1)
     #endif
     while (changed)
     {
-        changed = false;
+        changed = FALSE;
         #ifdef _OPENMP
         #pragma omp parallel for reduction(|:changed)
         #endif
@@ -329,7 +337,7 @@ BOOL solve_csp(struct ConstraintGraph* graph)
             changed |= csp_solution_iteration(graph, THREADS_NUMBER, i);
         }
     }
-    return check_nodes_left(*graph);
+    return check_nodes_left(graph);
 }
 
 }

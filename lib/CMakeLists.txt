@@ -96,7 +96,7 @@ if (OpenMP_CXX_FOUND)
         constraint_graph
         OpenMP::OpenMP_CXX
     )
-endif(OpenMP_CXX_FOUND)
+endif (OpenMP_CXX_FOUND)
 target_link_libraries(
     labeling_finder
     constraint_graph

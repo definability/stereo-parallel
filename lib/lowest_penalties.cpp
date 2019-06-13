@@ -35,27 +35,27 @@ using sp::indexing::neighborhood_index_fast;
 using sp::indexing::neighborhood_index_slow;
 using sp::types::Node;
 
-LowestPenalties::LowestPenalties(const struct DisparityGraph& graph)
+LowestPenalties::LowestPenalties(const struct DisparityGraph* graph)
     : graph{graph}
-    , pixels(graph.right.height * graph.right.width)
+    , pixels(graph->right.height * graph->right.width)
     , neighborhoods(
         NEIGHBORS_COUNT
-        * graph.right.height
-        * graph.right.width
+        * graph->right.height
+        * graph->right.width
     )
 {
     fill(this->pixels.begin(), this->pixels.end(), 0);
     fill(this->neighborhoods.begin(), this->neighborhoods.end(), 0);
     struct Pixel pixel{0, 0};
-    for (pixel.x = 0; pixel.x < this->graph.right.width; ++pixel.x)
+    for (pixel.x = 0; pixel.x < this->graph->right.width; ++pixel.x)
     {
         for (
             pixel.y = 0;
-            pixel.y < this->graph.right.height;
+            pixel.y < this->graph->right.height;
             ++pixel.y)
         {
             this->pixels[
-                pixel_index(this->graph.right, pixel)
+                pixel_index(&(this->graph->right), pixel)
             ] = calculate_lowest_pixel_penalty(
                 this->graph,
                 pixel
@@ -89,16 +89,18 @@ LowestPenalties::LowestPenalties(const struct DisparityGraph& graph)
 }
 
 FLOAT calculate_lowest_pixel_penalty(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel
 )
 {
-    Node node{pixel, 0};
+    struct Node node;
+    node.pixel = pixel;
+    node.disparity = 0;
     FLOAT minimal_penalty = node_penalty(graph, node);
     for (
         node.disparity = 0;
-        node.pixel.x + node.disparity < graph.left.width
-            && node.disparity < graph.disparity_levels;
+        node.pixel.x + node.disparity < graph->left.width
+            && node.disparity < graph->disparity_levels;
         ++node.disparity
     )
     {
@@ -111,19 +113,27 @@ FLOAT calculate_lowest_pixel_penalty(
 }
 
 FLOAT calculate_lowest_neighborhood_penalty(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel,
     struct Pixel neighbor
 )
 {
+    struct Edge edge;
+
+    edge.node.pixel = pixel;
+    edge.node.disparity = 0;
+
+    edge.neighbor.pixel = neighbor;
+    edge.neighbor.disparity = 0;
+
     return calculate_lowest_neighborhood_penalty_fast(
         graph,
-        {{pixel, 0}, {neighbor, 0}}
+        edge
     );
 }
 
 FLOAT calculate_lowest_neighborhood_penalty_fast(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Edge edge
 )
 {
@@ -131,8 +141,8 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
     ULONG initial_disparity = 0;
     for (
         edge.node.disparity = 0;
-        edge.node.pixel.x + edge.node.disparity < graph.left.width
-            && edge.node.disparity < graph.disparity_levels;
+        edge.node.pixel.x + edge.node.disparity < graph->left.width
+            && edge.node.disparity < graph->disparity_levels;
         ++edge.node.disparity
     )
     {
@@ -149,8 +159,8 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
         }
         for (
             edge.neighbor.disparity = initial_disparity;
-            edge.neighbor.pixel.x + edge.neighbor.disparity < graph.left.width
-                && edge.neighbor.disparity < graph.disparity_levels;
+            edge.neighbor.pixel.x + edge.neighbor.disparity < graph->left.width
+                && edge.neighbor.disparity < graph->disparity_levels;
             ++edge.neighbor.disparity
         )
         {
@@ -164,43 +174,51 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
 }
 
 FLOAT calculate_lowest_neighborhood_penalty_slow(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel,
     ULONG neighbor_index
 )
 {
+    struct Edge edge;
+
+    edge.node.pixel = pixel;
+    edge.node.disparity = 0;
+
+    edge.neighbor.pixel = neighbor_by_index(pixel, neighbor_index);
+    edge.neighbor.disparity = 0;
+
     return calculate_lowest_neighborhood_penalty_fast(
         graph,
-        {{pixel, 0}, {neighbor_by_index(pixel, neighbor_index), 0}}
+        edge
     );
 }
 
 FLOAT lowest_pixel_penalty(
-    const struct LowestPenalties& penalties,
+    const struct LowestPenalties* penalties,
     struct Pixel pixel
 )
 {
-    return penalties.pixels[pixel_index(penalties.graph.right, pixel)];
+    return penalties->pixels[pixel_index(&(penalties->graph->right), pixel)];
 }
 
 FLOAT lowest_neighborhood_penalty_fast(
-    const struct LowestPenalties& penalties,
+    const struct LowestPenalties* penalties,
     struct Pixel pixel,
     struct Pixel neighbor
 )
 {
-    return penalties.neighborhoods[
-        neighborhood_index(penalties.graph, pixel, neighbor)
+    return penalties->neighborhoods[
+        neighborhood_index(penalties->graph, pixel, neighbor)
     ];
 }
 
 FLOAT lowest_neighborhood_penalty(
-    const struct LowestPenalties& penalties,
+    const struct LowestPenalties* penalties,
     struct Edge edge
 )
 {
-    return penalties.neighborhoods[
-        neighborhood_index_slow(penalties.graph, edge)
+    return penalties->neighborhoods[
+        neighborhood_index_slow(penalties->graph, edge)
     ];
 }
 
