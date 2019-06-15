@@ -59,21 +59,21 @@ BOOST_AUTO_TEST_CASE(check_nodes_existence)
 
     for (ULONG y = 0; y < 2; ++y)
     {
-        BOOST_CHECK(node_exists(disparity_graph, {{0, y}, 0}));
-        BOOST_CHECK(node_exists(disparity_graph, {{1, y}, 0}));
-        BOOST_CHECK(node_exists(disparity_graph, {{2, y}, 0}));
+        BOOST_CHECK(node_exists(&disparity_graph, {{0, y}, 0}));
+        BOOST_CHECK(node_exists(&disparity_graph, {{1, y}, 0}));
+        BOOST_CHECK(node_exists(&disparity_graph, {{2, y}, 0}));
 
-        BOOST_CHECK(node_exists(disparity_graph, {{0, y}, 1}));
-        BOOST_CHECK(node_exists(disparity_graph, {{1, y}, 1}));
+        BOOST_CHECK(node_exists(&disparity_graph, {{0, y}, 1}));
+        BOOST_CHECK(node_exists(&disparity_graph, {{1, y}, 1}));
 
-        BOOST_CHECK(!node_exists(disparity_graph, {{0, y}, 2}));
-        BOOST_CHECK(!node_exists(disparity_graph, {{1, y}, 2}));
+        BOOST_CHECK(!node_exists(&disparity_graph, {{0, y}, 2}));
+        BOOST_CHECK(!node_exists(&disparity_graph, {{1, y}, 2}));
 
-        BOOST_CHECK(!node_exists(disparity_graph, {{2, y}, 1}));
+        BOOST_CHECK(!node_exists(&disparity_graph, {{2, y}, 1}));
     }
-    BOOST_CHECK(!node_exists(disparity_graph, {{0, 2}, 0}));
-    BOOST_CHECK(!node_exists(disparity_graph, {{3, 0}, 2}));
-    BOOST_CHECK(!node_exists(disparity_graph, {{3, 2}, 2}));
+    BOOST_CHECK(!node_exists(&disparity_graph, {{0, 2}, 0}));
+    BOOST_CHECK(!node_exists(&disparity_graph, {{3, 0}, 2}));
+    BOOST_CHECK(!node_exists(&disparity_graph, {{3, 2}, 2}));
 }
 
 BOOST_AUTO_TEST_CASE(check_reparametrization_indexing)
@@ -93,22 +93,22 @@ BOOST_AUTO_TEST_CASE(check_reparametrization_indexing)
 
     struct DisparityGraph disparity_graph{image, image, 3, 1, 1};
 
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 0}, 0), 0);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 1}, 0}, 0), 1);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 1}, 0), 2);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 2}, 0), 4);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 1}, 2}, 0), 5);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 0}, 1), 6);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 1}, 0}, 1), 7);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 1}, 1), 8);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 1}, 1}, 1), 9);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 2}, 1), 10);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 1}, 2}, 1), 11);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 0}, 2), 12);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 0}, 0}, 3), 18);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{0, 1}, 2}, 3), 23);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 0}, 0}, 0), 24);
-    BOOST_CHECK_EQUAL(reparametrization_index_fast(disparity_graph, {{1, 1}, 2}, 3), 47);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 0}, 0}, 0), 0);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 1}, 0}, 0), 1);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 0}, 1}, 0), 2);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 0}, 2}, 0), 4);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 1}, 2}, 0), 5);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 0}, 0}, 1), 6);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 1}, 0}, 1), 7);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 0}, 1}, 1), 8);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 1}, 1}, 1), 9);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 0}, 2}, 1), 10);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 1}, 2}, 1), 11);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 0}, 0}, 2), 12);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 0}, 0}, 3), 18);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{0, 1}, 2}, 3), 23);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{1, 0}, 0}, 0), 24);
+    BOOST_CHECK_EQUAL(reparametrization_index_fast(&disparity_graph, {{1, 1}, 2}, 3), 47);
 }
 
 BOOST_AUTO_TEST_CASE(check_neighborhood)
@@ -139,22 +139,22 @@ BOOST_AUTO_TEST_CASE(check_neighborhood)
 
     struct DisparityGraph disparity_graph{left_image, right_image, 3, 1, 1};
 
-    BOOST_CHECK(neighborhood_exists(disparity_graph, {0, 0}, {1, 0}));
-    BOOST_CHECK(neighborhood_exists(disparity_graph, {0, 0}, {0, 1}));
+    BOOST_CHECK(neighborhood_exists(&disparity_graph, {0, 0}, {1, 0}));
+    BOOST_CHECK(neighborhood_exists(&disparity_graph, {0, 0}, {0, 1}));
 
-    BOOST_CHECK(neighborhood_exists(disparity_graph, {1, 0}, {2, 0}));
+    BOOST_CHECK(neighborhood_exists(&disparity_graph, {1, 0}, {2, 0}));
 
-    BOOST_CHECK(neighborhood_exists(disparity_graph, {1, 0}, {0, 0}));
-    BOOST_CHECK(neighborhood_exists(disparity_graph, {1, 0}, {1, 1}));
+    BOOST_CHECK(neighborhood_exists(&disparity_graph, {1, 0}, {0, 0}));
+    BOOST_CHECK(neighborhood_exists(&disparity_graph, {1, 0}, {1, 1}));
 
-    BOOST_CHECK(!neighborhood_exists(disparity_graph, {0, 0}, {0, 0}));
-    BOOST_CHECK(!neighborhood_exists(disparity_graph, {0, 0}, {1, 1}));
-    BOOST_CHECK(!neighborhood_exists(disparity_graph, {0, 0}, {0, 2}));
-    BOOST_CHECK(!neighborhood_exists(disparity_graph, {0, 0}, {2, 0}));
+    BOOST_CHECK(!neighborhood_exists(&disparity_graph, {0, 0}, {0, 0}));
+    BOOST_CHECK(!neighborhood_exists(&disparity_graph, {0, 0}, {1, 1}));
+    BOOST_CHECK(!neighborhood_exists(&disparity_graph, {0, 0}, {0, 2}));
+    BOOST_CHECK(!neighborhood_exists(&disparity_graph, {0, 0}, {2, 0}));
 
-    BOOST_CHECK(!neighborhood_exists(disparity_graph, {1, 0}, {1, 0}));
-    BOOST_CHECK(!neighborhood_exists(disparity_graph, {1, 0}, {0, 1}));
-    BOOST_CHECK(!neighborhood_exists(disparity_graph, {1, 0}, {2, 1}));
+    BOOST_CHECK(!neighborhood_exists(&disparity_graph, {1, 0}, {1, 0}));
+    BOOST_CHECK(!neighborhood_exists(&disparity_graph, {1, 0}, {0, 1}));
+    BOOST_CHECK(!neighborhood_exists(&disparity_graph, {1, 0}, {2, 1}));
 }
 
 BOOST_AUTO_TEST_CASE(check_edges_existence)
@@ -185,17 +185,17 @@ BOOST_AUTO_TEST_CASE(check_edges_existence)
 
     struct DisparityGraph disparity_graph{left_image, right_image, 2, 1, 1};
 
-    BOOST_CHECK(edge_exists(disparity_graph, {{{0, 0}, 0}, {{1, 0}, 0}}));
-    BOOST_CHECK(edge_exists(disparity_graph, {{{0, 0}, 0}, {{1, 0}, 1}}));
+    BOOST_CHECK(edge_exists(&disparity_graph, {{{0, 0}, 0}, {{1, 0}, 0}}));
+    BOOST_CHECK(edge_exists(&disparity_graph, {{{0, 0}, 0}, {{1, 0}, 1}}));
 
-    BOOST_CHECK(edge_exists(disparity_graph, {{{1, 0}, 0}, {{0, 0}, 0}}));
-    BOOST_CHECK(edge_exists(disparity_graph, {{{1, 0}, 1}, {{0, 0}, 0}}));
+    BOOST_CHECK(edge_exists(&disparity_graph, {{{1, 0}, 0}, {{0, 0}, 0}}));
+    BOOST_CHECK(edge_exists(&disparity_graph, {{{1, 0}, 1}, {{0, 0}, 0}}));
 
-    BOOST_CHECK(!edge_exists(disparity_graph, {{{1, 0}, 2}, {{1, 0}, 1}}));
-    BOOST_CHECK(!edge_exists(disparity_graph, {{{0, 0}, 1}, {{1, 0}, 2}}));
+    BOOST_CHECK(!edge_exists(&disparity_graph, {{{1, 0}, 2}, {{1, 0}, 1}}));
+    BOOST_CHECK(!edge_exists(&disparity_graph, {{{0, 0}, 1}, {{1, 0}, 2}}));
 
-    BOOST_CHECK(!edge_exists(disparity_graph, {{{0, 0}, 2}, {{1, 0}, 0}}));
-    BOOST_CHECK(!edge_exists(disparity_graph, {{{1, 0}, 0}, {{1, 0}, 2}}));
+    BOOST_CHECK(!edge_exists(&disparity_graph, {{{0, 0}, 2}, {{1, 0}, 0}}));
+    BOOST_CHECK(!edge_exists(&disparity_graph, {{{1, 0}, 0}, {{1, 0}, 2}}));
 }
 
 BOOST_AUTO_TEST_CASE(check_continuity_constraint)
@@ -226,11 +226,11 @@ BOOST_AUTO_TEST_CASE(check_continuity_constraint)
 
     struct DisparityGraph disparity_graph{left_image, right_image, 3, 1, 1};
 
-    BOOST_CHECK(!edge_exists(disparity_graph, {{{0, 0}, 2}, {{1, 0}, 0}}));
-    BOOST_CHECK(!edge_exists(disparity_graph, {{{1, 0}, 0}, {{0, 0}, 2}}));
+    BOOST_CHECK(!edge_exists(&disparity_graph, {{{0, 0}, 2}, {{1, 0}, 0}}));
+    BOOST_CHECK(!edge_exists(&disparity_graph, {{{1, 0}, 0}, {{0, 0}, 2}}));
 
-    BOOST_CHECK(!edge_exists(disparity_graph, {{{0, 1}, 2}, {{1, 1}, 0}}));
-    BOOST_CHECK(!edge_exists(disparity_graph, {{{1, 1}, 0}, {{0, 1}, 2}}));
+    BOOST_CHECK(!edge_exists(&disparity_graph, {{{0, 1}, 2}, {{1, 1}, 0}}));
+    BOOST_CHECK(!edge_exists(&disparity_graph, {{{1, 1}, 0}, {{0, 1}, 2}}));
 }
 
 BOOST_AUTO_TEST_CASE(check_initial_edges_penalties)
@@ -262,34 +262,34 @@ BOOST_AUTO_TEST_CASE(check_initial_edges_penalties)
     struct DisparityGraph disparity_graph{left_image, right_image, 3, 1, 1};
 
     BOOST_CHECK_CLOSE(
-        edge_penalty(disparity_graph, {{{0, 0}, 0}, {{1, 0}, 0}}),
+        edge_penalty(&disparity_graph, {{{0, 0}, 0}, {{1, 0}, 0}}),
         0.0,
         0.5
     );
     BOOST_CHECK_CLOSE(
-        edge_penalty(disparity_graph, {{{0, 0}, 0}, {{0, 1}, 1}}),
+        edge_penalty(&disparity_graph, {{{0, 0}, 0}, {{0, 1}, 1}}),
         1.0,
         0.5
     );
 
     BOOST_CHECK_CLOSE(
-        edge_penalty(disparity_graph, {{{1, 0}, 1}, {{2, 0}, 0}}),
+        edge_penalty(&disparity_graph, {{{1, 0}, 1}, {{2, 0}, 0}}),
         1.0,
         0.5
     );
 
     BOOST_CHECK_CLOSE(
-        edge_penalty(disparity_graph, {{{1, 0}, 0}, {{0, 0}, 2}}),
+        edge_penalty(&disparity_graph, {{{1, 0}, 0}, {{0, 0}, 2}}),
         4.0,
         0.5
     );
     BOOST_CHECK_CLOSE(
-        edge_penalty(disparity_graph, {{{1, 0}, 2}, {{0, 1}, 0}}),
+        edge_penalty(&disparity_graph, {{{1, 0}, 2}, {{0, 1}, 0}}),
         4.0,
         0.5
     );
     BOOST_CHECK_CLOSE(
-        edge_penalty(disparity_graph, {{{1, 0}, 2}, {{1, 1}, 2}}),
+        edge_penalty(&disparity_graph, {{{1, 0}, 2}, {{1, 1}, 2}}),
         0.0,
         0.5
     );
@@ -323,23 +323,23 @@ BOOST_AUTO_TEST_CASE(check_initial_nodes_penalties)
 
     struct DisparityGraph disparity_graph{left_image, right_image, 3, 1, 1};
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 0}), 1.0, 0.5);
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 1}), 0.0, 0.5);
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 2}), 1.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 0}, 0}), 1.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 0}, 1}), 0.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 0}, 2}), 1.0, 0.5);
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 0}), 1.0, 0.5);
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 1}), 4.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{1, 0}, 0}), 1.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{1, 0}, 1}), 4.0, 0.5);
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{2, 0}, 0}), 0.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{2, 0}, 0}), 0.0, 0.5);
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 1}, 0}), 0.0, 0.5);
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 1}, 1}), 4.0, 0.5);
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 1}, 2}), 1.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 1}, 0}), 0.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 1}, 1}), 4.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 1}, 2}), 1.0, 0.5);
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 1}, 0}), 0.0, 0.5);
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 1}, 1}), 1.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{1, 1}, 0}), 0.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{1, 1}, 1}), 1.0, 0.5);
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{2, 1}, 0}), 0.0, 0.5);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{2, 1}, 0}), 0.0, 0.5);
 }
 
 BOOST_AUTO_TEST_CASE(check_edges_penalties)
@@ -371,27 +371,27 @@ BOOST_AUTO_TEST_CASE(check_edges_penalties)
     struct DisparityGraph disparity_graph{left_image, right_image, 3, 1, 10};
 
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{0, 0}, 0}, {1, 0})
+        reparametrization_index(&disparity_graph, {{0, 0}, 0}, {1, 0})
     ] = -2;
 
     BOOST_CHECK_CLOSE(
-        edge_penalty(disparity_graph, {{{0, 0}, 0}, {{1, 0}, 0}}),
+        edge_penalty(&disparity_graph, {{{0, 0}, 0}, {{1, 0}, 0}}),
         2,
         1
     );
     BOOST_CHECK_CLOSE(
-        edge_penalty(disparity_graph, {{{0, 0}, 0}, {{1, 0}, 1}}),
+        edge_penalty(&disparity_graph, {{{0, 0}, 0}, {{1, 0}, 1}}),
         12,
         1
     );
 
     BOOST_CHECK_CLOSE(
-        edge_penalty(disparity_graph, {{{1, 0}, 0}, {{0, 0}, 0}}),
+        edge_penalty(&disparity_graph, {{{1, 0}, 0}, {{0, 0}, 0}}),
         2,
         1
     );
     BOOST_CHECK_CLOSE(
-        edge_penalty(disparity_graph, {{{1, 0}, 0}, {{0, 0}, 1}}),
+        edge_penalty(&disparity_graph, {{{1, 0}, 0}, {{0, 0}, 1}}),
         10,
         1
     );
@@ -426,13 +426,13 @@ BOOST_AUTO_TEST_CASE(check_nodes_penalties)
     struct DisparityGraph disparity_graph{left_image, right_image, 3, 10, 1};
 
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{0, 0}, 0}, {1, 0})
+        reparametrization_index(&disparity_graph, {{0, 0}, 0}, {1, 0})
     ] = -2;
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 0}), 8, 1);
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 1}), 0, 1);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 0}, 0}), 8, 1);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 0}, 1}), 0, 1);
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 0}), 10, 1);
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{1, 0}, 0}), 10, 1);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

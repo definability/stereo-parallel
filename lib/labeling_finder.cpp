@@ -49,17 +49,17 @@ using std::to_string;
 using std::unique;
 
 FLOAT_ARRAY fetch_pixel_available_penalties(
-    const DisparityGraph& graph,
+    const DisparityGraph* graph,
     struct Pixel pixel,
     FLOAT minimal_penalty
 )
 {
     FLOAT_ARRAY result(
-        pixel.x + graph.disparity_levels < graph.left.width + 1
-        ? graph.disparity_levels
-        : graph.left.width - pixel.x
+        pixel.x + graph->disparity_levels < graph->left.width + 1
+        ? graph->disparity_levels
+        : graph->left.width - pixel.x
     );
-    Node node{pixel, 0};
+    struct Node node{pixel, 0};
     for (
         node.disparity = 0;
         node.disparity < result.size();
@@ -80,7 +80,7 @@ FLOAT_ARRAY fetch_pixel_available_penalties(
 }
 
 FLOAT_ARRAY fetch_edge_available_penalties(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Edge edge,
     FLOAT minimal_penalty
 )
@@ -90,8 +90,8 @@ FLOAT_ARRAY fetch_edge_available_penalties(
     ULONG initial_disparity = 0;
     for (
         edge.node.disparity = 0;
-        edge.node.pixel.x + edge.node.disparity < graph.left.width
-            && edge.node.disparity < graph.disparity_levels;
+        edge.node.pixel.x + edge.node.disparity < graph->left.width
+            && edge.node.disparity < graph->disparity_levels;
         ++edge.node.disparity
     )
     {
@@ -108,8 +108,8 @@ FLOAT_ARRAY fetch_edge_available_penalties(
         }
         for (
             edge.neighbor.disparity = initial_disparity;
-            edge.neighbor.pixel.x + edge.neighbor.disparity < graph.left.width
-                && edge.neighbor.disparity < graph.disparity_levels;
+            edge.neighbor.pixel.x + edge.neighbor.disparity < graph->left.width
+                && edge.neighbor.disparity < graph->disparity_levels;
             ++edge.neighbor.disparity
         )
         {
@@ -125,22 +125,22 @@ FLOAT_ARRAY fetch_edge_available_penalties(
 }
 
 FLOAT_ARRAY fetch_available_penalties(
-    const struct LowestPenalties& lowest_penalties
+    const struct LowestPenalties* lowest_penalties
 )
 {
     FLOAT_ARRAY result;
     FLOAT_ARRAY result_;
     FLOAT_ARRAY available_penalties;
     struct Pixel pixel{0, 0};
-    for (pixel.x = 0; pixel.x < lowest_penalties.graph.right.width; ++pixel.x)
+    for (pixel.x = 0; pixel.x < lowest_penalties->graph->right.width; ++pixel.x)
     {
         for (
             pixel.y = 0;
-            pixel.y < lowest_penalties.graph.right.height;
+            pixel.y < lowest_penalties->graph->right.height;
             ++pixel.y)
         {
             available_penalties = fetch_pixel_available_penalties(
-                lowest_penalties.graph,
+                lowest_penalties->graph,
                 pixel,
                 lowest_pixel_penalty(lowest_penalties, pixel)
             );
@@ -167,7 +167,7 @@ FLOAT_ARRAY fetch_available_penalties(
             {
                 if (
                     !neighborhood_exists_fast(
-                        lowest_penalties.graph, pixel, neighbor_index
+                        lowest_penalties->graph, pixel, neighbor_index
                     )
                 )
                 {
@@ -178,7 +178,7 @@ FLOAT_ARRAY fetch_available_penalties(
                     {neighbor_by_index(pixel, neighbor_index), 0}
                 };
                 available_penalties = fetch_edge_available_penalties(
-                    lowest_penalties.graph,
+                    lowest_penalties->graph,
                     edge,
                     lowest_neighborhood_penalty(
                         lowest_penalties,
@@ -206,8 +206,8 @@ FLOAT_ARRAY fetch_available_penalties(
 }
 
 FLOAT calculate_minimal_consistent_threshold(
-    const struct LowestPenalties& lowest_penalties,
-    const struct DisparityGraph& disparity_graph,
+    const struct LowestPenalties* lowest_penalties,
+    const struct DisparityGraph* disparity_graph,
     FLOAT_ARRAY available_penalties
 )
 {
@@ -242,16 +242,18 @@ struct ConstraintGraph* choose_best_node(
     struct Pixel pixel
 )
 {
-    Node node{pixel, 0};
+    struct Node node;
+    node.pixel = pixel;
+    node.disparity = 0;
     FLOAT minimal_penalty = -1;
     for (
         node.disparity = 0;
-        node.pixel.x + node.disparity < graph->disparity_graph.left.width
-            && node.disparity < graph->disparity_graph.disparity_levels;
+        node.pixel.x + node.disparity < graph->disparity_graph->left.width
+            && node.disparity < graph->disparity_graph->disparity_levels;
         ++node.disparity
     )
     {
-        if (!is_node_available(*graph, node))
+        if (!is_node_available(graph, node))
         {
             continue;
         }
@@ -271,12 +273,12 @@ struct ConstraintGraph* choose_best_node(
     bool node_chosen = false;
     for (
         node.disparity = 0;
-        node.pixel.x + node.disparity < graph->disparity_graph.left.width
-            && node.disparity < graph->disparity_graph.disparity_levels;
+        node.pixel.x + node.disparity < graph->disparity_graph->left.width
+            && node.disparity < graph->disparity_graph->disparity_levels;
         ++node.disparity
     )
     {
-        if (!is_node_available(*graph, node))
+        if (!is_node_available(graph, node))
         {
             continue;
         }
@@ -293,16 +295,16 @@ struct ConstraintGraph* choose_best_node(
             node_chosen = true;
         }
     }
-    return node_chosen? graph : nullptr;
+    return node_chosen? graph : NULL;
 }
 
 struct ConstraintGraph* find_labeling(
     struct ConstraintGraph* graph
 )
 {
-    for (ULONG x = 0; x < graph->disparity_graph.left.width; ++x)
+    for (ULONG x = 0; x < graph->disparity_graph->left.width; ++x)
     {
-        for (ULONG y = 0; y < graph->disparity_graph.left.height; ++y)
+        for (ULONG y = 0; y < graph->disparity_graph->left.height; ++y)
         {
             if (choose_best_node(graph, {x, y}) == nullptr)
             {
@@ -318,36 +320,40 @@ struct ConstraintGraph* find_labeling(
 }
 
 struct Image build_disparity_map(
-    const struct ConstraintGraph& constraint_graph
+    const struct ConstraintGraph* constraint_graph
 )
 {
     struct Image result{
-        constraint_graph.disparity_graph.left.width,
-        constraint_graph.disparity_graph.left.height,
-        constraint_graph.disparity_graph.disparity_levels,
+        constraint_graph->disparity_graph->left.width,
+        constraint_graph->disparity_graph->left.height,
+        constraint_graph->disparity_graph->disparity_levels,
         ULONG_ARRAY(
-            constraint_graph.disparity_graph.left.height
-            * constraint_graph.disparity_graph.left.width
+            constraint_graph->disparity_graph->left.height
+            * constraint_graph->disparity_graph->left.width
         )
     };
-    Node node{{0, 0}, 0};
+    struct Node node;
+    node.pixel.x = 0;
+    node.pixel.y = 0;
+    node.disparity = 0;
+
     BOOL found = false;
     for (
         node.pixel.x = 0;
-        node.pixel.x < constraint_graph.disparity_graph.left.width;
+        node.pixel.x < constraint_graph->disparity_graph->left.width;
         ++node.pixel.x)
     {
         for (
             node.pixel.y = 0;
-            node.pixel. y < constraint_graph.disparity_graph.left.height;
+            node.pixel. y < constraint_graph->disparity_graph->left.height;
             ++node.pixel.y)
         {
             for (
                 node.disparity = 0;
                 node.pixel.x + node.disparity
-                    < constraint_graph.disparity_graph.left.width
+                    < constraint_graph->disparity_graph->left.width
                 && node.disparity
-                    < constraint_graph.disparity_graph.disparity_levels;
+                    < constraint_graph->disparity_graph->disparity_levels;
                 ++node.disparity
             )
             {
@@ -363,7 +369,7 @@ struct Image build_disparity_map(
                             + ">."
                         );
                     }
-                    result.data[pixel_index(result, node.pixel)]
+                    result.data[pixel_index(&result, node.pixel)]
                         = node.disparity;
                     found = true;
                     break;

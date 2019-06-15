@@ -11,6 +11,10 @@
         -cert-err60-cpp,\
         -clang-diagnostic-unused-command-line-argument,\
         -cppcoreguidelines-pro-type-vararg,\
+        -hicpp-vararg,\
         -google-runtime-int,\
+        -cppcoreguidelines-pro-type-member-init,\
+        -hicpp-member-init,\
+        -modernize-use-nullptr,\
     ",
 }

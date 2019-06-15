@@ -105,20 +105,20 @@ int main(int argc, char* argv[]) try
                 smoothness
             };
             struct sp::graph::lowest_penalties::LowestPenalties
-                lowest_penalties{disparity_graph};
+                lowest_penalties{&disparity_graph};
             auto available_penalties
                 = sp::labeling::finder::fetch_available_penalties(
-                    lowest_penalties
+                    &lowest_penalties
                 );
             sp::types::FLOAT threshold
                 = sp::labeling::finder::calculate_minimal_consistent_threshold(
-                    lowest_penalties,
-                    disparity_graph,
+                    &lowest_penalties,
+                    &disparity_graph,
                     available_penalties
                 );
             struct sp::graph::constraint::ConstraintGraph constraint_graph{
-                disparity_graph,
-                lowest_penalties,
+                &disparity_graph,
+                &lowest_penalties,
                 threshold
             };
             if (!solve_csp(&constraint_graph))
@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) try
             std::shared_ptr<struct sp::image::Image> result
                 = std::make_shared<struct sp::image::Image>(
                     sp::labeling::finder::build_disparity_map(
-                        constraint_graph
+                        &constraint_graph
                     ));
             std::ofstream image_file(vm["output-image"].as<std::string>());
             sp::image::PGM_IO pgm_io{result};

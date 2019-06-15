@@ -13,6 +13,11 @@ and this project adheres to `Semantic Versioning`_.
 Unreleased_
 ===========
 
+Changed
+-------
+
+- Use pointers instead of references in cross-device code.
+
 0.1.1 - 2019-04-07
 ==================
 

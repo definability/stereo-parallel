@@ -110,7 +110,7 @@ bool PGM_IO::check_file_end(istream& in)
 
 ostream& operator<<(ostream& out, const PGM_IO& ppm_io)
 {
-    if (!ppm_io.get_image() || !image_valid(*ppm_io.get_image()))
+    if (!ppm_io.get_image() || !image_valid(ppm_io.get_image().get()))
     {
         return out;
     }
@@ -122,7 +122,7 @@ ostream& operator<<(ostream& out, const PGM_IO& ppm_io)
     {
         for (ULONG x = 0; x < image->width; ++x)
         {
-            out << image->data[pixel_index(*image, {x, y})];
+            out << image->data[pixel_index(image.get(), {x, y})];
             if (x == 0 || (x + 1) % PGM_IO::MAX_NUMBERS_PER_ROW != 0)
             {
                 if (x + 1 < image->width)
@@ -180,7 +180,7 @@ istream& operator>>(istream& in, PGM_IO& ppm_io)
         {
             try
             {
-                image->data[pixel_index(*image, {x, y})] =
+                image->data[pixel_index(image.get(), {x, y})] =
                     stoul(PGM_IO::read_pgm_instruction(in));
             }
             catch (invalid_argument&)

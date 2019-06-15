@@ -60,9 +60,9 @@ BOOST_AUTO_TEST_CASE(check_black_images)
     struct Image image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{image, image, 2, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity_graph};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
     auto pixel_penalties = fetch_pixel_available_penalties(
-        disparity_graph,
+        &disparity_graph,
         {0, 0},
         0
     );
@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(check_black_images)
     BOOST_CHECK_CLOSE(pixel_penalties[0], 0, 1);
 
     auto edge_penalties = fetch_edge_available_penalties(
-        disparity_graph,
+        &disparity_graph,
         {{{0, 0}, 0}, {{0, 1}, 0}},
         0
     );
@@ -78,21 +78,21 @@ BOOST_AUTO_TEST_CASE(check_black_images)
     BOOST_CHECK_CLOSE(edge_penalties[0], 0, 1);
     BOOST_CHECK_CLOSE(edge_penalties[1], 1, 1);
 
-    auto available_penalties = fetch_available_penalties(lowest_penalties);
+    auto available_penalties = fetch_available_penalties(&lowest_penalties);
     BOOST_CHECK_EQUAL(available_penalties.size(), 2);
     BOOST_CHECK_CLOSE(available_penalties[0], 0, 1);
     BOOST_CHECK_CLOSE(available_penalties[1], 1, 1);
 
     FLOAT threshold = calculate_minimal_consistent_threshold(
-        lowest_penalties,
-        disparity_graph,
+        &lowest_penalties,
+        &disparity_graph,
         available_penalties
     );
     BOOST_CHECK_CLOSE(threshold, 0, 1);
 
     struct ConstraintGraph constraint_graph{
-        disparity_graph,
-        lowest_penalties,
+        &disparity_graph,
+        &lowest_penalties,
         threshold
     };
     BOOST_CHECK(solve_csp(&constraint_graph));
@@ -115,10 +115,10 @@ BOOST_AUTO_TEST_CASE(check_equal_images)
     struct Image image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{image, image, 3, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity_graph};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
 
     auto pixel_penalties = fetch_pixel_available_penalties(
-        disparity_graph,
+        &disparity_graph,
         {1, 0},
         0
     );
@@ -127,7 +127,7 @@ BOOST_AUTO_TEST_CASE(check_equal_images)
     BOOST_CHECK_CLOSE(pixel_penalties[1], 129 * 129, 1);
 
     auto edge_penalties = fetch_edge_available_penalties(
-        disparity_graph,
+        &disparity_graph,
         {{{0, 0}, 0}, {{0, 1}, 0}},
         0
     );
@@ -136,7 +136,7 @@ BOOST_AUTO_TEST_CASE(check_equal_images)
     BOOST_CHECK_CLOSE(edge_penalties[1], 1, 1);
     BOOST_CHECK_CLOSE(edge_penalties[2], 4, 1);
 
-    auto available_penalties = fetch_available_penalties(lowest_penalties);
+    auto available_penalties = fetch_available_penalties(&lowest_penalties);
     BOOST_CHECK_EQUAL(available_penalties.size(), 6);
     BOOST_CHECK_CLOSE(available_penalties[0], 0, 1);
     BOOST_CHECK_CLOSE(available_penalties[1], 1, 1);
@@ -146,15 +146,15 @@ BOOST_AUTO_TEST_CASE(check_equal_images)
     BOOST_CHECK_CLOSE(available_penalties[5], 256 * 256, 1);
 
     FLOAT threshold = calculate_minimal_consistent_threshold(
-        lowest_penalties,
-        disparity_graph,
+        &lowest_penalties,
+        &disparity_graph,
         available_penalties
     );
     BOOST_CHECK_CLOSE(threshold, 0, 1);
 
     struct ConstraintGraph constraint_graph{
-        disparity_graph,
-        lowest_penalties,
+        &disparity_graph,
+        &lowest_penalties,
         threshold
     };
     BOOST_CHECK(solve_csp(&constraint_graph));
@@ -188,10 +188,10 @@ BOOST_AUTO_TEST_CASE(basic_check)
     struct Image right_image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{left_image, right_image, 3, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity_graph};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
 
     auto pixel_penalties = fetch_pixel_available_penalties(
-        disparity_graph,
+        &disparity_graph,
         {0, 0},
         0
     );
@@ -201,7 +201,7 @@ BOOST_AUTO_TEST_CASE(basic_check)
     BOOST_CHECK_CLOSE(pixel_penalties[2], 36, 1);
 
     auto edge_penalties = fetch_edge_available_penalties(
-        disparity_graph,
+        &disparity_graph,
         {{{0, 0}, 0}, {{0, 1}, 0}},
         0
     );
@@ -210,7 +210,7 @@ BOOST_AUTO_TEST_CASE(basic_check)
     BOOST_CHECK_CLOSE(edge_penalties[1], 1, 1);
     BOOST_CHECK_CLOSE(edge_penalties[2], 4, 1);
 
-    auto available_penalties = fetch_available_penalties(lowest_penalties);
+    auto available_penalties = fetch_available_penalties(&lowest_penalties);
     BOOST_CHECK_EQUAL(available_penalties.size(), 6);
     BOOST_CHECK_CLOSE(available_penalties[0], 0, 1);
     BOOST_CHECK_CLOSE(available_penalties[1], 1, 1);
@@ -220,15 +220,15 @@ BOOST_AUTO_TEST_CASE(basic_check)
     BOOST_CHECK_CLOSE(available_penalties[5], 36, 1);
 
     FLOAT threshold = calculate_minimal_consistent_threshold(
-        lowest_penalties,
-        disparity_graph,
+        &lowest_penalties,
+        &disparity_graph,
         available_penalties
     );
     BOOST_CHECK_CLOSE(threshold, 5, 1);
 
     struct ConstraintGraph constraint_graph{
-        disparity_graph,
-        lowest_penalties,
+        &disparity_graph,
+        &lowest_penalties,
         threshold
     };
     BOOST_CHECK(solve_csp(&constraint_graph));

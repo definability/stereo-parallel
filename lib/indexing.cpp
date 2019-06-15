@@ -29,14 +29,14 @@ namespace sp::indexing
 
 using sp::graph::disparity::NEIGHBORS_COUNT;
 
-ULONG pixel_index(const struct Image& image, struct Pixel pixel)
+ULONG pixel_index(const struct Image* image, struct Pixel pixel)
 {
-    return image.width * pixel.y + pixel.x;
+    return image->width * pixel.y + pixel.x;
 }
 
-ULONG pixel_value(const struct Image& image, struct Pixel pixel)
+ULONG pixel_value(const struct Image* image, struct Pixel pixel)
 {
-    return image.data[pixel_index(image, pixel)];
+    return image->data[pixel_index(image, pixel)];
 }
 
 ULONG neighbor_index(
@@ -68,26 +68,26 @@ ULONG neighbor_index(
 }
 
 ULONG reparametrization_index_fast(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Node node,
     ULONG neighbor_index
 )
 {
     ULONG index = 0;
-    index *= graph.right.width;
+    index *= graph->right.width;
     index += node.pixel.x;
     index *= NEIGHBORS_COUNT;
     index += neighbor_index;
-    index *= graph.disparity_levels;
+    index *= graph->disparity_levels;
     index += node.disparity;
-    index *= graph.left.height;
+    index *= graph->left.height;
     index += node.pixel.y;
 
     return index;
 }
 
 ULONG reparametrization_index(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Node node,
     struct Pixel neighbor
 )
@@ -100,7 +100,7 @@ ULONG reparametrization_index(
 }
 
 ULONG reparametrization_index_slow(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Edge edge
 )
 {
@@ -112,51 +112,51 @@ ULONG reparametrization_index_slow(
 }
 
 FLOAT reparametrization_value(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Node node,
     struct Pixel neighbor
 )
 {
-    return graph.reparametrization[reparametrization_index(graph, node, neighbor)];
+    return graph->reparametrization[reparametrization_index(graph, node, neighbor)];
 }
 
 FLOAT reparametrization_value_slow(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Edge edge
 )
 {
-    return graph.reparametrization[reparametrization_index_slow(graph, edge)];
+    return graph->reparametrization[reparametrization_index_slow(graph, edge)];
 }
 
 FLOAT reparametrization_value_fast(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Node node,
     ULONG neighbor_index
 )
 {
-    return graph.reparametrization[
+    return graph->reparametrization[
         reparametrization_index_fast(graph, node, neighbor_index)
     ];
 }
 
-ULONG node_index(const struct DisparityGraph& graph, struct Node node)
+ULONG node_index(const struct DisparityGraph* graph, struct Node node)
 {
-    return node.disparity + graph.disparity_levels
-        * (node.pixel.y + graph.right.height * node.pixel.x);
+    return node.disparity + graph->disparity_levels
+        * (node.pixel.y + graph->right.height * node.pixel.x);
 }
 
 ULONG neighborhood_index_fast(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel,
     ULONG neighbor_index
 )
 {
     return neighbor_index
-        + NEIGHBORS_COUNT * (pixel.y + graph.right.height * pixel.x);
+        + NEIGHBORS_COUNT * (pixel.y + graph->right.height * pixel.x);
 }
 
 ULONG neighborhood_index(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel,
     struct Pixel neighbor
 )
@@ -169,7 +169,7 @@ ULONG neighborhood_index(
 }
 
 ULONG neighborhood_index_slow(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Edge edge
 )
 {
@@ -180,7 +180,7 @@ ULONG neighborhood_index_slow(
     );
 }
 
-Pixel neighbor_by_index(
+struct Pixel neighbor_by_index(
     struct Pixel pixel,
     ULONG neighbor_index
 )

@@ -26,15 +26,15 @@
 namespace sp::image
 {
 
-bool image_valid(const struct Image& image)
+BOOL image_valid(const struct Image* image)
 {
-    if (image.max_value == 0 || image.width == 0 || image.height == 0)
+    if (image->max_value == 0 || image->width == 0 || image->height == 0)
     {
         return false;
     }
-    for (unsigned i = 0; i < image.width * image.height; ++i)
+    for (unsigned i = 0; i < image->width * image->height; ++i)
     {
-        if (image.data[i] > image.max_value)
+        if (image->data[i] > image->max_value)
         {
             return false;
         }

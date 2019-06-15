@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE(check_neighborhoods_indexing)
     struct Image image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{image, image, 3, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity_graph};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
     BOOST_CHECK_EQUAL(
         neighborhood_index_fast(lowest_penalties.graph, {0, 0}, 0),
         0
@@ -316,15 +316,15 @@ BOOST_AUTO_TEST_CASE(check_lowest_pixel_penalty)
     struct Image right_image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{left_image, right_image, 2, 10, 1};
-    struct LowestPenalties lowest_penalties{disparity_graph};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
 
-    BOOST_CHECK_CLOSE(lowest_pixel_penalty(lowest_penalties, {0, 0}), 10, 1);
-    BOOST_CHECK_CLOSE(lowest_pixel_penalty(lowest_penalties, {1, 0}), 10, 1);
-    BOOST_CHECK_CLOSE(lowest_pixel_penalty(lowest_penalties, {2, 0}), 40, 1);
+    BOOST_CHECK_CLOSE(lowest_pixel_penalty(&lowest_penalties, {0, 0}), 10, 1);
+    BOOST_CHECK_CLOSE(lowest_pixel_penalty(&lowest_penalties, {1, 0}), 10, 1);
+    BOOST_CHECK_CLOSE(lowest_pixel_penalty(&lowest_penalties, {2, 0}), 40, 1);
 
-    BOOST_CHECK_CLOSE(lowest_pixel_penalty(lowest_penalties, {0, 1}), 0, 1);
-    BOOST_CHECK_CLOSE(lowest_pixel_penalty(lowest_penalties, {1, 1}), 0, 1);
-    BOOST_CHECK_CLOSE(lowest_pixel_penalty(lowest_penalties, {2, 1}), 90, 1);
+    BOOST_CHECK_CLOSE(lowest_pixel_penalty(&lowest_penalties, {0, 1}), 0, 1);
+    BOOST_CHECK_CLOSE(lowest_pixel_penalty(&lowest_penalties, {1, 1}), 0, 1);
+    BOOST_CHECK_CLOSE(lowest_pixel_penalty(&lowest_penalties, {2, 1}), 90, 1);
 }
 
 BOOST_AUTO_TEST_CASE(check_lowest_vertical_neighborhood_penalty)
@@ -356,29 +356,29 @@ BOOST_AUTO_TEST_CASE(check_lowest_vertical_neighborhood_penalty)
     struct DisparityGraph disparity_graph{left_image, right_image, 3, 1, 1};
 
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{0, 0}, 0}, {0, 1})
+        reparametrization_index(&disparity_graph, {{0, 0}, 0}, {0, 1})
     ] = -5;
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{0, 0}, 1}, {0, 1})
+        reparametrization_index(&disparity_graph, {{0, 0}, 1}, {0, 1})
     ] = -5;
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{0, 0}, 2}, {0, 1})
+        reparametrization_index(&disparity_graph, {{0, 0}, 2}, {0, 1})
     ] = 0;
 
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{0, 1}, 0}, {0, 0})
+        reparametrization_index(&disparity_graph, {{0, 1}, 0}, {0, 0})
     ] = 0;
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{0, 1}, 1}, {0, 0})
+        reparametrization_index(&disparity_graph, {{0, 1}, 1}, {0, 0})
     ] = -5;
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{0, 1}, 2}, {0, 0})
+        reparametrization_index(&disparity_graph, {{0, 1}, 2}, {0, 0})
     ] = -5;
 
-    struct LowestPenalties lowest_penalties{disparity_graph};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
 
     BOOST_CHECK_CLOSE(
-        lowest_neighborhood_penalty_fast(lowest_penalties, {0, 0}, {0, 1}),
+        lowest_neighborhood_penalty_fast(&lowest_penalties, {0, 0}, {0, 1}),
         4,
         1
     );
@@ -413,58 +413,58 @@ BOOST_AUTO_TEST_CASE(check_lowest_neighborhood_penalty)
     struct DisparityGraph disparity_graph{left_image, right_image, 2, 1, 10};
 
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{1, 0}, 0}, {1, 1})
+        reparametrization_index(&disparity_graph, {{1, 0}, 0}, {1, 1})
     ] = 0.5;
 
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{1, 0}, 0}, {2, 0})
+        reparametrization_index(&disparity_graph, {{1, 0}, 0}, {2, 0})
     ] = -2;
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{2, 0}, 1}, {1, 0})
+        reparametrization_index(&disparity_graph, {{2, 0}, 1}, {1, 0})
     ] = -2;
 
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{2, 0}, 0}, {2, 1})
+        reparametrization_index(&disparity_graph, {{2, 0}, 0}, {2, 1})
     ] = -1;
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{2, 1}, 0}, {2, 0})
+        reparametrization_index(&disparity_graph, {{2, 1}, 0}, {2, 0})
     ] = -1;
 
-    struct LowestPenalties lowest_penalties{disparity_graph};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
 
     /**
      * This should not affect the final weights,
      * because it's modified after minimal penalties calculation.
      */
     disparity_graph.reparametrization[
-        reparametrization_index(disparity_graph, {{1, 1}, 0}, {1, 0})
+        reparametrization_index(&disparity_graph, {{1, 1}, 0}, {1, 0})
     ] = 0.5;
 
     BOOST_CHECK_CLOSE(
-        lowest_neighborhood_penalty_fast(lowest_penalties, {0, 0}, {1, 0}),
+        lowest_neighborhood_penalty_fast(&lowest_penalties, {0, 0}, {1, 0}),
         0,
         1
     );
     BOOST_CHECK_CLOSE(
-        lowest_neighborhood_penalty_fast(lowest_penalties, {0, 0}, {0, 1}),
+        lowest_neighborhood_penalty_fast(&lowest_penalties, {0, 0}, {0, 1}),
         0,
         1
     );
 
     BOOST_CHECK_CLOSE(
-        lowest_neighborhood_penalty_fast(lowest_penalties, {1, 0}, {1, 1}),
+        lowest_neighborhood_penalty_fast(&lowest_penalties, {1, 0}, {1, 1}),
         -0.5,
         1
     );
 
     BOOST_CHECK_CLOSE(
-        lowest_neighborhood_penalty_fast(lowest_penalties, {1, 0}, {2, 0}),
+        lowest_neighborhood_penalty_fast(&lowest_penalties, {1, 0}, {2, 0}),
         2,
         1
     );
 
     BOOST_CHECK_CLOSE(
-        lowest_neighborhood_penalty_fast(lowest_penalties, {2, 0}, {2, 1}),
+        lowest_neighborhood_penalty_fast(&lowest_penalties, {2, 0}, {2, 1}),
         2,
         1
     );

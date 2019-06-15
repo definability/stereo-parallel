@@ -56,8 +56,8 @@ BOOST_AUTO_TEST_CASE(check_nodes_indexing)
     struct Image image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{image, image, 3, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity_graph};
-    struct ConstraintGraph constraint_graph{disparity_graph, lowest_penalties, 1};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
+    struct ConstraintGraph constraint_graph{&disparity_graph, &lowest_penalties, 1};
 
     BOOST_CHECK_EQUAL(node_index(constraint_graph.disparity_graph, {{0, 0}, 0}), 0);
     BOOST_CHECK_EQUAL(node_index(constraint_graph.disparity_graph, {{0, 0}, 2}), 2);
@@ -82,8 +82,8 @@ BOOST_AUTO_TEST_CASE(check_black_images)
     struct Image image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{image, image, 3, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity_graph};
-    struct ConstraintGraph constraint_graph{disparity_graph, lowest_penalties, 1};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
+    struct ConstraintGraph constraint_graph{&disparity_graph, &lowest_penalties, 1};
     BOOST_CHECK_CLOSE(constraint_graph.threshold, 1, 1);
 
     struct Node node{{0, 0}, 0};
@@ -106,7 +106,7 @@ BOOST_AUTO_TEST_CASE(check_black_images)
             )
             {
                 BOOST_CHECK_EQUAL(
-                    is_node_available(constraint_graph, node),
+                    is_node_available(&constraint_graph, node),
                     node.pixel.x + node.disparity
                     < disparity_graph.left.width
                 );
@@ -131,27 +131,27 @@ BOOST_AUTO_TEST_CASE(check_equal_images)
     struct Image image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{image, image, 3, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity_graph};
-    struct ConstraintGraph constraint_graph{disparity_graph, lowest_penalties, 128 * 128};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
+    struct ConstraintGraph constraint_graph{&disparity_graph, &lowest_penalties, 128 * 128};
     BOOST_CHECK_CLOSE(constraint_graph.threshold, 128 * 128, 1);
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 0}), 0, 1);
-    BOOST_CHECK(is_node_available(constraint_graph, {{0, 0}, 0}));
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 0}, 0}), 0, 1);
+    BOOST_CHECK(is_node_available(&constraint_graph, {{0, 0}, 0}));
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 1}), 127 * 127, 1);
-    BOOST_CHECK(is_node_available(constraint_graph, {{0, 0}, 1}));
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 0}, 1}), 127 * 127, 1);
+    BOOST_CHECK(is_node_available(&constraint_graph, {{0, 0}, 1}));
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 2}), 256 * 256, 1);
-    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 0}, 2}));
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 0}, 2}), 256 * 256, 1);
+    BOOST_CHECK(!is_node_available(&constraint_graph, {{0, 0}, 2}));
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 1}, 0}), 0, 1);
-    BOOST_CHECK(is_node_available(constraint_graph, {{0, 1}, 0}));
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 1}, 0}), 0, 1);
+    BOOST_CHECK(is_node_available(&constraint_graph, {{0, 1}, 0}));
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 1}, 1}), 129 * 129, 1);
-    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 1}, 1}));
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 1}, 1}), 129 * 129, 1);
+    BOOST_CHECK(!is_node_available(&constraint_graph, {{0, 1}, 1}));
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 1}, 2}), 256 * 256, 1);
-    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 1}, 2}));
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 1}, 2}), 256 * 256, 1);
+    BOOST_CHECK(!is_node_available(&constraint_graph, {{0, 1}, 2}));
 }
 
 BOOST_AUTO_TEST_CASE(check_disparity_loop)
@@ -181,15 +181,15 @@ BOOST_AUTO_TEST_CASE(check_disparity_loop)
     struct Image right_image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{left_image, right_image, 2, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity_graph};
-    struct ConstraintGraph constraint_graph{disparity_graph, lowest_penalties, 15};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
+    struct ConstraintGraph constraint_graph{&disparity_graph, &lowest_penalties, 15};
     BOOST_CHECK_CLOSE(constraint_graph.threshold, 15, 1);
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 0}), 4, 1);
-    BOOST_CHECK(is_node_available(constraint_graph, {{0, 0}, 0}));
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 0}, 0}), 4, 1);
+    BOOST_CHECK(is_node_available(&constraint_graph, {{0, 0}, 0}));
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 1}), 9, 1);
-    BOOST_CHECK(is_node_available(constraint_graph, {{0, 0}, 1}));
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 0}, 1}), 9, 1);
+    BOOST_CHECK(is_node_available(&constraint_graph, {{0, 0}, 1}));
 }
 
 /**
@@ -230,12 +230,12 @@ BOOST_AUTO_TEST_CASE(check_minimal_node_value_calculation)
     struct Image right_image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{left_image, right_image, 3, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity_graph};
-    struct ConstraintGraph constraint_graph{disparity_graph, lowest_penalties, 0.5};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
+    struct ConstraintGraph constraint_graph{&disparity_graph, &lowest_penalties, 0.5};
     BOOST_CHECK_CLOSE(constraint_graph.threshold, 0.5, 1);
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{2, 0}, 0}), 1, 1);
-    BOOST_CHECK(is_node_available(constraint_graph, {{2, 0}, 0}));
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{2, 0}, 0}), 1, 1);
+    BOOST_CHECK(is_node_available(&constraint_graph, {{2, 0}, 0}));
 }
 
 BOOST_AUTO_TEST_CASE(check_removal)
@@ -265,35 +265,35 @@ BOOST_AUTO_TEST_CASE(check_removal)
     struct Image right_image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{left_image, right_image, 3, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity_graph};
-    struct ConstraintGraph constraint_graph{disparity_graph, lowest_penalties, 16};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
+    struct ConstraintGraph constraint_graph{&disparity_graph, &lowest_penalties, 16};
 
     BOOST_CHECK_CLOSE(constraint_graph.threshold, 16, 1);
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 0}), 36, 1);
-    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 0}, 0}));
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 0}, 0}), 36, 1);
+    BOOST_CHECK(!is_node_available(&constraint_graph, {{0, 0}, 0}));
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 1}), 25, 1);
-    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 0}, 1}));
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 0}, 1}), 25, 1);
+    BOOST_CHECK(!is_node_available(&constraint_graph, {{0, 0}, 1}));
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{0, 0}, 2}), 0, 1);
-    BOOST_CHECK(is_node_available(constraint_graph, {{0, 0}, 2}));
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{0, 0}, 2}), 0, 1);
+    BOOST_CHECK(is_node_available(&constraint_graph, {{0, 0}, 2}));
 
-    BOOST_CHECK_CLOSE(node_penalty(disparity_graph, {{1, 0}, 0}), 4, 1);
-    BOOST_CHECK(is_node_available(constraint_graph, {{1, 0}, 0}));
+    BOOST_CHECK_CLOSE(node_penalty(&disparity_graph, {{1, 0}, 0}), 4, 1);
+    BOOST_CHECK(is_node_available(&constraint_graph, {{1, 0}, 0}));
 
     BOOST_CHECK(solve_csp(&constraint_graph));
 
-    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 0}, 0}));
-    BOOST_CHECK(!is_node_available(constraint_graph, {{0, 0}, 1}));
-    BOOST_CHECK(is_node_available(constraint_graph, {{0, 0}, 2}));
+    BOOST_CHECK(!is_node_available(&constraint_graph, {{0, 0}, 0}));
+    BOOST_CHECK(!is_node_available(&constraint_graph, {{0, 0}, 1}));
+    BOOST_CHECK(is_node_available(&constraint_graph, {{0, 0}, 2}));
 
-    BOOST_CHECK(!is_node_available(constraint_graph, {{1, 0}, 0}));
-    BOOST_CHECK(is_node_available(constraint_graph, {{1, 0}, 1}));
+    BOOST_CHECK(!is_node_available(&constraint_graph, {{1, 0}, 0}));
+    BOOST_CHECK(is_node_available(&constraint_graph, {{1, 0}, 1}));
 
-    BOOST_CHECK(!is_edge_available(constraint_graph, {{{0, 0}, 0}, {{1, 0}, 0}}));
-    BOOST_CHECK(!is_edge_available(constraint_graph, {{{0, 0}, 1}, {{1, 0}, 0}}));
-    BOOST_CHECK(!is_edge_available(constraint_graph, {{{0, 0}, 2}, {{1, 0}, 0}}));
+    BOOST_CHECK(!is_edge_available(&constraint_graph, {{{0, 0}, 0}, {{1, 0}, 0}}));
+    BOOST_CHECK(!is_edge_available(&constraint_graph, {{{0, 0}, 1}, {{1, 0}, 0}}));
+    BOOST_CHECK(!is_edge_available(&constraint_graph, {{{0, 0}, 2}, {{1, 0}, 0}}));
 }
 
 BOOST_AUTO_TEST_CASE(check_unconstrained_disparities)
@@ -313,8 +313,8 @@ BOOST_AUTO_TEST_CASE(check_unconstrained_disparities)
     struct Image left_image{*pgm_io.get_image()};
 
     struct DisparityGraph disparity_graph{left_image, left_image, 4, 1, 1};
-    struct LowestPenalties lowest_penalties{disparity_graph};
-    struct ConstraintGraph constraint_graph{disparity_graph, lowest_penalties, 9};
+    struct LowestPenalties lowest_penalties{&disparity_graph};
+    struct ConstraintGraph constraint_graph{&disparity_graph, &lowest_penalties, 9};
     BOOST_CHECK_CLOSE(constraint_graph.threshold, 9, 1);
     BOOST_CHECK(solve_csp(&constraint_graph));
 
@@ -331,10 +331,10 @@ BOOST_AUTO_TEST_CASE(check_unconstrained_disparities)
     make_node_unavailable(&constraint_graph, {{1, 2}, 1});
 
     BOOST_CHECK(solve_csp(&constraint_graph));
-    BOOST_CHECK(is_node_available(constraint_graph, {{0, 0}, 0}));
-    BOOST_CHECK(is_node_available(constraint_graph, {{1, 0}, 2}));
-    BOOST_CHECK(is_node_available(constraint_graph, {{2, 0}, 1}));
-    BOOST_CHECK(is_node_available(constraint_graph, {{1, 1}, 0}));
+    BOOST_CHECK(is_node_available(&constraint_graph, {{0, 0}, 0}));
+    BOOST_CHECK(is_node_available(&constraint_graph, {{1, 0}, 2}));
+    BOOST_CHECK(is_node_available(&constraint_graph, {{2, 0}, 1}));
+    BOOST_CHECK(is_node_available(&constraint_graph, {{1, 1}, 0}));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

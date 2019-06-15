@@ -57,7 +57,7 @@ using sp::types::ULONG;
  * are not a neighbors in the sp::graph::disparity::DisparityGraph.
  */
 bool neighborhood_exists(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel,
     struct Pixel neighbor
 );
@@ -73,7 +73,7 @@ bool neighborhood_exists(
  * calculated by sp::indexing::neighbor_index function.
  */
 bool neighborhood_exists_fast(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Pixel pixel,
     ULONG neighbor_index
 );
@@ -89,7 +89,7 @@ bool neighborhood_exists_fast(
  * the maximal allowed.
  */
 bool node_exists(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Node node
 );
 
@@ -101,7 +101,7 @@ bool node_exists(
  * of the neighboring pixels.
  */
 bool edge_exists(
-    const struct DisparityGraph& graph,
+    const struct DisparityGraph* graph,
     struct Edge edge
 );
 
