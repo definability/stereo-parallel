@@ -71,6 +71,18 @@ using BOOL_ARRAY = std::vector<BOOL>;
 const BOOL TRUE = true;
 const BOOL FALSE = false;
 
+#else
+
+#define ULONG ulong
+#define ULONG_ARRAY ULONG*
+#define FLOAT float
+#define FLOAT_ARRAY FLOAT*
+#define BOOL int
+#define BOOL_ARRAY BOOL*
+
+#define TRUE 1
+#define FALSE 0
+
 #endif
 
 /**

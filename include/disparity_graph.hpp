@@ -53,6 +53,8 @@ using sp::types::ULONG;
  * - top
  */
 const ULONG NEIGHBORS_COUNT = 4;
+#else
+#define NEIGHBORS_COUNT (4)
 #endif
 
 /**

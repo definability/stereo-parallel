@@ -31,6 +31,10 @@
 
 #define TO_FLOAT(x) (static_cast<FLOAT>(x))
 
+#else
+
+#define TO_FLOAT(x) (convert_float(x))
+
 #endif
 
 #define SQR(x) ((x) * (x))
