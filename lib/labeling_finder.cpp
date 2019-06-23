@@ -25,7 +25,9 @@
 #include <indexing_checks.hpp>
 #include <labeling_finder.hpp>
 
+#ifndef __OPENCL_C_VERSION__
 #include <algorithm>
+#include <iostream>
 #include <iterator>
 #include <stdexcept>
 
@@ -236,6 +238,7 @@ FLOAT calculate_minimal_consistent_threshold(
     }
     return available_penalties[current_index];
 }
+#endif
 
 struct ConstraintGraph* choose_best_node(
     struct ConstraintGraph* graph,
@@ -298,6 +301,7 @@ struct ConstraintGraph* choose_best_node(
     return node_chosen? graph : NULL;
 }
 
+#ifndef __OPENCL_C_VERSION__
 struct ConstraintGraph* find_labeling(
     struct ConstraintGraph* graph
 )
@@ -392,3 +396,4 @@ struct Image build_disparity_map(
 }
 
 }
+#endif

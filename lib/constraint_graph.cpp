@@ -30,12 +30,17 @@
 #include <omp.h>
 #endif
 
+#ifndef __OPENCL_C_VERSION__
+#include <iostream>
+#endif
+
 #ifdef _OPENMP
 #define THREADS_NUMBER (omp_get_num_threads())
 #else
 #define THREADS_NUMBER (1)
 #endif
 
+#ifndef __OPENCL_C_VERSION__
 namespace sp::graph::constraint
 {
 
@@ -101,6 +106,7 @@ ConstraintGraph::ConstraintGraph(
         }
     }
 }
+#endif
 
 void make_node_available(
     struct ConstraintGraph* graph,
@@ -340,4 +346,6 @@ BOOL solve_csp(struct ConstraintGraph* graph)
     return check_nodes_left(graph);
 }
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif

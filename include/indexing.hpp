@@ -28,6 +28,7 @@
 #include <image.hpp>
 #include <types.hpp>
 
+#ifndef __OPENCL_C_VERSION__
 /**
  * \brief Functions for getting access to arrays
  * by abstract indices like sp::types::Pixels, sp::types::Nodes, etc.
@@ -42,6 +43,7 @@ using sp::types::FLOAT;
 using sp::types::Node;
 using sp::types::Pixel;
 using sp::types::ULONG;
+#endif
 
 /**
  * \brief Get position of the pixel in data array of the image.
@@ -223,6 +225,8 @@ struct Pixel neighbor_by_index(
     ULONG neighbor_index
 );
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif
 
 #endif

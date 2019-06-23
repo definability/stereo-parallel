@@ -24,6 +24,7 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
+#ifndef __OPENCL_C_VERSION__
 #include <vector>
 
 /**
@@ -69,6 +70,8 @@ using BOOL_ARRAY = std::vector<BOOL>;
 
 const BOOL TRUE = true;
 const BOOL FALSE = false;
+
+#endif
 
 /**
  * Structure that contains position of a pixel.
@@ -120,6 +123,8 @@ struct Edge
     struct Node neighbor;
 };
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif
 
 #endif

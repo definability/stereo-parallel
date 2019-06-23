@@ -30,6 +30,7 @@
 #include <lowest_penalties.hpp>
 #include <types.hpp>
 
+#ifndef __OPENCL_C_VERSION__
 /**
  * \brief Functions to find a consistent labeling.
  */
@@ -44,6 +45,7 @@ using sp::types::Edge;
 using sp::types::FLOAT;
 using sp::types::FLOAT_ARRAY;
 using sp::types::Pixel;
+#endif
 
 /**
  * \brief Construct an array of available differences
@@ -165,6 +167,8 @@ struct Image build_disparity_map(
     const struct ConstraintGraph* constraint_graph
 );
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif
 
 #endif

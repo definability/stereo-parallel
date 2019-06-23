@@ -29,6 +29,7 @@
 #include <lowest_penalties.hpp>
 #include <types.hpp>
 
+#ifndef __OPENCL_C_VERSION__
 /**
  * \brief Utilities to solve CSP.
  */
@@ -43,6 +44,7 @@ using sp::types::Edge;
 using sp::types::FLOAT;
 using sp::types::Node;
 using sp::types::ULONG;
+#endif
 
 /**
  * \brief Structure to represent a graph with constraints
@@ -319,11 +321,13 @@ struct ConstraintGraph
      * it's good to have precalculated
      * sp::graph::lowest_penalties::LowestPenalties instance.
      */
+    #ifndef __OPENCL_C_VERSION__
     ConstraintGraph(
         const struct DisparityGraph* disparity_graph,
         const struct LowestPenalties* lowest_penalties,
         FLOAT threshold
     );
+    #endif
 };
 /**
  * \brief Mark specific Node as available (`true`).
@@ -434,6 +438,8 @@ BOOL solve_csp(struct ConstraintGraph* graph);
  */
 BOOL check_nodes_left(const struct ConstraintGraph* graph);
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif
 
 #endif

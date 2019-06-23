@@ -24,10 +24,12 @@
 #include <disparity_graph.hpp>
 #include <indexing.hpp>
 
+#ifndef __OPENCL_C_VERSION__
 namespace sp::indexing
 {
 
 using sp::graph::disparity::NEIGHBORS_COUNT;
+#endif
 
 ULONG pixel_index(const struct Image* image, struct Pixel pixel)
 {
@@ -204,4 +206,6 @@ struct Pixel neighbor_by_index(
     return pixel;
 }
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif
