@@ -69,9 +69,7 @@ before_install:
 
 before_script:
     - sudo apt-get update
-    - sudo apt-get install -y
-        libboost-test-dev
-        libboost-program-options-dev
+    - sudo apt-get install -y libboost-dev
     - shopt -s expand_aliases
     - alias clang-static-analyzer="scan-build
         --use-cc=`which $CC`
