@@ -138,7 +138,20 @@ struct ConstraintGraph* choose_best_node(
     struct Pixel pixel
 );
 /**
- * \brief Find a labeling, consistent with the minimal available threshold.
+ * \brief Find a labeling, consistent with the minimal available threshold,
+ * using OpenCL.
+ *
+ * Use sp::labeling::finder::calculate_minimal_consistent_threshold
+ * to find the threshold.
+ *
+ * The function performs the same actions as find_labeling.
+ */
+struct ConstraintGraph* find_labeling_cl(
+    struct ConstraintGraph* graph
+);
+/**
+ * \brief Find a labeling, consistent with the minimal available threshold,
+ * using CPU. Use OpenMP if available.
  *
  * Use sp::labeling::finder::calculate_minimal_consistent_threshold
  * to find the threshold.
