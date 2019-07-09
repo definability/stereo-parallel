@@ -254,6 +254,32 @@ BOOL check_nodes_left(const struct ConstraintGraph* graph)
     return FALSE;
 }
 
+BOOL csp_process_pixel(
+    struct ConstraintGraph* graph,
+    struct Pixel pixel
+)
+{
+    struct Node node;
+    node.pixel = pixel;
+
+    BOOL changed = FALSE;
+    for (
+        node.disparity = 0;
+        node.pixel.x + node.disparity
+            < graph->disparity_graph->right.width
+        && node.disparity < graph->disparity_graph->disparity_levels;
+        ++node.disparity
+    )
+    {
+        if (should_remove_node(graph, node))
+        {
+            make_node_unavailable(graph, node);
+            changed = TRUE;
+        }
+    }
+    return changed;
+}
+
 BOOL csp_solution_iteration(
     struct ConstraintGraph* graph,
     ULONG jobs,
@@ -285,6 +311,7 @@ BOOL csp_solution_iteration(
             ++node.pixel.x
         )
         {
+            csp_process_pixel(graph, node.pixel);
             pixel_available = FALSE;
             for (
                 node.disparity = 0;
@@ -294,12 +321,7 @@ BOOL csp_solution_iteration(
                 ++node.disparity
             )
             {
-                if (should_remove_node(graph, node))
-                {
-                    make_node_unavailable(graph, node);
-                    changed = TRUE;
-                }
-                else if (is_node_available(graph, node))
+                if (is_node_available(graph, node))
                 {
                     pixel_available = TRUE;
                 }

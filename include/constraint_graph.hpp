@@ -43,6 +43,7 @@ using sp::types::BOOL_ARRAY;
 using sp::types::Edge;
 using sp::types::FLOAT;
 using sp::types::Node;
+using sp::types::Pixel;
 using sp::types::ULONG;
 #endif
 
@@ -398,6 +399,19 @@ BOOL is_edge_available(
 BOOL should_remove_node(
     const struct ConstraintGraph* graph,
     struct Node node
+);
+/**
+ * \brief Check all nodes of the Pixel and remove the redundant ones.
+ *
+ * @return
+ *  Boolean flag.
+ *  `true` if availability of at least one node was changed.
+ *  `false` if a solution was found (at least an empty one)
+ *  and nothing was changed during iteration.
+ */
+BOOL csp_process_pixel(
+    struct ConstraintGraph* graph,
+    struct Pixel pixel
 );
 /**
  * \brief Perform one iteration of sp::graph::constraint::solve_csp.
