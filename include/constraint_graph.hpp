@@ -300,7 +300,7 @@ struct ConstraintGraph
      * \f$i\f$ is an index of used neighbor
      * and \f$d\f$ is a Node::disparity.
      */
-    BOOL_ARRAY nodes_availability;
+    __global BOOL_ARRAY nodes_availability;
     /**
      * \brief Threshold to compare penalty of an edge with the minimal one
      * against.

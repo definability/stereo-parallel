@@ -78,7 +78,7 @@ struct Image
      *  \end{bmatrix}
      * \f]
      */
-    ULONG_ARRAY data;
+    __global ULONG_ARRAY data;
 };
 
 /**

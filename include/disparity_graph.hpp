@@ -379,7 +379,7 @@ struct DisparityGraph
      * \f$i\f$ is an index of used neighbor
      * and \f$d\f$ is a Node::disparity.
      */
-    FLOAT_ARRAY reparametrization;
+    __global FLOAT_ARRAY reparametrization;
     /**
      * \brief Weight of difference in colors
      * between pixel and its neighbor.

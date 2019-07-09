@@ -27,6 +27,7 @@
 #ifndef __OPENCL_C_VERSION__
 #include <vector>
 
+#define __global
 /**
  * \brief Basic types.
  */
