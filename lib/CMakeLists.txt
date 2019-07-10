@@ -37,8 +37,10 @@ add_library(constraint_graph constraint_graph.cpp)
 add_library(labeling_finder labeling_finder.cpp)
 add_library(indexing indexing.cpp)
 add_library(indexing_checks indexing_checks.cpp)
+if (OpenCL_FOUND)
 add_library(compile_cl compile_cl.cpp)
 add_library(gpu_csp gpu_csp.cpp)
+endif (OpenCL_FOUND)
 
 target_include_directories(
     indexing PUBLIC
@@ -72,6 +74,7 @@ target_include_directories(
     labeling_finder PUBLIC
     ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
 )
+if (OpenCL_FOUND)
 target_include_directories(
     compile_cl PUBLIC
     ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
@@ -80,6 +83,7 @@ target_include_directories(
     gpu_csp PUBLIC
     ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
 )
+endif (OpenCL_FOUND)
 
 target_link_libraries(
     pgm_io
@@ -110,14 +114,21 @@ if (OpenMP_CXX_FOUND)
         OpenMP::OpenMP_CXX
     )
 endif (OpenMP_CXX_FOUND)
+
 target_link_libraries(
     labeling_finder
     constraint_graph
     lowest_penalties
     disparity_graph
     image
-    gpu_csp
 )
+
+if (OpenCL_FOUND)
+    target_link_libraries(
+        labeling_finder
+        gpu_csp
+    )
+endif (OpenCL_FOUND)
 
 if (OpenCL_FOUND)
     target_link_libraries(
