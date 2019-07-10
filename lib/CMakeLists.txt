@@ -26,6 +26,7 @@ if (WITH_OPENMP)
     find_package(OpenMP REQUIRED)
 endif(WITH_OPENMP)
 if (WITH_OPENCL)
+    find_package(Boost 1.61 REQUIRED)
     find_package(OpenCL REQUIRED)
 endif(WITH_OPENCL)
 
