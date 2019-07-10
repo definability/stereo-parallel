@@ -91,7 +91,7 @@ int main(int argc, char* argv[]) try
                 parallelism_input.begin(),
                 parallelism_input.end(),
                 parallelism_input.begin(),
-                (int (*)(int))std::tolower
+                [](unsigned char c){ return std::tolower(c)
             );
 #ifdef USE_OPENCL
             if (parallelism_input == "cl" || parallelism_input == "opencl")
