@@ -128,6 +128,11 @@ if (OpenCL_FOUND)
         labeling_finder
         gpu_csp
     )
+    target_compile_definitions(
+        labeling_finder
+        PRIVATE
+        "USE_OPENCL"
+    )
 endif (OpenCL_FOUND)
 
 if (OpenCL_FOUND)
@@ -163,5 +168,10 @@ if (OpenCL_FOUND)
     target_link_libraries(
         stereo_parallel
         gpu_csp
+    )
+    target_compile_definitions(
+        stereo_parallel
+        PRIVATE
+        "USE_OPENCL"
     )
 endif (OpenCL_FOUND)
