@@ -2,7 +2,9 @@
 
 #include <constraint_graph.hpp>
 #include <disparity_graph.hpp>
+#ifdef USE_OPENCL
 #include <gpu_csp.hpp>
+#endif
 #include <image.hpp>
 #include <labeling_finder.hpp>
 #include <lowest_penalties.hpp>
@@ -20,7 +22,9 @@ struct sp::image::Image read_image(const std::string& image_path);
 enum Parallelism
 {
     CPU,
+#ifdef USE_OPENCL
     OpenCL,
+#endif
 };
 
 int main(int argc, char* argv[]) try
@@ -89,12 +93,15 @@ int main(int argc, char* argv[]) try
                 parallelism_input.begin(),
                 (int (*)(int))std::tolower
             );
+#ifdef USE_OPENCL
             if (parallelism_input == "cl" || parallelism_input == "opencl")
             {
                 parallelism = Parallelism::OpenCL;
                     std::cout << "OpenCL parallelism" << std::endl;
             }
-            else if (
+            else
+#endif
+            if (
                 parallelism_input == "cpu"
                 || parallelism_input == "openmp"
                 || parallelism_input == "omp"
@@ -184,11 +191,13 @@ int main(int argc, char* argv[]) try
                         &constraint_graph
                     );
                     break;
+#ifdef USE_OPENCL
                 case Parallelism::OpenCL:
                     labeled_graph = sp::labeling::finder::find_labeling_cl(
                         &constraint_graph
                     );
                     break;
+#endif
                 default:
                     throw std::logic_error(
                         "Unknown parallelism schema. "

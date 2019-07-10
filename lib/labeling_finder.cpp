@@ -26,7 +26,9 @@
 #include <labeling_finder.hpp>
 
 #ifndef __OPENCL_C_VERSION__
+#ifdef USE_OPENCL
 #include <gpu_csp.hpp>
+#endif
 
 #include <algorithm>
 #include <iostream>
@@ -44,7 +46,9 @@ using sp::types::BOOL;
 using sp::types::Node;
 using sp::types::ULONG;
 using sp::types::ULONG_ARRAY;
+#ifdef USE_OPENCL
 using gpu::csp_solution_cl;
+#endif
 using std::back_inserter;
 using std::logic_error;
 using std::merge;
@@ -305,6 +309,7 @@ struct ConstraintGraph* choose_best_node(
 }
 
 #ifndef __OPENCL_C_VERSION__
+#ifdef USE_OPENCL
 struct ConstraintGraph* find_labeling_cl(
     struct ConstraintGraph* graph
 )
@@ -315,6 +320,7 @@ struct ConstraintGraph* find_labeling_cl(
     gpu::csp_solution_cl(graph, &problem);
     return graph;
 }
+#endif
 
 struct ConstraintGraph* find_labeling(
     struct ConstraintGraph* graph
