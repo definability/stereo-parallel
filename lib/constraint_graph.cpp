@@ -359,7 +359,7 @@ BOOL solve_csp(struct ConstraintGraph* graph)
     {
         changed = FALSE;
         #ifdef _OPENMP
-        #pragma omp parallel for reduction(|:changed)
+        #pragma omp parallel for reduction(||:changed)
         #endif
         for (ULONG i = 0; i < THREADS_NUMBER; ++i)
         {
