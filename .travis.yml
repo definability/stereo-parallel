@@ -4,6 +4,11 @@ matrix:
   include:
     - os: linux
       dist: bionic
+      env:
+        - MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
+
+    - os: linux
+      dist: bionic
       addons:
         apt:
           sources:
@@ -47,17 +52,6 @@ matrix:
             - g++-7
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-
-    - os: linux
-      dist: bionic
-      addons:
-        apt:
-          sources:
-            - llvm-toolchain-trusty-4.9
-          packages:
-            - clang-4.9
-      env:
-        - MATRIX_EVAL="CC=clang-4.9 && CXX=clang++-4.9"
 
     - os: linux
       dist: bionic
