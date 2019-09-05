@@ -348,6 +348,7 @@ BOOL csp_solution_iteration(
     return changed;
 }
 
+#ifndef __OPENCL_C_VERSION__
 BOOL solve_csp(struct ConstraintGraph* graph)
 {
     BOOL changed = TRUE;
@@ -367,6 +368,7 @@ BOOL solve_csp(struct ConstraintGraph* graph)
     }
     return check_nodes_left(graph);
 }
+#endif
 
 #ifndef __OPENCL_C_VERSION__
 }
