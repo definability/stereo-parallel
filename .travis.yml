@@ -85,6 +85,7 @@ before_script:
         -v -v -v"
 
 script:
+    - echo "$CC $CXX $(which $CC) $(which $CXX) $(which clang) $(which clang++)"
     - mkdir build
     - cd build
     - |
