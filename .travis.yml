@@ -3,6 +3,7 @@ language: cpp
 matrix:
   include:
     - os: linux
+      dist: bionic
       addons:
         apt:
           sources:
@@ -15,6 +16,7 @@ matrix:
         - MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
 
     - os: linux
+      dist: bionic
       addons:
         apt:
           sources:
@@ -25,6 +27,7 @@ matrix:
         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
 
     - os: linux
+      dist: bionic
       addons:
         apt:
           sources:
@@ -35,6 +38,7 @@ matrix:
         - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
 
     - os: linux
+      dist: bionic
       addons:
         apt:
           sources:
@@ -45,6 +49,7 @@ matrix:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
     - os: linux
+      dist: bionic
       addons:
         apt:
           sources:
@@ -55,6 +60,7 @@ matrix:
         - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
 
     - os: linux
+      dist: bionic
       addons:
         apt:
           sources:
