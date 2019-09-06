@@ -17,7 +17,6 @@ using std::string;
 using std::vector;
 
 using boost::compute::program;
-using boost::compute::system;
 using boost::compute::context;
 
 program create_program(const string& filename, const context& context)
@@ -37,10 +36,10 @@ program create_program(const vector<string>& filenames, const context& context)
 
 string concatenate_files(const vector<string>& filenames)
 {
-    string result = "";
-    for (unsigned i = 0; i < filenames.size(); ++i)
+    string result;
+    for (const string& filename : filenames)
     {
-        ifstream file{filenames[i]};
+        ifstream file{filename};
         result += string{
             istreambuf_iterator<char>{file},
             istreambuf_iterator<char>{}
