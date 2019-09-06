@@ -91,6 +91,7 @@ script:
       then
         BUILD_DIR="${TRAVIS_BUILD_DIR}" && \
         clang-static-analyzer cmake \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
             -DCMAKE_CXX_CLANG_TIDY="clang-tidy;-header-filter=${BUILD_DIR};" \
             -DCMAKE_BUILD_TYPE=Debug \
             .. && \
