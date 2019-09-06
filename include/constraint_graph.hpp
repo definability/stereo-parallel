@@ -29,6 +29,7 @@
 #include <lowest_penalties.hpp>
 #include <types.hpp>
 
+#ifndef __OPENCL_C_VERSION__
 /**
  * \brief Utilities to solve CSP.
  */
@@ -42,7 +43,9 @@ using sp::types::BOOL_ARRAY;
 using sp::types::Edge;
 using sp::types::FLOAT;
 using sp::types::Node;
+using sp::types::Pixel;
 using sp::types::ULONG;
+#endif
 
 /**
  * \brief Structure to represent a graph with constraints
@@ -297,7 +300,7 @@ struct ConstraintGraph
      * \f$i\f$ is an index of used neighbor
      * and \f$d\f$ is a Node::disparity.
      */
-    BOOL_ARRAY nodes_availability;
+    __global BOOL_ARRAY nodes_availability;
     /**
      * \brief Threshold to compare penalty of an edge with the minimal one
      * against.
@@ -319,11 +322,13 @@ struct ConstraintGraph
      * it's good to have precalculated
      * sp::graph::lowest_penalties::LowestPenalties instance.
      */
+    #ifndef __OPENCL_C_VERSION__
     ConstraintGraph(
         const struct DisparityGraph* disparity_graph,
         const struct LowestPenalties* lowest_penalties,
         FLOAT threshold
     );
+    #endif
 };
 /**
  * \brief Mark specific Node as available (`true`).
@@ -396,6 +401,19 @@ BOOL should_remove_node(
     struct Node node
 );
 /**
+ * \brief Check all nodes of the Pixel and remove the redundant ones.
+ *
+ * @return
+ *  Boolean flag.
+ *  `true` if availability of at least one node was changed.
+ *  `false` if a solution was found (at least an empty one)
+ *  and nothing was changed during iteration.
+ */
+BOOL csp_process_pixel(
+    struct ConstraintGraph* graph,
+    struct Pixel pixel
+);
+/**
  * \brief Perform one iteration of sp::graph::constraint::solve_csp.
  *
  * Can be used for the parallel processing
@@ -434,6 +452,8 @@ BOOL solve_csp(struct ConstraintGraph* graph);
  */
 BOOL check_nodes_left(const struct ConstraintGraph* graph);
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif
 
 #endif

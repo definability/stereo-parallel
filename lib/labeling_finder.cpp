@@ -25,7 +25,13 @@
 #include <indexing_checks.hpp>
 #include <labeling_finder.hpp>
 
+#ifndef __OPENCL_C_VERSION__
+#ifdef USE_OPENCL
+#include <gpu_csp.hpp>
+#endif
+
 #include <algorithm>
+#include <iostream>
 #include <iterator>
 #include <stdexcept>
 
@@ -40,6 +46,9 @@ using sp::types::BOOL;
 using sp::types::Node;
 using sp::types::ULONG;
 using sp::types::ULONG_ARRAY;
+#ifdef USE_OPENCL
+using gpu::csp_solution_cl;
+#endif
 using std::back_inserter;
 using std::logic_error;
 using std::merge;
@@ -236,6 +245,7 @@ FLOAT calculate_minimal_consistent_threshold(
     }
     return available_penalties[current_index];
 }
+#endif
 
 struct ConstraintGraph* choose_best_node(
     struct ConstraintGraph* graph,
@@ -297,6 +307,20 @@ struct ConstraintGraph* choose_best_node(
     }
     return node_chosen? graph : NULL;
 }
+
+#ifndef __OPENCL_C_VERSION__
+#ifdef USE_OPENCL
+struct ConstraintGraph* find_labeling_cl(
+    struct ConstraintGraph* graph
+)
+{
+    struct gpu::Problem problem;
+    build_csp_program(&problem);
+    prepare_problem(graph, &problem);
+    gpu::csp_solution_cl(graph, &problem);
+    return graph;
+}
+#endif
 
 struct ConstraintGraph* find_labeling(
     struct ConstraintGraph* graph
@@ -392,3 +416,4 @@ struct Image build_disparity_map(
 }
 
 }
+#endif

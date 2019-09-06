@@ -23,8 +23,10 @@
  */
 #include <image.hpp>
 
+#ifndef __OPENCL_C_VERSION__
 namespace sp::image
 {
+#endif
 
 BOOL image_valid(const struct Image* image)
 {
@@ -42,4 +44,6 @@ BOOL image_valid(const struct Image* image)
     return true;
 }
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif

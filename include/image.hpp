@@ -26,6 +26,7 @@
 
 #include <types.hpp>
 
+#ifndef __OPENCL_C_VERSION__
 /**
  * \brief Image processing utilities.
  */
@@ -35,6 +36,7 @@ namespace sp::image
 using sp::types::BOOL;
 using sp::types::ULONG;
 using sp::types::ULONG_ARRAY;
+#endif
 
 /**
  * \brief Structure to represent image on both CPU and GPU.
@@ -76,7 +78,7 @@ struct Image
      *  \end{bmatrix}
      * \f]
      */
-    ULONG_ARRAY data;
+    __global ULONG_ARRAY data;
 };
 
 /**
@@ -88,6 +90,8 @@ struct Image
  */
 BOOL image_valid(const struct Image* image);
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif
 
 #endif

@@ -26,6 +26,7 @@
 
 #include <disparity_graph.hpp>
 
+#ifndef __OPENCL_C_VERSION__
 /**
  * \brief Checks for the availability of indices.
  */
@@ -38,6 +39,7 @@ using sp::types::FLOAT;
 using sp::types::Node;
 using sp::types::Pixel;
 using sp::types::ULONG;
+#endif
 
 /**
  * \brief Check wheter provided Pixel instances
@@ -105,6 +107,8 @@ bool edge_exists(
     struct Edge edge
 );
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif
 
 #endif

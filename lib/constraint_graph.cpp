@@ -30,12 +30,17 @@
 #include <omp.h>
 #endif
 
+#ifndef __OPENCL_C_VERSION__
+#include <iostream>
+#endif
+
 #ifdef _OPENMP
 #define THREADS_NUMBER (omp_get_num_threads())
 #else
 #define THREADS_NUMBER (1)
 #endif
 
+#ifndef __OPENCL_C_VERSION__
 namespace sp::graph::constraint
 {
 
@@ -101,6 +106,7 @@ ConstraintGraph::ConstraintGraph(
         }
     }
 }
+#endif
 
 void make_node_available(
     struct ConstraintGraph* graph,
@@ -248,6 +254,32 @@ BOOL check_nodes_left(const struct ConstraintGraph* graph)
     return FALSE;
 }
 
+BOOL csp_process_pixel(
+    struct ConstraintGraph* graph,
+    struct Pixel pixel
+)
+{
+    struct Node node;
+    node.pixel = pixel;
+
+    BOOL changed = FALSE;
+    for (
+        node.disparity = 0;
+        node.pixel.x + node.disparity
+            < graph->disparity_graph->right.width
+        && node.disparity < graph->disparity_graph->disparity_levels;
+        ++node.disparity
+    )
+    {
+        if (should_remove_node(graph, node))
+        {
+            make_node_unavailable(graph, node);
+            changed = TRUE;
+        }
+    }
+    return changed;
+}
+
 BOOL csp_solution_iteration(
     struct ConstraintGraph* graph,
     ULONG jobs,
@@ -279,6 +311,7 @@ BOOL csp_solution_iteration(
             ++node.pixel.x
         )
         {
+            csp_process_pixel(graph, node.pixel);
             pixel_available = FALSE;
             for (
                 node.disparity = 0;
@@ -288,12 +321,7 @@ BOOL csp_solution_iteration(
                 ++node.disparity
             )
             {
-                if (should_remove_node(graph, node))
-                {
-                    make_node_unavailable(graph, node);
-                    changed = TRUE;
-                }
-                else if (is_node_available(graph, node))
+                if (is_node_available(graph, node))
                 {
                     pixel_available = TRUE;
                 }
@@ -320,6 +348,7 @@ BOOL csp_solution_iteration(
     return changed;
 }
 
+#ifndef __OPENCL_C_VERSION__
 BOOL solve_csp(struct ConstraintGraph* graph)
 {
     BOOL changed = TRUE;
@@ -330,7 +359,7 @@ BOOL solve_csp(struct ConstraintGraph* graph)
     {
         changed = FALSE;
         #ifdef _OPENMP
-        #pragma omp parallel for reduction(|:changed)
+        #pragma omp parallel for reduction(||:changed)
         #endif
         for (ULONG i = 0; i < THREADS_NUMBER; ++i)
         {
@@ -339,5 +368,8 @@ BOOL solve_csp(struct ConstraintGraph* graph)
     }
     return check_nodes_left(graph);
 }
+#endif
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif

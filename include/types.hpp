@@ -24,8 +24,10 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
+#ifndef __OPENCL_C_VERSION__
 #include <vector>
 
+#define __global
 /**
  * \brief Basic types.
  */
@@ -69,6 +71,20 @@ using BOOL_ARRAY = std::vector<BOOL>;
 
 const BOOL TRUE = true;
 const BOOL FALSE = false;
+
+#else
+
+#define ULONG ulong
+#define ULONG_ARRAY ULONG*
+#define FLOAT float
+#define FLOAT_ARRAY FLOAT*
+#define BOOL int
+#define BOOL_ARRAY BOOL*
+
+#define TRUE 1
+#define FALSE 0
+
+#endif
 
 /**
  * Structure that contains position of a pixel.
@@ -120,6 +136,8 @@ struct Edge
     struct Node neighbor;
 };
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif
 
 #endif

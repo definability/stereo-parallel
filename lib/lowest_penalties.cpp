@@ -24,6 +24,7 @@
 #include <indexing_checks.hpp>
 #include <lowest_penalties.hpp>
 
+#ifndef __OPENCL_C_VERSION__
 namespace sp::graph::lowest_penalties
 {
 
@@ -87,6 +88,7 @@ LowestPenalties::LowestPenalties(const struct DisparityGraph* graph)
         }
     }
 }
+#endif
 
 FLOAT calculate_lowest_pixel_penalty(
     const struct DisparityGraph* graph,
@@ -222,4 +224,6 @@ FLOAT lowest_neighborhood_penalty(
     ];
 }
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif

@@ -2,11 +2,15 @@
 
 #include <constraint_graph.hpp>
 #include <disparity_graph.hpp>
+#ifdef USE_OPENCL
+#include <gpu_csp.hpp>
+#endif
 #include <image.hpp>
 #include <labeling_finder.hpp>
 #include <lowest_penalties.hpp>
 #include <pgm_io.hpp>
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -15,11 +19,22 @@
 
 struct sp::image::Image read_image(const std::string& image_path);
 
+enum Parallelism
+{
+    CPU,
+#ifdef USE_OPENCL
+    OpenCL,
+#endif
+};
+
 int main(int argc, char* argv[]) try
 {
     boost::program_options::options_description desc("Allowed options");
     desc.add_options()
         ("help,h", "Help message")
+        ("parallel,p",
+         boost::program_options::value<std::string>(),
+         "Choose the paralleling technology: OMP, CL")
         ("left-image,l",
          boost::program_options::value<std::string>(),
          "Left image")
@@ -64,6 +79,44 @@ int main(int argc, char* argv[]) try
         && vm.count("right-image") == 1
     )
     {
+        Parallelism parallelism;
+        if (vm.count("parallel") == 0)
+        {
+            parallelism = Parallelism::CPU;
+        }
+        else
+        {
+            std::string parallelism_input = vm["parallel"].as<std::string>();
+            std::transform(
+                parallelism_input.begin(),
+                parallelism_input.end(),
+                parallelism_input.begin(),
+                [](unsigned char c){ return std::tolower(c); }
+            );
+#ifdef USE_OPENCL
+            if (parallelism_input == "cl" || parallelism_input == "opencl")
+            {
+                parallelism = Parallelism::OpenCL;
+                    std::cout << "OpenCL parallelism" << std::endl;
+            }
+            else
+#endif
+            if (
+                parallelism_input == "cpu"
+                || parallelism_input == "openmp"
+                || parallelism_input == "omp"
+            )
+            {
+                    parallelism = Parallelism::CPU;
+                    std::cout << "OpenMP parallelism" << std::endl;
+            }
+            else
+            {
+                throw std::invalid_argument(
+                    "`parallel` cannot be " + vm["parallel"].as<std::string>() + "."
+                );
+            }
+        }
         try
         {
             struct sp::image::Image left_image{
@@ -129,10 +182,30 @@ int main(int argc, char* argv[]) try
                     "Refer to the developers."
                 );
             }
-            if (
-                sp::labeling::finder::find_labeling(&constraint_graph)
-                == nullptr
-            )
+
+            struct sp::graph::constraint::ConstraintGraph* labeled_graph = nullptr;
+            switch (parallelism)
+            {
+                case Parallelism::CPU:
+                    labeled_graph = sp::labeling::finder::find_labeling(
+                        &constraint_graph
+                    );
+                    break;
+#ifdef USE_OPENCL
+                case Parallelism::OpenCL:
+                    labeled_graph = sp::labeling::finder::find_labeling_cl(
+                        &constraint_graph
+                    );
+                    break;
+#endif
+                default:
+                    throw std::logic_error(
+                        "Unknown parallelism schema. "
+                        "This should not ever happen. "
+                        "Refer to the developers."
+                    );
+            }
+            if (labeled_graph == nullptr)
             {
                 throw std::logic_error(
                     "Cannot find labeling. "

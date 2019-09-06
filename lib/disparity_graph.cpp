@@ -24,13 +24,22 @@
 #include <disparity_graph.hpp>
 #include <indexing.hpp>
 
+#ifndef __OPENCL_C_VERSION__
 #include <limits>
 #include <stdexcept>
 #include <string>
 
-#define SQR(x) ((x) * (x))
 #define TO_FLOAT(x) (static_cast<FLOAT>(x))
 
+#else
+
+#define TO_FLOAT(x) (convert_float(x))
+
+#endif
+
+#define SQR(x) ((x) * (x))
+
+#ifndef __OPENCL_C_VERSION__
 namespace sp::graph::disparity
 {
 
@@ -162,6 +171,7 @@ DisparityGraph::DisparityGraph(
         static_cast<FLOAT>(0)
     );
 }
+#endif
 
 FLOAT edge_penalty(const struct DisparityGraph* graph, struct Edge edge)
 {
@@ -187,4 +197,6 @@ FLOAT node_penalty(const struct DisparityGraph* graph, struct Node node)
         + reparametrization_value_fast(graph, node, 3);
 }
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif

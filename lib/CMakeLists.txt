@@ -25,6 +25,10 @@ find_package(Boost 1.54 REQUIRED COMPONENTS program_options)
 if (WITH_OPENMP)
     find_package(OpenMP REQUIRED)
 endif(WITH_OPENMP)
+if (WITH_OPENCL)
+    find_package(Boost 1.61 REQUIRED)
+    find_package(OpenCL REQUIRED)
+endif(WITH_OPENCL)
 
 add_library(image image.cpp)
 add_library(pgm_io pgm_io.cpp)
@@ -34,6 +38,10 @@ add_library(constraint_graph constraint_graph.cpp)
 add_library(labeling_finder labeling_finder.cpp)
 add_library(indexing indexing.cpp)
 add_library(indexing_checks indexing_checks.cpp)
+if (OpenCL_FOUND)
+add_library(compile_cl compile_cl.cpp)
+add_library(gpu_csp gpu_csp.cpp)
+endif (OpenCL_FOUND)
 
 target_include_directories(
     indexing PUBLIC
@@ -67,6 +75,16 @@ target_include_directories(
     labeling_finder PUBLIC
     ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
 )
+if (OpenCL_FOUND)
+target_include_directories(
+    compile_cl PUBLIC
+    ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
+)
+target_include_directories(
+    gpu_csp PUBLIC
+    ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
+)
+endif (OpenCL_FOUND)
 
 target_link_libraries(
     pgm_io
@@ -97,6 +115,7 @@ if (OpenMP_CXX_FOUND)
         OpenMP::OpenMP_CXX
     )
 endif (OpenMP_CXX_FOUND)
+
 target_link_libraries(
     labeling_finder
     constraint_graph
@@ -104,6 +123,31 @@ target_link_libraries(
     disparity_graph
     image
 )
+
+if (OpenCL_FOUND)
+    target_link_libraries(
+        labeling_finder
+        gpu_csp
+    )
+    target_compile_definitions(
+        labeling_finder
+        PRIVATE
+        "USE_OPENCL"
+    )
+endif (OpenCL_FOUND)
+
+if (OpenCL_FOUND)
+    target_link_libraries(
+        compile_cl
+        OpenCL::OpenCL
+    )
+    target_link_libraries(
+        gpu_csp
+        constraint_graph
+        compile_cl
+        OpenCL::OpenCL
+    )
+endif (OpenCL_FOUND)
 
 add_executable(stereo_parallel main.cpp)
 target_include_directories(
@@ -120,3 +164,15 @@ target_link_libraries(
     labeling_finder
     ${Boost_PROGRAM_OPTIONS_LIBRARY}
 )
+
+if (OpenCL_FOUND)
+    target_link_libraries(
+        stereo_parallel
+        gpu_csp
+    )
+    target_compile_definitions(
+        stereo_parallel
+        PRIVATE
+        "USE_OPENCL"
+    )
+endif (OpenCL_FOUND)

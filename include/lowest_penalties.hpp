@@ -33,6 +33,7 @@
 #include <indexing.hpp>
 #include <types.hpp>
 
+#ifndef __OPENCL_C_VERSION__
 /**
  * \brief Utilities to find locally best nodes and edges.
  */
@@ -46,6 +47,7 @@ using sp::types::FLOAT;
 using sp::types::FLOAT_ARRAY;
 using sp::types::Pixel;
 using sp::types::ULONG;
+#endif
 
 /**
  * \brief Graph containing lowest penalties for
@@ -87,7 +89,7 @@ struct LowestPenalties
      *  k\left( \left\langle x, y \right\rangle \right) = y + h \cdot x.
      * \f]
      */
-    FLOAT_ARRAY pixels;
+    __global FLOAT_ARRAY pixels;
     /**
      * \brief Minimal penalties of edges per neighborhood.
      *
@@ -102,7 +104,7 @@ struct LowestPenalties
      * where \f$i\f$ is an index of the neighbor,
      * and \f$\max\limits_j{\left| \mathcal{N}_j \right|}\f$ is sp::graph::disparity::NEIGHBORS_COUNT.
      */
-    FLOAT_ARRAY neighborhoods;
+    __global FLOAT_ARRAY neighborhoods;
     /**
      * \brief Calculate lowest penalties from sp::graph::disparity::DisparityGraph.
      *
@@ -116,7 +118,9 @@ struct LowestPenalties
      * after sp::graph::lowest_penalties::LowestPenalties construction,
      * the sp::graph::lowest_penalties::LowestPenalties instance will not be changed.
      */
+    #ifndef __OPENCL_C_VERSION__
     explicit LowestPenalties(const struct DisparityGraph* graph);
+    #endif
 };
 /**
  * \brief Calculate minimal penalty among nodes of a pixel.
@@ -194,6 +198,8 @@ FLOAT lowest_neighborhood_penalty(
     struct Edge edge
 );
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif
 
 #endif

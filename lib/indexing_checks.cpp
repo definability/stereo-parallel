@@ -24,10 +24,12 @@
 #include <indexing.hpp>
 #include <indexing_checks.hpp>
 
+#ifndef __OPENCL_C_VERSION__
 namespace sp::indexing::checks
 {
 
 using sp::types::FLOAT;
+#endif
 
 bool neighborhood_exists(
     const struct DisparityGraph* graph,
@@ -108,4 +110,6 @@ bool edge_exists(
     return true;
 }
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif

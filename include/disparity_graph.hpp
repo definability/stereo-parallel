@@ -29,6 +29,7 @@
 
 #define MAX(x, y) ((x) >= (y)? (x) : (y))
 
+#ifndef __OPENCL_C_VERSION__
 /**
  * \brief Graph representation of disparity map support.
  */
@@ -52,6 +53,9 @@ using sp::types::ULONG;
  * - top
  */
 const ULONG NEIGHBORS_COUNT = 4;
+#else
+#define NEIGHBORS_COUNT (4)
+#endif
 
 /**
  * \brief Structure to represent a graph of MRF
@@ -375,7 +379,7 @@ struct DisparityGraph
      * \f$i\f$ is an index of used neighbor
      * and \f$d\f$ is a Node::disparity.
      */
-    FLOAT_ARRAY reparametrization;
+    __global FLOAT_ARRAY reparametrization;
     /**
      * \brief Weight of difference in colors
      * between pixel and its neighbor.
@@ -404,6 +408,7 @@ struct DisparityGraph
      * and initialize its
      * sp::graph::disparity::DisparityGraph::reparametrization.
      */
+    #ifndef __OPENCL_C_VERSION__
     DisparityGraph(
         struct Image left,
         struct Image right,
@@ -411,6 +416,7 @@ struct DisparityGraph
         FLOAT cleanness,
         FLOAT smoothness
     );
+    #endif
 };
 
 /**
@@ -438,6 +444,8 @@ FLOAT edge_penalty(const struct DisparityGraph* graph, struct Edge edge);
  */
 FLOAT node_penalty(const struct DisparityGraph* graph, struct Node node);
 
+#ifndef __OPENCL_C_VERSION__
 }
+#endif
 
 #endif
