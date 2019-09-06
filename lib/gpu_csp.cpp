@@ -110,8 +110,8 @@ BOOL csp_solution_cl(
         static_cast<cl_ulong>(0)
     );
 
-    ULONG x_index = static_cast<cl_ulong>(choose_best_node_gpu.arity() - 2);
-    ULONG y_index = static_cast<cl_ulong>(choose_best_node_gpu.arity() - 1);
+    auto x_index = static_cast<cl_ulong>(choose_best_node_gpu.arity() - 2);
+    auto y_index = static_cast<cl_ulong>(choose_best_node_gpu.arity() - 1);
 
     for (ULONG x = 0; x < graph->disparity_graph->right.width; ++x)
     {
