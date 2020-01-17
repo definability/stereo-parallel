@@ -28,12 +28,14 @@
 #include <image.hpp>
 #include <types.hpp>
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
 /**
  * \brief Functions for getting access to arrays
  * by abstract indices like sp::types::Pixels, sp::types::Nodes, etc.
  */
-namespace sp::indexing
+namespace sp
+{
+namespace indexing
 {
 
 using sp::graph::disparity::DisparityGraph;
@@ -55,7 +57,7 @@ using sp::types::ULONG;
  * Result of accessing non-existent value
  * depends on sp::types::ULONG_ARRAY.
  */
-ULONG pixel_index(const struct Image* image, struct Pixel pixel);
+__device__ ULONG pixel_index(const struct Image* image, struct Pixel pixel);
 
 /**
  * \brief Get intensity of the pixel in the image.
@@ -63,7 +65,7 @@ ULONG pixel_index(const struct Image* image, struct Pixel pixel);
  * Simply call sp::indexing::pixel_index and take a value with returned index
  * from Image::data.
  */
-ULONG pixel_value(const struct Image* image, struct Pixel pixel);
+__device__ ULONG pixel_value(const struct Image* image, struct Pixel pixel);
 
 /**
  * \brief Get an index of sp::graph::disparity::DisparityGraph::reparametrization element
@@ -73,7 +75,7 @@ ULONG pixel_value(const struct Image* image, struct Pixel pixel);
  * You should perform it by yourself
  * using sp::indexing::checks::neighborhood_exists.
  */
-ULONG reparametrization_index_fast(
+__device__ ULONG reparametrization_index_fast(
     const struct DisparityGraph* graph,
     struct Node node,
     ULONG neighbor_index
@@ -87,7 +89,7 @@ ULONG reparametrization_index_fast(
  * You should perform it by yourself
  * using sp::indexing::checks::neighborhood_exists.
  */
-ULONG reparametrization_index(
+__device__ ULONG reparametrization_index(
     const struct DisparityGraph* graph,
     struct Node node,
     struct Pixel neighbor
@@ -101,7 +103,7 @@ ULONG reparametrization_index(
  * You should perform it by yourself
  * using sp::indexing::checks::neighborhood_exists.
  */
-ULONG reparametrization_index_slow(
+__device__ ULONG reparametrization_index_slow(
     const struct DisparityGraph* graph,
     struct Edge edge
 );
@@ -114,7 +116,7 @@ ULONG reparametrization_index_slow(
  * You should perform it by yourself
  * using sp::indexing::checks::neighborhood_exists.
  */
-FLOAT reparametrization_value_fast(
+__device__ FLOAT reparametrization_value_fast(
     const struct DisparityGraph* graph,
     struct Node node,
     ULONG neighbor_index
@@ -128,7 +130,7 @@ FLOAT reparametrization_value_fast(
  * You should perform it by yourself
  * using sp::indexing::checks::neighborhood_exists.
  */
-FLOAT reparametrization_value(
+__device__ FLOAT reparametrization_value(
     const struct DisparityGraph* graph,
     struct Node node,
     struct Pixel neighbor
@@ -142,7 +144,7 @@ FLOAT reparametrization_value(
  * You should perform it by yourself
  * using sp::indexing::checks::neighborhood_exists.
  */
-FLOAT reparametrization_value_slow(
+__device__ FLOAT reparametrization_value_slow(
     const struct DisparityGraph* graph,
     struct Edge edge
 );
@@ -163,7 +165,7 @@ FLOAT reparametrization_value_slow(
  *  if there should be at least one Edge between two provided pixels.
  *  sp::graph::disparity::NEIGHBORS_COUNT if the `neighbor` is not a neighbor of the pixel.
  */
-ULONG neighbor_index(
+__device__ ULONG neighbor_index(
     struct Pixel pixel,
     struct Pixel neighbor
 );
@@ -176,7 +178,7 @@ ULONG neighbor_index(
  * You should perform it by yourself
  * using sp::indexing::checks::node_exists.
  */
-ULONG node_index(const struct DisparityGraph* graph, struct Node node);
+__device__ ULONG node_index(const struct DisparityGraph* graph, struct Node node);
 
 /**
  * \brief Get index of a neighborhood in
@@ -185,7 +187,7 @@ ULONG node_index(const struct DisparityGraph* graph, struct Node node);
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::neighborhood_exists_fast to make sure that you use it right.
  */
-ULONG neighborhood_index_fast(
+__device__ ULONG neighborhood_index_fast(
     const struct DisparityGraph* graph,
     struct Pixel pixel,
     ULONG neighbor_index
@@ -197,7 +199,7 @@ ULONG neighborhood_index_fast(
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::neighborhood_exists to make sure that you use it right.
  */
-ULONG neighborhood_index(
+__device__ ULONG neighborhood_index(
     const struct DisparityGraph* graph,
     struct Pixel pixel,
     struct Pixel neighbor
@@ -209,7 +211,7 @@ ULONG neighborhood_index(
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::edge_exists to make sure that you use it right.
  */
-ULONG neighborhood_index_slow(
+__device__ ULONG neighborhood_index_slow(
     const struct DisparityGraph* graph,
     struct Edge edge
 );
@@ -220,12 +222,13 @@ ULONG neighborhood_index_slow(
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::neighborhood_exists to make sure that you use it right.
  */
-struct Pixel neighbor_by_index(
+__device__ struct Pixel neighbor_by_index(
     struct Pixel pixel,
     ULONG neighbor_index
 );
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
 }
 #endif
 

@@ -26,14 +26,19 @@
 
 #include <disparity_graph.hpp>
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
 /**
  * \brief Checks for the availability of indices.
  */
-namespace sp::indexing::checks
+namespace sp
+{
+namespace indexing
+{
+namespace checks
 {
 
 using sp::graph::disparity::DisparityGraph;
+using sp::types::BOOL;
 using sp::types::Edge;
 using sp::types::FLOAT;
 using sp::types::Node;
@@ -58,7 +63,7 @@ using sp::types::ULONG;
  * Also, pixels that are not the nearest straight neighbors,
  * are not a neighbors in the sp::graph::disparity::DisparityGraph.
  */
-bool neighborhood_exists(
+__device__ BOOL neighborhood_exists(
     const struct DisparityGraph* graph,
     struct Pixel pixel,
     struct Pixel neighbor
@@ -74,7 +79,7 @@ bool neighborhood_exists(
  * it takes a neighbor index
  * calculated by sp::indexing::neighbor_index function.
  */
-bool neighborhood_exists_fast(
+__device__ BOOL neighborhood_exists_fast(
     const struct DisparityGraph* graph,
     struct Pixel pixel,
     ULONG neighbor_index
@@ -90,7 +95,7 @@ bool neighborhood_exists_fast(
  * and its disparity doesn't overflow
  * the maximal allowed.
  */
-bool node_exists(
+__device__ BOOL node_exists(
     const struct DisparityGraph* graph,
     struct Node node
 );
@@ -102,12 +107,14 @@ bool node_exists(
  * but also checks constraints imposed on disparities
  * of the neighboring pixels.
  */
-bool edge_exists(
+__device__ BOOL edge_exists(
     const struct DisparityGraph* graph,
     struct Edge edge
 );
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
+}
 }
 #endif
 

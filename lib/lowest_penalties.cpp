@@ -24,8 +24,12 @@
 #include <indexing_checks.hpp>
 #include <lowest_penalties.hpp>
 
-#ifndef __OPENCL_C_VERSION__
-namespace sp::graph::lowest_penalties
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+namespace sp
+{
+namespace graph
+{
+namespace lowest_penalties
 {
 
 using sp::graph::disparity::NEIGHBORS_COUNT;
@@ -90,7 +94,7 @@ LowestPenalties::LowestPenalties(const struct DisparityGraph* graph)
 }
 #endif
 
-FLOAT calculate_lowest_pixel_penalty(
+__device__ FLOAT calculate_lowest_pixel_penalty(
     const struct DisparityGraph* graph,
     struct Pixel pixel
 )
@@ -114,7 +118,7 @@ FLOAT calculate_lowest_pixel_penalty(
     return minimal_penalty;
 }
 
-FLOAT calculate_lowest_neighborhood_penalty(
+__device__ FLOAT calculate_lowest_neighborhood_penalty(
     const struct DisparityGraph* graph,
     struct Pixel pixel,
     struct Pixel neighbor
@@ -134,7 +138,7 @@ FLOAT calculate_lowest_neighborhood_penalty(
     );
 }
 
-FLOAT calculate_lowest_neighborhood_penalty_fast(
+__device__ FLOAT calculate_lowest_neighborhood_penalty_fast(
     const struct DisparityGraph* graph,
     struct Edge edge
 )
@@ -175,7 +179,7 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
     return minimal_penalty;
 }
 
-FLOAT calculate_lowest_neighborhood_penalty_slow(
+__device__ FLOAT calculate_lowest_neighborhood_penalty_slow(
     const struct DisparityGraph* graph,
     struct Pixel pixel,
     ULONG neighbor_index
@@ -195,7 +199,7 @@ FLOAT calculate_lowest_neighborhood_penalty_slow(
     );
 }
 
-FLOAT lowest_pixel_penalty(
+__device__ FLOAT lowest_pixel_penalty(
     const struct LowestPenalties* penalties,
     struct Pixel pixel
 )
@@ -203,7 +207,7 @@ FLOAT lowest_pixel_penalty(
     return penalties->pixels[pixel_index(&(penalties->graph->right), pixel)];
 }
 
-FLOAT lowest_neighborhood_penalty_fast(
+__device__ FLOAT lowest_neighborhood_penalty_fast(
     const struct LowestPenalties* penalties,
     struct Pixel pixel,
     struct Pixel neighbor
@@ -214,7 +218,7 @@ FLOAT lowest_neighborhood_penalty_fast(
     ];
 }
 
-FLOAT lowest_neighborhood_penalty(
+__device__ FLOAT lowest_neighborhood_penalty(
     const struct LowestPenalties* penalties,
     struct Edge edge
 )
@@ -224,6 +228,8 @@ FLOAT lowest_neighborhood_penalty(
     ];
 }
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
+}
 }
 #endif

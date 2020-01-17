@@ -24,14 +24,18 @@
 #include <indexing.hpp>
 #include <indexing_checks.hpp>
 
-#ifndef __OPENCL_C_VERSION__
-namespace sp::indexing::checks
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+namespace sp
+{
+namespace indexing
+{
+namespace checks
 {
 
 using sp::types::FLOAT;
 #endif
 
-bool neighborhood_exists(
+__device__ BOOL neighborhood_exists(
     const struct DisparityGraph* graph,
     struct Pixel pixel,
     struct Pixel neighbor
@@ -44,7 +48,7 @@ bool neighborhood_exists(
     );
 }
 
-bool neighborhood_exists_fast(
+__device__ BOOL neighborhood_exists_fast(
     const struct DisparityGraph* graph,
     struct Pixel pixel,
     ULONG neighbor_index
@@ -60,7 +64,7 @@ bool neighborhood_exists_fast(
     );
 }
 
-bool node_exists(
+__device__ BOOL node_exists(
     const struct DisparityGraph* graph,
     struct Node node
 )
@@ -73,7 +77,7 @@ bool node_exists(
     );
 }
 
-bool edge_exists(
+__device__ BOOL edge_exists(
     const struct DisparityGraph* graph,
     struct Edge edge
 )
@@ -110,6 +114,8 @@ bool edge_exists(
     return true;
 }
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
+}
 }
 #endif

@@ -24,24 +24,26 @@
 #include <disparity_graph.hpp>
 #include <indexing.hpp>
 
-#ifndef __OPENCL_C_VERSION__
-namespace sp::indexing
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+namespace sp
+{
+namespace indexing
 {
 
 using sp::graph::disparity::NEIGHBORS_COUNT;
 #endif
 
-ULONG pixel_index(const struct Image* image, struct Pixel pixel)
+__device__ ULONG pixel_index(const struct Image* image, struct Pixel pixel)
 {
     return image->width * pixel.y + pixel.x;
 }
 
-ULONG pixel_value(const struct Image* image, struct Pixel pixel)
+__device__ ULONG pixel_value(const struct Image* image, struct Pixel pixel)
 {
     return image->data[pixel_index(image, pixel)];
 }
 
-ULONG neighbor_index(
+__device__ ULONG neighbor_index(
     struct Pixel pixel,
     struct Pixel neighbor
 )
@@ -69,7 +71,7 @@ ULONG neighbor_index(
     return NEIGHBORS_COUNT;
 }
 
-ULONG reparametrization_index_fast(
+__device__ ULONG reparametrization_index_fast(
     const struct DisparityGraph* graph,
     struct Node node,
     ULONG neighbor_index
@@ -88,7 +90,7 @@ ULONG reparametrization_index_fast(
     return index;
 }
 
-ULONG reparametrization_index(
+__device__ ULONG reparametrization_index(
     const struct DisparityGraph* graph,
     struct Node node,
     struct Pixel neighbor
@@ -101,7 +103,7 @@ ULONG reparametrization_index(
     );
 }
 
-ULONG reparametrization_index_slow(
+__device__ ULONG reparametrization_index_slow(
     const struct DisparityGraph* graph,
     struct Edge edge
 )
@@ -113,7 +115,7 @@ ULONG reparametrization_index_slow(
     );
 }
 
-FLOAT reparametrization_value(
+__device__ FLOAT reparametrization_value(
     const struct DisparityGraph* graph,
     struct Node node,
     struct Pixel neighbor
@@ -122,7 +124,7 @@ FLOAT reparametrization_value(
     return graph->reparametrization[reparametrization_index(graph, node, neighbor)];
 }
 
-FLOAT reparametrization_value_slow(
+__device__ FLOAT reparametrization_value_slow(
     const struct DisparityGraph* graph,
     struct Edge edge
 )
@@ -130,7 +132,7 @@ FLOAT reparametrization_value_slow(
     return graph->reparametrization[reparametrization_index_slow(graph, edge)];
 }
 
-FLOAT reparametrization_value_fast(
+__device__ FLOAT reparametrization_value_fast(
     const struct DisparityGraph* graph,
     struct Node node,
     ULONG neighbor_index
@@ -141,13 +143,13 @@ FLOAT reparametrization_value_fast(
     ];
 }
 
-ULONG node_index(const struct DisparityGraph* graph, struct Node node)
+__device__ ULONG node_index(const struct DisparityGraph* graph, struct Node node)
 {
     return node.disparity + graph->disparity_levels
         * (node.pixel.y + graph->right.height * node.pixel.x);
 }
 
-ULONG neighborhood_index_fast(
+__device__ ULONG neighborhood_index_fast(
     const struct DisparityGraph* graph,
     struct Pixel pixel,
     ULONG neighbor_index
@@ -157,7 +159,7 @@ ULONG neighborhood_index_fast(
         + NEIGHBORS_COUNT * (pixel.y + graph->right.height * pixel.x);
 }
 
-ULONG neighborhood_index(
+__device__ ULONG neighborhood_index(
     const struct DisparityGraph* graph,
     struct Pixel pixel,
     struct Pixel neighbor
@@ -170,7 +172,7 @@ ULONG neighborhood_index(
     );
 }
 
-ULONG neighborhood_index_slow(
+__device__ ULONG neighborhood_index_slow(
     const struct DisparityGraph* graph,
     struct Edge edge
 )
@@ -182,7 +184,7 @@ ULONG neighborhood_index_slow(
     );
 }
 
-struct Pixel neighbor_by_index(
+__device__ struct Pixel neighbor_by_index(
     struct Pixel pixel,
     ULONG neighbor_index
 )
@@ -206,6 +208,7 @@ struct Pixel neighbor_by_index(
     return pixel;
 }
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
 }
 #endif

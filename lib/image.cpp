@@ -23,8 +23,10 @@
  */
 #include <image.hpp>
 
-#ifndef __OPENCL_C_VERSION__
-namespace sp::image
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+namespace sp
+{
+namespace image
 {
 #endif
 
@@ -44,6 +46,7 @@ BOOL image_valid(const struct Image* image)
     return true;
 }
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
 }
 #endif

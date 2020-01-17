@@ -30,7 +30,7 @@
 #include <omp.h>
 #endif
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
 #include <iostream>
 #endif
 
@@ -40,8 +40,12 @@
 #define THREADS_NUMBER (1)
 #endif
 
-#ifndef __OPENCL_C_VERSION__
-namespace sp::graph::constraint
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+namespace sp
+{
+namespace graph
+{
+namespace constraint
 {
 
 using sp::graph::disparity::NEIGHBORS_COUNT;
@@ -108,7 +112,7 @@ ConstraintGraph::ConstraintGraph(
 }
 #endif
 
-void make_node_available(
+__device__ void make_node_available(
     struct ConstraintGraph* graph,
     struct Node node
 )
@@ -117,7 +121,7 @@ void make_node_available(
         = TRUE;
 }
 
-void make_node_unavailable(
+__device__ void make_node_unavailable(
     struct ConstraintGraph* graph,
     struct Node node
 )
@@ -126,7 +130,7 @@ void make_node_unavailable(
         = FALSE;
 }
 
-void make_all_nodes_unavailable(struct ConstraintGraph* graph)
+__device__ void make_all_nodes_unavailable(struct ConstraintGraph* graph)
 {
     for (
         ULONG index = 0;
@@ -141,7 +145,7 @@ void make_all_nodes_unavailable(struct ConstraintGraph* graph)
     }
 }
 
-BOOL is_node_available(
+__device__ BOOL is_node_available(
     const struct ConstraintGraph* graph,
     struct Node node
 )
@@ -151,7 +155,7 @@ BOOL is_node_available(
     ];
 }
 
-BOOL is_edge_available(
+__device__ BOOL is_edge_available(
     const struct ConstraintGraph* graph,
     struct Edge edge
 )
@@ -165,7 +169,7 @@ BOOL is_edge_available(
         && edge_exists(graph->disparity_graph, edge);
 }
 
-BOOL should_remove_node(
+__device__ BOOL should_remove_node(
     const struct ConstraintGraph* graph,
     struct Node node
 )
@@ -235,7 +239,7 @@ BOOL should_remove_node(
     return FALSE;
 }
 
-BOOL check_nodes_left(const struct ConstraintGraph* graph)
+__device__ BOOL check_nodes_left(const struct ConstraintGraph* graph)
 {
     for (
         ULONG index = 0;
@@ -254,7 +258,7 @@ BOOL check_nodes_left(const struct ConstraintGraph* graph)
     return FALSE;
 }
 
-BOOL csp_process_pixel(
+__device__ BOOL csp_process_pixel(
     struct ConstraintGraph* graph,
     struct Pixel pixel
 )
@@ -280,7 +284,7 @@ BOOL csp_process_pixel(
     return changed;
 }
 
-BOOL csp_solution_iteration(
+__device__ BOOL csp_solution_iteration(
     struct ConstraintGraph* graph,
     ULONG jobs,
     ULONG job_number
@@ -348,7 +352,7 @@ BOOL csp_solution_iteration(
     return changed;
 }
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
 BOOL solve_csp(struct ConstraintGraph* graph)
 {
     BOOL changed = TRUE;
@@ -370,6 +374,8 @@ BOOL solve_csp(struct ConstraintGraph* graph)
 }
 #endif
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
+}
 }
 #endif

@@ -25,7 +25,7 @@
 #include <indexing_checks.hpp>
 #include <labeling_finder.hpp>
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
 #ifdef USE_OPENCL
 #include <gpu_csp.hpp>
 #endif
@@ -35,7 +35,11 @@
 #include <iterator>
 #include <stdexcept>
 
-namespace sp::labeling::finder
+namespace sp
+{
+namespace labeling
+{
+namespace finder
 {
 
 using sp::graph::disparity::NEIGHBORS_COUNT;
@@ -57,7 +61,7 @@ using std::swap;
 using std::to_string;
 using std::unique;
 
-FLOAT_ARRAY fetch_pixel_available_penalties(
+__device__ FLOAT_ARRAY fetch_pixel_available_penalties(
     const DisparityGraph* graph,
     struct Pixel pixel,
     FLOAT minimal_penalty
@@ -88,7 +92,7 @@ FLOAT_ARRAY fetch_pixel_available_penalties(
     return result;
 }
 
-FLOAT_ARRAY fetch_edge_available_penalties(
+__device__ FLOAT_ARRAY fetch_edge_available_penalties(
     const struct DisparityGraph* graph,
     struct Edge edge,
     FLOAT minimal_penalty
@@ -133,7 +137,7 @@ FLOAT_ARRAY fetch_edge_available_penalties(
     return result;
 }
 
-FLOAT_ARRAY fetch_available_penalties(
+__device__ FLOAT_ARRAY fetch_available_penalties(
     const struct LowestPenalties* lowest_penalties
 )
 {
@@ -214,7 +218,7 @@ FLOAT_ARRAY fetch_available_penalties(
     return result;
 }
 
-FLOAT calculate_minimal_consistent_threshold(
+__device__ FLOAT calculate_minimal_consistent_threshold(
     const struct LowestPenalties* lowest_penalties,
     const struct DisparityGraph* disparity_graph,
     FLOAT_ARRAY available_penalties
@@ -247,7 +251,7 @@ FLOAT calculate_minimal_consistent_threshold(
 }
 #endif
 
-struct ConstraintGraph* choose_best_node(
+__device__ struct ConstraintGraph* choose_best_node(
     struct ConstraintGraph* graph,
     struct Pixel pixel
 )
@@ -308,7 +312,8 @@ struct ConstraintGraph* choose_best_node(
     return node_chosen? graph : NULL;
 }
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+
 #ifdef USE_OPENCL
 struct ConstraintGraph* find_labeling_cl(
     struct ConstraintGraph* graph
@@ -322,7 +327,7 @@ struct ConstraintGraph* find_labeling_cl(
 }
 #endif
 
-struct ConstraintGraph* find_labeling(
+__device__ struct ConstraintGraph* find_labeling(
     struct ConstraintGraph* graph
 )
 {
@@ -343,7 +348,7 @@ struct ConstraintGraph* find_labeling(
     return graph;
 }
 
-struct Image build_disparity_map(
+__device__ struct Image build_disparity_map(
     const struct ConstraintGraph* constraint_graph
 )
 {
@@ -415,5 +420,7 @@ struct Image build_disparity_map(
     return result;
 }
 
+}
+}
 }
 #endif

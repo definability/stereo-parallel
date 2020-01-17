@@ -29,11 +29,15 @@
 
 #define MAX(x, y) ((x) >= (y)? (x) : (y))
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
 /**
  * \brief Graph representation of disparity map support.
  */
-namespace sp::graph::disparity
+namespace sp
+{
+namespace graph
+{
+namespace disparity
 {
 
 using sp::image::Image;
@@ -408,7 +412,8 @@ struct DisparityGraph
      * and initialize its
      * sp::graph::disparity::DisparityGraph::reparametrization.
      */
-    #ifndef __OPENCL_C_VERSION__
+    #if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+    DisparityGraph() = default;
     DisparityGraph(
         struct Image left,
         struct Image right,
@@ -430,7 +435,7 @@ struct DisparityGraph
  * Otherwise, the penalty is a norm of a difference
  * between disparities of Node instances that the Edge connects.
  */
-FLOAT edge_penalty(const struct DisparityGraph* graph, struct Edge edge);
+__device__ FLOAT edge_penalty(const struct DisparityGraph* graph, struct Edge edge);
 /**
  * \brief Calculate penalty of Node.
  *
@@ -442,9 +447,11 @@ FLOAT edge_penalty(const struct DisparityGraph* graph, struct Edge edge);
  * Otherwise, the penalty is a norm of a difference
  * between disparities of Node instances that the Edge connects.
  */
-FLOAT node_penalty(const struct DisparityGraph* graph, struct Node node);
+__device__ FLOAT node_penalty(const struct DisparityGraph* graph, struct Node node);
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
+}
 }
 #endif
 
