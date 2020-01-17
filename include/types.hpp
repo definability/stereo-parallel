@@ -24,14 +24,26 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
-#ifndef __OPENCL_C_VERSION__
-#include <vector>
-
+#if !defined(__OPENCL_C_VERSION__)
 #define __global
+#endif
+
+#if !defined(__device__)
+#define __device__
+#endif
+
+#if !defined(__host__)
+#define __host__
+#endif
+
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+#include <vector>
 /**
  * \brief Basic types.
  */
-namespace sp::types
+namespace sp
+{
+namespace types
 {
 
 /**
@@ -72,7 +84,7 @@ using BOOL_ARRAY = std::vector<BOOL>;
 const BOOL TRUE = true;
 const BOOL FALSE = false;
 
-#else
+#elif defined(__OPENCL_C_VERSION__)
 
 #define ULONG ulong
 #define ULONG_ARRAY ULONG*
@@ -83,6 +95,18 @@ const BOOL FALSE = false;
 
 #define TRUE 1
 #define FALSE 0
+
+#elif defined(__CUDA_ARCH__)
+
+using ULONG = unsigned;
+using ULONG_ARRAY = ULONG*;
+using FLOAT = float;
+using FLOAT_ARRAY = FLOAT*;
+using BOOL = int;
+using BOOL_ARRAY = BOOL*;
+
+const BOOL TRUE = 1;
+const BOOL FALSE = 0;
 
 #endif
 
@@ -136,7 +160,8 @@ struct Edge
     struct Node neighbor;
 };
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
 }
 #endif
 
