@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 option(WITH_OPENMP "Use OpenMP for parallel computations on CPU" OFF)
+option(WITH_OPENCL "Use OpenCL for parallel computations on GPU" OFF)
+option(WITH_CUDA "Use CUDA for parallel computations on GPU" OFF)
 
 find_package(Boost 1.54 REQUIRED COMPONENTS program_options)
 if (WITH_OPENMP)
