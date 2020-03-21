@@ -153,6 +153,21 @@ target_link_libraries(
     image
 )
 
+if (WITH_CUDA)
+    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -arch=sm_60")
+    set_target_properties(cuda_csp PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+
+    target_link_libraries(
+        labeling_finder
+        cuda_csp
+    )
+    target_compile_definitions(
+        labeling_finder
+        PRIVATE
+        "USE_CUDA"
+    )
+endif (WITH_CUDA)
+
 if (OpenCL_FOUND)
     target_link_libraries(
         labeling_finder
