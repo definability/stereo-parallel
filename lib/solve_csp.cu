@@ -89,3 +89,101 @@ __device__ void csp_solution_iteration_gpu(
         g.sync();
     } while (*changed);
 }
+
+__global__ void csp_iteration_cuda(
+    int* nodes_availability,
+    int* changed,
+    unsigned* left_image,
+    unsigned* right_image,
+    float* min_penalties_pixels,
+    float* min_penalties_edges,
+    float* reparametrization,
+    unsigned height,
+    unsigned width,
+    unsigned max_value,
+    unsigned disparity_levels,
+    float threshold,
+    float cleanness,
+    float smoothness
+)
+{
+    struct DisparityGraph disparity_graph;
+    struct LowestPenalties lowest_penalties;
+    struct ConstraintGraph constraint_graph;
+
+    populate_structures_gpu(
+        &disparity_graph,
+        &lowest_penalties,
+        &constraint_graph,
+        nodes_availability,
+        left_image,
+        right_image,
+        min_penalties_pixels,
+        min_penalties_edges,
+        reparametrization,
+        height,
+        width,
+        max_value,
+        disparity_levels,
+        threshold,
+        cleanness,
+        smoothness
+    );
+
+    struct Pixel pixel;
+    pixel.x = blockIdx.x;
+    pixel.y = threadIdx.x;
+
+    csp_solution_iteration_gpu(
+        &constraint_graph,
+        pixel,
+        changed
+    );
+}
+
+__global__ void choose_best_node_gpu(
+    int* nodes_availability,
+    unsigned* left_image,
+    unsigned* right_image,
+    float* min_penalties_pixels,
+    float* min_penalties_edges,
+    float* reparametrization,
+    unsigned height,
+    unsigned width,
+    unsigned max_value,
+    unsigned disparity_levels,
+    float threshold,
+    float cleanness,
+    float smoothness,
+    unsigned pixel_x,
+    unsigned pixel_y
+)
+{
+    struct DisparityGraph disparity_graph;
+    struct LowestPenalties lowest_penalties;
+    struct ConstraintGraph constraint_graph;
+
+    populate_structures_gpu(
+        &disparity_graph,
+        &lowest_penalties,
+        &constraint_graph,
+        nodes_availability,
+        left_image,
+        right_image,
+        min_penalties_pixels,
+        min_penalties_edges,
+        reparametrization,
+        height,
+        width,
+        max_value,
+        disparity_levels,
+        threshold,
+        cleanness,
+        smoothness
+    );
+
+    struct Pixel pixel;
+    pixel.x = pixel_x;
+    pixel.y = pixel_y;
+    choose_best_node(&constraint_graph, pixel);
+}
