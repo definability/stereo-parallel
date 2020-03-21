@@ -32,7 +32,7 @@ if (WITH_OPENCL)
     find_package(OpenCL REQUIRED)
 endif(WITH_OPENCL)
 if (WITH_CUDA)
-    cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
+    cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
     enable_language(CUDA)
 endif(WITH_CUDA)
 
@@ -48,6 +48,21 @@ if (OpenCL_FOUND)
 add_library(compile_cl compile_cl.cpp)
 add_library(gpu_csp gpu_csp.cpp)
 endif (OpenCL_FOUND)
+
+if (WITH_CUDA)
+    add_library(
+        cuda_csp
+        cuda_csp.cu
+        solve_csp.cu
+        constraint_graph.cu
+        lowest_penalties.cu
+        labeling_finder.cu
+        disparity_graph.cu
+        image.cu
+        indexing_checks.cu
+        indexing.cu
+    )
+endif (WITH_CUDA)
 
 target_include_directories(
     indexing PUBLIC
@@ -81,16 +96,24 @@ target_include_directories(
     labeling_finder PUBLIC
     ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
 )
+
 if (OpenCL_FOUND)
-target_include_directories(
-    compile_cl PUBLIC
-    ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
-)
-target_include_directories(
-    gpu_csp PUBLIC
-    ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
-)
+    target_include_directories(
+        compile_cl PUBLIC
+        ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
+    )
+    target_include_directories(
+        gpu_csp PUBLIC
+        ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
+    )
 endif (OpenCL_FOUND)
+
+if (WITH_CUDA)
+    target_include_directories(
+        cuda_csp PUBLIC
+        ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
+    )
+endif (WITH_CUDA)
 
 target_link_libraries(
     pgm_io
@@ -182,3 +205,11 @@ if (OpenCL_FOUND)
         "USE_OPENCL"
     )
 endif (OpenCL_FOUND)
+
+if (WITH_CUDA)
+    target_compile_definitions(
+        stereo_parallel
+        PRIVATE
+        "USE_CUDA"
+    )
+endif (WITH_CUDA)
