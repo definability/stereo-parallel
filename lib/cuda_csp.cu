@@ -151,5 +151,66 @@ void free_problem(struct ConstraintGraph* graph, struct CUDAProblem* problem)
     cdpErrchk(cudaDeviceSynchronize());
 }
 
+void csp_solution_cuda(
+    struct ConstraintGraph* graph,
+    struct CUDAProblem* problem
+)
+{
+    for (ULONG x = 0; x < graph->disparity_graph->right.width; ++x)
+    {
+        for (ULONG y = 0; y < graph->disparity_graph->right.height; ++y)
+        {
+            cudaCheckError();
+
+            choose_best_node_gpu<<<1, 1>>>(
+
+                problem->nodes_availability,
+
+                problem->left_image,
+                problem->right_image,
+                problem->min_penalties_pixels,
+                problem->min_penalties_edges,
+                problem->reparametrization,
+
+                graph->disparity_graph->right.height,
+                graph->disparity_graph->right.width,
+                graph->disparity_graph->right.max_value,
+                graph->disparity_graph->disparity_levels,
+                graph->threshold,
+                graph->disparity_graph->cleanness,
+                graph->disparity_graph->smoothness,
+
+                x,
+                y
+            );
+
+            csp_iteration_cuda<<<
+                graph->disparity_graph->right.width,
+                graph->disparity_graph->right.height
+            >>>(
+
+                problem->nodes_availability,
+
+                problem->changed,
+                problem->left_image,
+                problem->right_image,
+                problem->min_penalties_pixels,
+                problem->min_penalties_edges,
+                problem->reparametrization,
+
+                graph->disparity_graph->right.height,
+                graph->disparity_graph->right.width,
+                graph->disparity_graph->right.max_value,
+                graph->disparity_graph->disparity_levels,
+                graph->threshold,
+                graph->disparity_graph->cleanness,
+                graph->disparity_graph->smoothness
+            );
+        }
+    }
+    cudaCheckError();
+    cdpErrchk(cudaDeviceSynchronize());
+}
+
 }
 #endif
