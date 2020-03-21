@@ -74,18 +74,18 @@ __device__ void populate_structures_gpu(
 __device__ void csp_solution_iteration_gpu(
     struct ConstraintGraph* constraint_graph,
     struct Pixel pixel,
-    int* changed_step,
+    int* changed
 )
 {
     cooperative_groups::grid_group g = cooperative_groups::this_grid();
     do
     {
-        *changed_step = 0;
+        *changed = 0;
         g.sync();
         if (csp_process_pixel(constraint_graph, pixel))
         {
-            *changed_step = 1;
+            *changed = 1;
         }
         g.sync();
-    } while (*changed_step);
+    } while (*changed);
 }
