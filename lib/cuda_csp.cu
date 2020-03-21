@@ -2,8 +2,9 @@
 #include <cuda_csp.hpp>
 #include <solve_csp.hpp>
 
-#include <vector>
 #include <cassert>
+#include <cstdio>
+#include <vector>
 
 #define cdpErrchk(ans) { cdpAssert((ans), __FILE__, __LINE__); }
 __host__ __device__ void cdpAssert(cudaError_t code, const char *file, int line, bool abort=true)
@@ -30,7 +31,6 @@ using std::vector;
 
 void prepare_problem(struct ConstraintGraph* graph, struct CUDAProblem* problem)
 {
-    vector<int> changed{0, 0};
     vector<unsigned> left_image(
         graph->disparity_graph->left.data.begin(),
         graph->disparity_graph->left.data.end()
@@ -58,11 +58,7 @@ void prepare_problem(struct ConstraintGraph* graph, struct CUDAProblem* problem)
 
     cdpErrchk(cudaMalloc(
         (void**)&(problem->changed),
-        2 * sizeof(int))
-    );
-    cdpErrchk(cudaMalloc(
-        (void**)&(problem->changed),
-        changed.size() * sizeof(changed[0]))
+        sizeof(int))
     );
     cdpErrchk(cudaMalloc(
         &(problem->left_image),
@@ -92,7 +88,7 @@ void prepare_problem(struct ConstraintGraph* graph, struct CUDAProblem* problem)
     cdpErrchk(cudaMemcpy(
         problem->changed,
         changed.data(),
-        changed.size() * sizeof(changed[0]),
+        changed.size() * sizeof(int),
         cudaMemcpyHostToDevice)
     );
     cdpErrchk(cudaMemcpy(
