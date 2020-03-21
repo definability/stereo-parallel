@@ -86,12 +86,6 @@ void prepare_problem(struct ConstraintGraph* graph, struct CUDAProblem* problem)
     );
 
     cdpErrchk(cudaMemcpy(
-        problem->changed,
-        changed.data(),
-        changed.size() * sizeof(int),
-        cudaMemcpyHostToDevice)
-    );
-    cdpErrchk(cudaMemcpy(
         problem->left_image,
         left_image.data(),
         left_image.size() * sizeof(left_image[0]),
