@@ -10,6 +10,7 @@
 
 #include <cuda.h>
 #include <cuda_runtime.h>
+#include <cooperative_groups.h>
 
 #if !defined(__CUDA_ARCH__)
 using sp::types::ULONG;
@@ -68,4 +69,23 @@ __device__ void populate_structures_gpu(
     constraint_graph->lowest_penalties = lowest_penalties;
     constraint_graph->disparity_graph = disparity_graph;
     #endif
+}
+
+__device__ void csp_solution_iteration_gpu(
+    struct ConstraintGraph* constraint_graph,
+    struct Pixel pixel,
+    int* changed_step,
+)
+{
+    cooperative_groups::grid_group g = cooperative_groups::this_grid();
+    do
+    {
+        *changed_step = 0;
+        g.sync();
+        if (csp_process_pixel(constraint_graph, pixel))
+        {
+            *changed_step = 1;
+        }
+        g.sync();
+    } while (*changed_step);
 }
