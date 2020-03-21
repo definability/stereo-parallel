@@ -25,6 +25,9 @@ enum Parallelism
 #ifdef USE_OPENCL
     OpenCL,
 #endif
+#ifdef USE_CUDA
+    CUDA,
+#endif
 };
 
 int main(int argc, char* argv[]) try
