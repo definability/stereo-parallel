@@ -29,6 +29,9 @@
 #ifdef USE_OPENCL
 #include <gpu_csp.hpp>
 #endif
+#ifdef USE_CUDA
+#include <cuda_csp.hpp>
+#endif
 
 #include <algorithm>
 #include <iostream>
@@ -52,6 +55,9 @@ using sp::types::ULONG;
 using sp::types::ULONG_ARRAY;
 #ifdef USE_OPENCL
 using gpu::csp_solution_cl;
+#endif
+#ifdef USE_CUDA
+using gpu::csp_solution_cuda;
 #endif
 using std::back_inserter;
 using std::logic_error;
@@ -323,6 +329,19 @@ struct ConstraintGraph* find_labeling_cl(
     build_csp_program(&problem);
     prepare_problem(graph, &problem);
     gpu::csp_solution_cl(graph, &problem);
+    return graph;
+}
+#endif
+
+#ifdef USE_CUDA
+struct ConstraintGraph* find_labeling_cuda(
+    struct ConstraintGraph* graph
+)
+{
+    struct gpu::CUDAProblem problem;
+    prepare_problem(graph, &problem);
+    gpu::csp_solution_cuda(graph, &problem);
+    free_problem(graph, &problem);
     return graph;
 }
 #endif
