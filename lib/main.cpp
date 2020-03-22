@@ -25,6 +25,9 @@ enum Parallelism
 #ifdef USE_OPENCL
     OpenCL,
 #endif
+#ifdef USE_CUDA
+    CUDA,
+#endif
 };
 
 int main(int argc, char* argv[]) try
@@ -98,6 +101,14 @@ int main(int argc, char* argv[]) try
             {
                 parallelism = Parallelism::OpenCL;
                     std::cout << "OpenCL parallelism" << std::endl;
+            }
+            else
+#endif
+#ifdef USE_CUDA
+            if (parallelism_input == "cuda")
+            {
+                parallelism = Parallelism::CUDA;
+                std::cout << "CUDA parallelism" << std::endl;
             }
             else
 #endif
@@ -194,6 +205,13 @@ int main(int argc, char* argv[]) try
 #ifdef USE_OPENCL
                 case Parallelism::OpenCL:
                     labeled_graph = sp::labeling::finder::find_labeling_cl(
+                        &constraint_graph
+                    );
+                    break;
+#endif
+#ifdef USE_CUDA
+                case Parallelism::CUDA:
+                    labeled_graph = sp::labeling::finder::find_labeling_cuda(
                         &constraint_graph
                     );
                     break;

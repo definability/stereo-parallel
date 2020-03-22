@@ -30,11 +30,15 @@
 #include <lowest_penalties.hpp>
 #include <types.hpp>
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
 /**
  * \brief Functions to find a consistent labeling.
  */
-namespace sp::labeling::finder
+namespace sp
+{
+namespace labeling
+{
+namespace finder
 {
 
 using sp::graph::constraint::ConstraintGraph;
@@ -53,7 +57,7 @@ using sp::types::Pixel;
  * with the lowest penalty in the pixel.
  * The output is sorted in ascending order.
  */
-FLOAT_ARRAY fetch_pixel_available_penalties(
+__device__ FLOAT_ARRAY fetch_pixel_available_penalties(
     const struct DisparityGraph* graph,
     struct Pixel pixel,
     FLOAT minimal_penalty
@@ -64,7 +68,7 @@ FLOAT_ARRAY fetch_pixel_available_penalties(
  * with the lowest penalty in the neighborhood.
  * The output is sorted in ascending order.
  */
-FLOAT_ARRAY fetch_edge_available_penalties(
+__device__ FLOAT_ARRAY fetch_edge_available_penalties(
     const struct DisparityGraph* graph,
     struct Edge edge,
     FLOAT minimal_penalty
@@ -75,7 +79,7 @@ FLOAT_ARRAY fetch_edge_available_penalties(
  * and from all neighbors via sp::labeling::finder::fetch_edge_available_penalties.
  * The output is sorted in ascending order.
  */
-FLOAT_ARRAY fetch_available_penalties(
+__device__ FLOAT_ARRAY fetch_available_penalties(
     const struct LowestPenalties* lowest_penalties
 );
 /**
@@ -123,7 +127,7 @@ FLOAT_ARRAY fetch_available_penalties(
  * This allows us to execute sp::graph::constraint::solve_csp
  * not more than \f$ \left[ \log_2 \ell + 1 \right] \f$ times.
  */
-FLOAT calculate_minimal_consistent_threshold(
+__device__ FLOAT calculate_minimal_consistent_threshold(
     const struct LowestPenalties* lowest_penalties,
     const struct DisparityGraph* disparity_graph,
     FLOAT_ARRAY available_penalties
@@ -133,7 +137,7 @@ FLOAT calculate_minimal_consistent_threshold(
  * Remove all other nodes
  * (mark them as unavailable with sp::graph::constraint::make_node_unavailable).
  */
-struct ConstraintGraph* choose_best_node(
+__device__ struct ConstraintGraph* choose_best_node(
     struct ConstraintGraph* graph,
     struct Pixel pixel
 );
@@ -147,6 +151,9 @@ struct ConstraintGraph* choose_best_node(
  * The function performs the same actions as find_labeling.
  */
 struct ConstraintGraph* find_labeling_cl(
+    struct ConstraintGraph* graph
+);
+struct ConstraintGraph* find_labeling_cuda(
     struct ConstraintGraph* graph
 );
 /**
@@ -167,7 +174,7 @@ struct ConstraintGraph* find_labeling_cl(
  * from the best penalty in each node and edge
  * will be minimal.
  */
-struct ConstraintGraph* find_labeling(struct ConstraintGraph* graph);
+__device__ struct ConstraintGraph* find_labeling(struct ConstraintGraph* graph);
 /**
  * \brief Build a disparity map by the constraint graph.
  *
@@ -176,11 +183,13 @@ struct ConstraintGraph* find_labeling(struct ConstraintGraph* graph);
  * and add it as the pixel's intensity
  * to the output image.
  */
-struct Image build_disparity_map(
+__device__ struct Image build_disparity_map(
     const struct ConstraintGraph* constraint_graph
 );
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
+}
 }
 #endif
 

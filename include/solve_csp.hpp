@@ -21,32 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <image.hpp>
+#ifndef SOLVE_CSP_HPP
+#define SOLVE_CSP_HPP
 
-#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
-namespace sp
-{
-namespace image
-{
-#endif
+#include <cuda.h>
+#include <cuda_runtime.h>
 
-BOOL image_valid(const struct Image* image)
-{
-    if (image->max_value == 0 || image->width == 0 || image->height == 0)
-    {
-        return false;
-    }
-    for (unsigned i = 0; i < image->width * image->height; ++i)
-    {
-        if (image->data[i] > image->max_value)
-        {
-            return false;
-        }
-    }
-    return true;
-}
+__global__ void choose_best_node_gpu(
+    int* nodes_availability,
+    unsigned* left_image,
+    unsigned* right_image,
+    float* min_penalties_pixels,
+    float* min_penalties_edges,
+    float* reparametrization,
+    unsigned height,
+    unsigned width,
+    unsigned max_value,
+    unsigned disparity_levels,
+    float threshold,
+    float cleanness,
+    float smoothness,
+    unsigned pixel_x,
+    unsigned pixel_y
+);
 
-#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
-}
-}
+__global__ void csp_iteration_cuda(
+    int* nodes_availability,
+    int* changed,
+    unsigned* left_image,
+    unsigned* right_image,
+    float* min_penalties_pixels,
+    float* min_penalties_edges,
+    float* reparametrization,
+    unsigned height,
+    unsigned width,
+    unsigned max_value,
+    unsigned disparity_levels,
+    float threshold,
+    float cleanness,
+    float smoothness
+);
+
 #endif

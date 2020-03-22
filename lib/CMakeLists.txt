@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 option(WITH_OPENMP "Use OpenMP for parallel computations on CPU" OFF)
+option(WITH_OPENCL "Use OpenCL for parallel computations on GPU" OFF)
+option(WITH_CUDA "Use CUDA for parallel computations on GPU" OFF)
 
 find_package(Boost 1.54 REQUIRED COMPONENTS program_options)
 if (WITH_OPENMP)
@@ -29,6 +31,10 @@ if (WITH_OPENCL)
     find_package(Boost 1.61 REQUIRED)
     find_package(OpenCL REQUIRED)
 endif(WITH_OPENCL)
+if (WITH_CUDA)
+    cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
+    enable_language(CUDA)
+endif(WITH_CUDA)
 
 add_library(image image.cpp)
 add_library(pgm_io pgm_io.cpp)
@@ -42,6 +48,21 @@ if (OpenCL_FOUND)
 add_library(compile_cl compile_cl.cpp)
 add_library(gpu_csp gpu_csp.cpp)
 endif (OpenCL_FOUND)
+
+if (WITH_CUDA)
+    add_library(
+        cuda_csp
+        cuda_csp.cu
+        solve_csp.cu
+        constraint_graph.cu
+        lowest_penalties.cu
+        labeling_finder.cu
+        disparity_graph.cu
+        image.cu
+        indexing_checks.cu
+        indexing.cu
+    )
+endif (WITH_CUDA)
 
 target_include_directories(
     indexing PUBLIC
@@ -75,16 +96,24 @@ target_include_directories(
     labeling_finder PUBLIC
     ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
 )
+
 if (OpenCL_FOUND)
-target_include_directories(
-    compile_cl PUBLIC
-    ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
-)
-target_include_directories(
-    gpu_csp PUBLIC
-    ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
-)
+    target_include_directories(
+        compile_cl PUBLIC
+        ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
+    )
+    target_include_directories(
+        gpu_csp PUBLIC
+        ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
+    )
 endif (OpenCL_FOUND)
+
+if (WITH_CUDA)
+    target_include_directories(
+        cuda_csp PUBLIC
+        ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
+    )
+endif (WITH_CUDA)
 
 target_link_libraries(
     pgm_io
@@ -123,6 +152,21 @@ target_link_libraries(
     disparity_graph
     image
 )
+
+if (WITH_CUDA)
+    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -arch=sm_60")
+    set_target_properties(cuda_csp PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+
+    target_link_libraries(
+        labeling_finder
+        cuda_csp
+    )
+    target_compile_definitions(
+        labeling_finder
+        PRIVATE
+        "USE_CUDA"
+    )
+endif (WITH_CUDA)
 
 if (OpenCL_FOUND)
     target_link_libraries(
@@ -176,3 +220,11 @@ if (OpenCL_FOUND)
         "USE_OPENCL"
     )
 endif (OpenCL_FOUND)
+
+if (WITH_CUDA)
+    target_compile_definitions(
+        stereo_parallel
+        PRIVATE
+        "USE_CUDA"
+    )
+endif (WITH_CUDA)

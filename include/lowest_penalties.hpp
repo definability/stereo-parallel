@@ -33,11 +33,15 @@
 #include <indexing.hpp>
 #include <types.hpp>
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
 /**
  * \brief Utilities to find locally best nodes and edges.
  */
-namespace sp::graph::lowest_penalties
+namespace sp
+{
+namespace graph
+{
+namespace lowest_penalties
 {
 
 using sp::graph::disparity::DisparityGraph;
@@ -118,14 +122,15 @@ struct LowestPenalties
      * after sp::graph::lowest_penalties::LowestPenalties construction,
      * the sp::graph::lowest_penalties::LowestPenalties instance will not be changed.
      */
-    #ifndef __OPENCL_C_VERSION__
+    #if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+    LowestPenalties() = default;
     explicit LowestPenalties(const struct DisparityGraph* graph);
     #endif
 };
 /**
  * \brief Calculate minimal penalty among nodes of a pixel.
  */
-FLOAT calculate_lowest_pixel_penalty(
+__device__ FLOAT calculate_lowest_pixel_penalty(
     const struct DisparityGraph* graph,
     struct Pixel pixel
 );
@@ -135,7 +140,7 @@ FLOAT calculate_lowest_pixel_penalty(
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::neighborhood_exists to make sure that you use it right.
  */
-FLOAT calculate_lowest_neighborhood_penalty(
+__device__ FLOAT calculate_lowest_neighborhood_penalty(
     const struct DisparityGraph* graph,
     struct Pixel pixel,
     struct Pixel neighbor
@@ -146,7 +151,7 @@ FLOAT calculate_lowest_neighborhood_penalty(
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::neighborhood_exists_fast to make sure that you use it right.
  */
-FLOAT calculate_lowest_neighborhood_penalty_fast(
+__device__ FLOAT calculate_lowest_neighborhood_penalty_fast(
     const struct DisparityGraph* graph,
     struct Edge edge
 );
@@ -156,7 +161,7 @@ FLOAT calculate_lowest_neighborhood_penalty_fast(
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::edge_exists to make sure that you use it right.
  */
-FLOAT calculate_lowest_neighborhood_penalty_slow(
+__device__ FLOAT calculate_lowest_neighborhood_penalty_slow(
     const struct DisparityGraph* graph,
     struct Pixel pixel,
     ULONG neighbor_index
@@ -168,7 +173,7 @@ FLOAT calculate_lowest_neighborhood_penalty_slow(
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::neighborhood_exists to make sure that you use it right.
  */
-FLOAT lowest_pixel_penalty(
+__device__ FLOAT lowest_pixel_penalty(
     const struct LowestPenalties* penalties,
     struct Pixel pixel
 );
@@ -180,7 +185,7 @@ FLOAT lowest_pixel_penalty(
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::neighborhood_exists_fast to make sure that you use it right.
  */
-FLOAT lowest_neighborhood_penalty_fast(
+__device__ FLOAT lowest_neighborhood_penalty_fast(
     const struct LowestPenalties* penalties,
     struct Pixel pixel,
     struct Pixel neighbor
@@ -193,12 +198,14 @@ FLOAT lowest_neighborhood_penalty_fast(
  * Note that the function doesn't check existence of provided neighborhood.
  * Use sp::indexing::checks::edge_exists to make sure that you use it right.
  */
-FLOAT lowest_neighborhood_penalty(
+__device__ FLOAT lowest_neighborhood_penalty(
     const struct LowestPenalties* penalties,
     struct Edge edge
 );
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
+}
 }
 #endif
 

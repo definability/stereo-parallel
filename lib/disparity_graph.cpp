@@ -24,23 +24,31 @@
 #include <disparity_graph.hpp>
 #include <indexing.hpp>
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
 #include <limits>
 #include <stdexcept>
 #include <string>
 
 #define TO_FLOAT(x) (static_cast<FLOAT>(x))
 
-#else
+#elif defined(__OPENCL_C_VERSION__)
 
 #define TO_FLOAT(x) (convert_float(x))
+
+#elif defined(__CUDA_ARCH__)
+
+#define TO_FLOAT(x) (__int2float_rn(x))
 
 #endif
 
 #define SQR(x) ((x) * (x))
 
-#ifndef __OPENCL_C_VERSION__
-namespace sp::graph::disparity
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+namespace sp
+{
+namespace graph
+{
+namespace disparity
 {
 
 using sp::indexing::pixel_value;
@@ -173,7 +181,7 @@ DisparityGraph::DisparityGraph(
 }
 #endif
 
-FLOAT edge_penalty(const struct DisparityGraph* graph, struct Edge edge)
+__device__ FLOAT edge_penalty(const struct DisparityGraph* graph, struct Edge edge)
 {
     return
         graph->smoothness
@@ -182,7 +190,7 @@ FLOAT edge_penalty(const struct DisparityGraph* graph, struct Edge edge)
         - reparametrization_value(graph, edge.neighbor, edge.node.pixel);
 }
 
-FLOAT node_penalty(const struct DisparityGraph* graph, struct Node node)
+__device__ FLOAT node_penalty(const struct DisparityGraph* graph, struct Node node)
 {
     struct Pixel left_pixel;
     left_pixel.x = node.pixel.x + node.disparity;
@@ -197,6 +205,8 @@ FLOAT node_penalty(const struct DisparityGraph* graph, struct Node node)
         + reparametrization_value_fast(graph, node, 3);
 }
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
+}
 }
 #endif

@@ -26,11 +26,13 @@
 
 #include <types.hpp>
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
 /**
  * \brief Image processing utilities.
  */
-namespace sp::image
+namespace sp
+{
+namespace image
 {
 
 using sp::types::BOOL;
@@ -90,7 +92,8 @@ struct Image
  */
 BOOL image_valid(const struct Image* image);
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
 }
 #endif
 

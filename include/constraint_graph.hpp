@@ -29,11 +29,15 @@
 #include <lowest_penalties.hpp>
 #include <types.hpp>
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
 /**
  * \brief Utilities to solve CSP.
  */
-namespace sp::graph::constraint
+namespace sp
+{
+namespace graph
+{
+namespace constraint
 {
 
 using sp::graph::disparity::DisparityGraph;
@@ -322,7 +326,8 @@ struct ConstraintGraph
      * it's good to have precalculated
      * sp::graph::lowest_penalties::LowestPenalties instance.
      */
-    #ifndef __OPENCL_C_VERSION__
+    #if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+    ConstraintGraph() = default;
     ConstraintGraph(
         const struct DisparityGraph* disparity_graph,
         const struct LowestPenalties* lowest_penalties,
@@ -337,7 +342,7 @@ struct ConstraintGraph
  * You should perform it by yourself
  * using sp::indexing::checks::node_exists.
  */
-void make_node_available(
+__device__ void make_node_available(
     struct ConstraintGraph* graph,
     struct Node node
 );
@@ -348,14 +353,14 @@ void make_node_available(
  * You should perform it by yourself
  * using sp::indexing::checks::node_exists.
  */
-void make_node_unavailable(
+__device__ void make_node_unavailable(
     struct ConstraintGraph* graph,
     struct Node node
 );
 /**
  * \brief Mark all nodes as unavailable.
  */
-void make_all_nodes_unavailable(struct ConstraintGraph* graph);
+__device__ void make_all_nodes_unavailable(struct ConstraintGraph* graph);
 /**
  * \brief Check whether the Node is still available.
  *
@@ -365,7 +370,7 @@ void make_all_nodes_unavailable(struct ConstraintGraph* graph);
  * You should perform it by yourself
  * using sp::indexing::checks::node_exists.
  */
-BOOL is_node_available(
+__device__ BOOL is_node_available(
     const struct ConstraintGraph* graph,
     struct Node node
 );
@@ -380,7 +385,7 @@ BOOL is_node_available(
  * The function checks existence of the Edge
  * using sp::indexing::checks::edge_exists.
  */
-BOOL is_edge_available(
+__device__ BOOL is_edge_available(
     const struct ConstraintGraph* graph,
     struct Edge edge
 );
@@ -396,7 +401,7 @@ BOOL is_edge_available(
  * You should perform it by yourself
  * using sp::indexing::checks::node_exists.
  */
-BOOL should_remove_node(
+__device__ BOOL should_remove_node(
     const struct ConstraintGraph* graph,
     struct Node node
 );
@@ -409,7 +414,7 @@ BOOL should_remove_node(
  *  `false` if a solution was found (at least an empty one)
  *  and nothing was changed during iteration.
  */
-BOOL csp_process_pixel(
+__device__ BOOL csp_process_pixel(
     struct ConstraintGraph* graph,
     struct Pixel pixel
 );
@@ -433,7 +438,7 @@ BOOL csp_process_pixel(
  *  `false` if a solution was found (at least, an empty one)
  *  and nothing was changed during iteration.
  */
-BOOL csp_solution_iteration(
+__device__ BOOL csp_solution_iteration(
     struct ConstraintGraph* graph,
     ULONG jobs,
     ULONG job_number
@@ -446,13 +451,15 @@ BOOL csp_solution_iteration(
  *  `true` if nonempty solution was found.
  *  `false` if all nodes were removed --- the problem is unsolvable.
  */
-BOOL solve_csp(struct ConstraintGraph* graph);
+__device__ BOOL solve_csp(struct ConstraintGraph* graph);
 /**
  * \brief Check whether at least one node is available.
  */
-BOOL check_nodes_left(const struct ConstraintGraph* graph);
+__device__ BOOL check_nodes_left(const struct ConstraintGraph* graph);
 
-#ifndef __OPENCL_C_VERSION__
+#if !defined(__OPENCL_C_VERSION__) && !defined(__CUDA_ARCH__)
+}
+}
 }
 #endif
 
