@@ -44,9 +44,10 @@ add_library(constraint_graph constraint_graph.cpp)
 add_library(labeling_finder labeling_finder.cpp)
 add_library(indexing indexing.cpp)
 add_library(indexing_checks indexing_checks.cpp)
+
 if (OpenCL_FOUND)
-add_library(compile_cl compile_cl.cpp)
-add_library(gpu_csp gpu_csp.cpp)
+    add_library(compile_cl compile_cl.cpp)
+    add_library(gpu_csp gpu_csp.cpp)
 endif (OpenCL_FOUND)
 
 if (WITH_CUDA)
@@ -141,6 +142,7 @@ target_link_libraries(
     indexing_checks
     indexing
 )
+
 if (OpenMP_CXX_FOUND)
     target_link_libraries(
         constraint_graph
