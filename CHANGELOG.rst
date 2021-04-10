@@ -13,6 +13,9 @@ and this project adheres to `Semantic Versioning`_.
 Unreleased_
 ===========
 
+0.1.2 - 2019-04-10
+==================
+
 Changed
 -------
 
@@ -216,7 +219,9 @@ Added
     to build a grayscale image with the solution to the problem.
 
 .. _Unreleased:
-    https://github.com/char-lie/stereo-parallel/compare/v0.1.1...HEAD
+    https://github.com/char-lie/stereo-parallel/compare/v0.1.2...HEAD
+.. _0.1.2:
+    https://github.com/char-lie/stereo-parallel/compare/v0.1.1...v0.1.2
 .. _0.1.1:
     https://github.com/char-lie/stereo-parallel/compare/v0.1.0...v0.1.1
 
