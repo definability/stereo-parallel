@@ -36,16 +36,17 @@
 #include <cooperative_groups.h>
 
 #if !defined(__CUDA_ARCH__)
+using sp::graph::constraint::ConstraintGraph;
+using sp::graph::disparity::DisparityGraph;
+using sp::graph::lowest_penalties::LowestPenalties;
+using sp::image::Image;
+using sp::labeling::finder::choose_best_node;
+using sp::types::Edge;
+using sp::types::FLOAT;
+using sp::types::Node;
+using sp::types::Pixel;
 using sp::types::ULONG;
 using sp::types::ULONG_ARRAY;
-using sp::types::Pixel;
-using sp::types::Edge;
-using sp::types::Node;
-using sp::image::Image;
-using sp::graph::disparity::DisparityGraph;
-using sp::graph::constraint::ConstraintGraph;
-using sp::graph::lowest_penalties::LowestPenalties;
-using sp::labeling::finder::choose_best_node;
 #endif
 
 __device__ void populate_structures_gpu(
@@ -55,16 +56,16 @@ __device__ void populate_structures_gpu(
     int* nodes_availability,
     unsigned* left_image,
     unsigned* right_image,
-    float* min_penalties_pixels,
-    float* min_penalties_edges,
-    float* reparametrization,
+    FLOAT* min_penalties_pixels,
+    FLOAT* min_penalties_edges,
+    FLOAT* reparametrization,
     unsigned height,
     unsigned width,
     unsigned max_value,
     unsigned disparity_levels,
-    float threshold,
-    float cleanness,
-    float smoothness
+    FLOAT threshold,
+    FLOAT cleanness,
+    FLOAT smoothness
 )
 {
     #if defined(__CUDA_ARCH__)
@@ -118,16 +119,16 @@ __global__ void csp_iteration_cuda(
     int* changed,
     unsigned* left_image,
     unsigned* right_image,
-    float* min_penalties_pixels,
-    float* min_penalties_edges,
-    float* reparametrization,
+    FLOAT* min_penalties_pixels,
+    FLOAT* min_penalties_edges,
+    FLOAT* reparametrization,
     unsigned height,
     unsigned width,
     unsigned max_value,
     unsigned disparity_levels,
-    float threshold,
-    float cleanness,
-    float smoothness
+    FLOAT threshold,
+    FLOAT cleanness,
+    FLOAT smoothness
 )
 {
     struct DisparityGraph disparity_graph;
@@ -168,16 +169,16 @@ __global__ void choose_best_node_gpu(
     int* nodes_availability,
     unsigned* left_image,
     unsigned* right_image,
-    float* min_penalties_pixels,
-    float* min_penalties_edges,
-    float* reparametrization,
+    FLOAT* min_penalties_pixels,
+    FLOAT* min_penalties_edges,
+    FLOAT* reparametrization,
     unsigned height,
     unsigned width,
     unsigned max_value,
     unsigned disparity_levels,
-    float threshold,
-    float cleanness,
-    float smoothness,
+    FLOAT threshold,
+    FLOAT cleanness,
+    FLOAT smoothness,
     unsigned pixel_x,
     unsigned pixel_y
 )

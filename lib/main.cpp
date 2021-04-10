@@ -150,14 +150,14 @@ int main(int argc, char* argv[]) try
             sp::types::FLOAT cleanness = 1;
             if (vm.count("cleanness") == 1)
             {
-                cleanness = std::stoul(
+                cleanness = std::stof(
                     vm["cleanness"].as<std::string>()
                 );
             }
             sp::types::FLOAT smoothness = 1;
             if (vm.count("smoothness") == 1)
             {
-                smoothness = std::stoul(
+                smoothness = std::stof(
                     vm["smoothness"].as<std::string>()
                 );
             }

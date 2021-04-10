@@ -25,7 +25,7 @@ option(WITH_CUDA "Use CUDA for parallel computations on GPU" OFF)
 
 find_package(Boost 1.54 REQUIRED COMPONENTS program_options)
 if (WITH_OPENMP)
-    find_package(OpenMP REQUIRED)
+    find_package(OpenMP 2.0 REQUIRED)
 endif(WITH_OPENMP)
 if (WITH_OPENCL)
     find_package(Boost 1.61 REQUIRED)
@@ -44,9 +44,10 @@ add_library(constraint_graph constraint_graph.cpp)
 add_library(labeling_finder labeling_finder.cpp)
 add_library(indexing indexing.cpp)
 add_library(indexing_checks indexing_checks.cpp)
+
 if (OpenCL_FOUND)
-add_library(compile_cl compile_cl.cpp)
-add_library(gpu_csp gpu_csp.cpp)
+    add_library(compile_cl compile_cl.cpp)
+    add_library(gpu_csp gpu_csp.cpp)
 endif (OpenCL_FOUND)
 
 if (WITH_CUDA)
@@ -100,11 +101,14 @@ target_include_directories(
 if (OpenCL_FOUND)
     target_include_directories(
         compile_cl PUBLIC
-        ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
+        ${STEREO_PARALLEL_MAIN_INCLUDE_DIR};
+        ${Boost_INCLUDE_DIRS}
     )
     target_include_directories(
         gpu_csp PUBLIC
-        ${STEREO_PARALLEL_MAIN_INCLUDE_DIR}
+        ${STEREO_PARALLEL_MAIN_INCLUDE_DIR};
+        ${Boost_INCLUDE_DIRS};
+        ${OpenCL_INCLUDE_DIR};
     )
 endif (OpenCL_FOUND)
 
@@ -138,6 +142,7 @@ target_link_libraries(
     indexing_checks
     indexing
 )
+
 if (OpenMP_CXX_FOUND)
     target_link_libraries(
         constraint_graph
@@ -155,7 +160,10 @@ target_link_libraries(
 
 if (WITH_CUDA)
     set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -arch=sm_60")
-    set_target_properties(cuda_csp PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+    set_target_properties(cuda_csp PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+        CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    )
 
     target_link_libraries(
         labeling_finder
@@ -194,11 +202,6 @@ if (OpenCL_FOUND)
 endif (OpenCL_FOUND)
 
 add_executable(stereo_parallel main.cpp)
-target_include_directories(
-    stereo_parallel
-    PRIVATE
-    ${BOOST_INCLUDE_DIRS}
-)
 target_link_libraries(
     stereo_parallel
     image
@@ -206,7 +209,7 @@ target_link_libraries(
     disparity_graph
     constraint_graph
     labeling_finder
-    ${Boost_PROGRAM_OPTIONS_LIBRARY}
+    Boost::program_options
 )
 
 if (OpenCL_FOUND)

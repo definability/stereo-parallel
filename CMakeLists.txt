@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
-project(STEREO_PARALLEL VERSION 0.1.1)
+project(STEREO_PARALLEL VERSION 0.1.1 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -30,5 +30,13 @@ add_subdirectory(lib)
 
 enable_testing()
 
-add_subdirectory(tests)
-add_subdirectory(docs)
+option(WITH_TESTS "Build unit tests" OFF)
+option(BUILD_DOC "Build documentation" OFF)
+
+if (WITH_TESTS)
+    add_subdirectory(tests)
+endif (WITH_TESTS)
+
+if (BUILD_DOC)
+    add_subdirectory(docs)
+endif (BUILD_DOC)

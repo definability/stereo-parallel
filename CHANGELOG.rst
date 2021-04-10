@@ -18,6 +18,11 @@ Changed
 
 - Use pointers instead of references in cross-device code.
 
+Fixed
+-----
+
+- Now the code works fine on Windows.
+
 0.1.1 - 2019-04-07
 ==================
 
