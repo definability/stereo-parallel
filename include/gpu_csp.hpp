@@ -39,7 +39,6 @@ struct Problem
     program program;
     command_queue queue;
     compute::vector<cl_ulong> left_image;
-    compute::vector<cl_ulong> changed;
     compute::vector<cl_ulong> right_image;
     compute::vector<cl_float> min_penalties_pixels;
     compute::vector<cl_float> min_penalties_edges;

@@ -417,10 +417,12 @@ __device__ struct Image build_disparity_map(
                             + ">."
                         );
                     }
-                    result.data[pixel_index(&result, node.pixel)]
-                        = node.disparity;
-                    found = true;
-                    break;
+                    else
+                    {
+                        result.data[pixel_index(&result, node.pixel)]
+                            = node.disparity;
+                        found = true;
+                    }
                 }
             }
             if (!found)

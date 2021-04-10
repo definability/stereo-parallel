@@ -62,7 +62,7 @@ using ULONG_ARRAY = std::vector<ULONG>;
  * \brief Floating point type alias.
  * to use the same name on CPU and GPU.
  */
-using FLOAT = double;
+using FLOAT = float;
 
 /**
  * \brief Floating point array type alias

@@ -31,7 +31,7 @@ add_executable(
     lowest_penalties.cpp
     labeling_finder.cpp
 )
-target_include_directories(test_executable PRIVATE ${BOOST_INCLUDE_DIRS})
+target_include_directories(test_executable PRIVATE ${Boost_INCLUDE_DIRS})
 target_link_libraries(
     test_executable
     indexing
@@ -42,7 +42,7 @@ target_link_libraries(
     constraint_graph
     lowest_penalties
     labeling_finder
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    Boost::unit_test_framework
 )
 target_compile_definitions(
     test_executable

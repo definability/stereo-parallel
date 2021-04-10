@@ -30,5 +30,13 @@ add_subdirectory(lib)
 
 enable_testing()
 
-add_subdirectory(tests)
-add_subdirectory(docs)
+option(WITH_TESTS "Build unit tests" OFF)
+option(BUILD_DOC "Build documentation" OFF)
+
+if (WITH_TESTS)
+    add_subdirectory(tests)
+endif (WITH_TESTS)
+
+if (BUILD_DOC)
+    add_subdirectory(docs)
+endif (BUILD_DOC)

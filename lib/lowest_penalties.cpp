@@ -49,8 +49,8 @@ LowestPenalties::LowestPenalties(const struct DisparityGraph* graph)
         * graph->right.width
     )
 {
-    fill(this->pixels.begin(), this->pixels.end(), 0);
-    fill(this->neighborhoods.begin(), this->neighborhoods.end(), 0);
+    fill(this->pixels.begin(), this->pixels.end(), static_cast<FLOAT>(0));
+    fill(this->neighborhoods.begin(), this->neighborhoods.end(), static_cast<FLOAT>(0));
     struct Pixel pixel{0, 0};
     for (pixel.x = 0; pixel.x < this->graph->right.width; ++pixel.x)
     {

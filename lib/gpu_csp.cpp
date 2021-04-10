@@ -29,30 +29,55 @@ void build_csp_program(struct Problem* problem)
 
 void prepare_problem(struct ConstraintGraph* graph, struct Problem* problem)
 {
-    problem->left_image.assign(
+    problem->left_image.clear();
+    problem->left_image.reserve(
+        graph->disparity_graph->left.data.size(),
+        problem->queue
+    );
+    std::copy(
         graph->disparity_graph->left.data.begin(),
         graph->disparity_graph->left.data.end(),
+        std::back_inserter(problem->left_image)
+    );
+    problem->right_image.clear();
+    problem->right_image.reserve(
+        graph->disparity_graph->right.data.size(),
         problem->queue
     );
-    problem->right_image.assign(
+    std::copy(
         graph->disparity_graph->right.data.begin(),
         graph->disparity_graph->right.data.end(),
+        std::back_inserter(problem->right_image)
+    );
+    problem->min_penalties_pixels.clear();
+    problem->min_penalties_pixels.reserve(
+        graph->lowest_penalties->pixels.size(),
         problem->queue
     );
-    problem->min_penalties_pixels.assign(
+    std::copy(
         graph->lowest_penalties->pixels.begin(),
         graph->lowest_penalties->pixels.end(),
+        std::back_inserter(problem->min_penalties_pixels)
+    );
+    problem->min_penalties_edges.clear();
+    problem->min_penalties_edges.reserve(
+        graph->lowest_penalties->neighborhoods.size(),
         problem->queue
     );
-    problem->min_penalties_edges.assign(
+    std::copy(
         graph->lowest_penalties->neighborhoods.begin(),
         graph->lowest_penalties->neighborhoods.end(),
+        std::back_inserter(problem->min_penalties_edges)
+    );
+    problem->reparametrization.clear();
+    problem->reparametrization.reserve(
+        graph->disparity_graph->reparametrization.size(),
         problem->queue
     );
-    problem->reparametrization.assign(
+    std::copy(
         graph->disparity_graph->reparametrization.begin(),
         graph->disparity_graph->reparametrization.end(),
-        problem->queue
+        std::back_inserter(problem->reparametrization)
     );
 }
 
@@ -62,14 +87,19 @@ BOOL csp_solution_cl(
 )
 {
     command_queue queue = system::default_queue();
-    compute::vector<int> data(
+
+    compute::vector<cl_int> nodes_availability;
+    nodes_availability.reserve(
         graph->nodes_availability.size(),
-        problem->queue.get_context()
+        problem->queue
+    );
+    std::copy(
+        graph->nodes_availability.begin(),
+        graph->nodes_availability.end(),
+        std::back_inserter(nodes_availability)
     );
 
-    vector<int> tmp(graph->nodes_availability.begin(), graph->nodes_availability.end());
-    compute::vector<int> nodes_availability(tmp, problem->queue);
-    compute::vector<int> changed({0, 0}, problem->queue);
+    compute::vector<cl_int> changed({0, 0}, problem->queue);
 
     kernel csp_iteration = problem->program.create_kernel("csp_iteration");
     csp_iteration.set_args(
@@ -136,9 +166,11 @@ BOOL csp_solution_cl(
         }
     }
 
-    graph->nodes_availability.assign(
+    graph->nodes_availability.clear();
+    std::copy(
         nodes_availability.begin(),
-        nodes_availability.end()
+        nodes_availability.end(),
+        std::back_inserter(graph->nodes_availability)
     );
     return changed[1] != 0;
 }
