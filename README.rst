@@ -14,6 +14,9 @@ Stereo Parallel
              utm_source=github.com&amp;utm_medium=referral&amp;
              utm_content=char-lie/stereo-parallel&amp;utm_campaign=Badge_Grade
 
+Abandoned and archived.
+You may be interested in https://github.com/definability/python_scanline_stereo.
+
 .. contents::
 
 Contributing
